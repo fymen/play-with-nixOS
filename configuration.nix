@@ -94,12 +94,44 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    pkgs.inconsolata
-    pkgs.git
-    pkgs.python3
-    pkgs.vim
-    pkgs.wget
-    pkgs.emacs29
+    inconsolata
+    tmux
+    git
+    python3
+    python3Packages.pip
+    python3Packages.pyqt6
+    wget
+    # Image viewer
+    feh
+    gnome.eog
+    flameshot
+    # Editor
+    vim
+    emacs29
+    # Shells
+    zsh
+    oh-my-zsh
+    j4-dmenu-desktop
+    # Browsers
+    firefox
+    chromium
+    # Data visualization
+    gnuplot
+    # Player
+    mplayer
+    mpv
+    # Program
+    gcc
+    gnumake
+    cmake
+    opencv4
+    (opencv4.override { enableGtk2 = true; })
+    # Download
+    qbittorrent
+    # Password Manager
+    bitwarden
+
+    multimarkdown
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

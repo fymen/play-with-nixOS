@@ -1,0 +1,5 @@
+#+begin_src shell :dir "/sudo::/home/oscar/nixos-config/" :cache no :results none
+# sudo nixos-rebuild switch --flake .
+# test
+sudo nixos-rebuild test --flake .
+#+end_src
