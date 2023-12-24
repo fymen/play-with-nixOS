@@ -19,12 +19,12 @@
   # environment.
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
-    gnome.gnome-terminal
-    graphviz
-    # Download
-    qbittorrent
-    # Password Manager
-    bitwarden
+    # gnome.gnome-terminal
+     graphviz
+    # # Download
+    #qbittorrent
+    # # Password Manager
+    # bitwarden
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of

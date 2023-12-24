@@ -101,24 +101,24 @@
     python3Packages.pyqt6
     wget
     # Image viewer
-    feh
+     feh
     gnome.eog
-    flameshot
+     flameshot
     # Editor
     vim
-    emacs29
+     emacs29
     # Shells
-    zsh
-    oh-my-zsh
-    j4-dmenu-desktop
+     zsh
+     oh-my-zsh
+     j4-dmenu-desktop
     # Browsers
-    firefox
-    chromium
+     firefox
+     chromium
     # Data visualization
-    gnuplot
+     gnuplot
     # Player
-    mplayer
-    mpv
+     mplayer
+     mpv
     # Program
     gcc
     gnumake

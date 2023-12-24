@@ -1,5 +1,9 @@
 #+begin_src shell :dir "/sudo::/home/oscar/nixos-config/" :cache no :results none
 # sudo nixos-rebuild switch --flake .
+nix-env -qa home-manager
 # test
 sudo nixos-rebuild test --flake .
 #+end_src
+python -m venv myenv # Create a Python virtual environment
+source myenv/bin/activate # Activate the virtual environment
+pip install package-name # Install Python packages using pip
