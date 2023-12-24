@@ -9,7 +9,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-
   # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
@@ -125,7 +124,6 @@
     gnumake
     cmake
     opencv4
-    (opencv4.override { enableGtk2 = true; })
     # Download
     qbittorrent
     # Password Manager
