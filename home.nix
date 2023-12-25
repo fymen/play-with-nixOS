@@ -18,37 +18,37 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # Adds the 'hello' command to your environment. It prints a friendly
+    # Fonts
     inconsolata
+    # Terminal
     tmux
+    alacritty
+
     git
     python3
     python3Packages.pip
     python3Packages.pyqt6
     wget
     # Image viewer
-     feh
+    feh
     gnome.eog
-     flameshot
+    flameshot
     # Editor
     vim
-     emacs29
+    emacs29
     # Shells
-     zsh
-     oh-my-zsh
-     j4-dmenu-desktop
+    zsh
+    oh-my-zsh
+    j4-dmenu-desktop
     # Browsers
-     firefox
-     chromium
+    firefox
+    chromium
     # Data visualization
-     gnuplot
+    gnuplot
     # Player
-     mplayer
-     mpv
+    mplayer
+    mpv
     # Program
-    gcc
-    gnumake
-    cmake
     opencv4
     # Download
     qbittorrent
@@ -58,11 +58,7 @@
     multimarkdown
 
     # gnome.gnome-terminal
-     graphviz
-    # # Download
-    #qbittorrent
-    # # Password Manager
-    # bitwarden
+    graphviz
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -102,8 +98,13 @@
     };
     zsh = {
       enable = true;
+      oh-my-zsh = {
+        enable = true;
+        theme = "af-magic";
+      };
     };
   };
+
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
   # Manager then you have to manually source 'hm-session-vars.sh' located at

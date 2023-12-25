@@ -1,12 +1,18 @@
-#+begin_src shell :dir "/sudo::/home/oscar/nixos-config/" :cache no :results none
-# sudo nixos-rebuild switch --flake .
+#+begin_src shell
 nix-env -qa home-manager
-# test
-sudo nixos-rebuild test --flake .
 #+end_src
+
+#+begin_src sh :dir (concat "/sudo::" (expand-file-name "./")) :cache no :results none
+# nixos-rebuild switch --flake .
+nixos-rebuild test --flake .
+#+end_src
+
+#+begin_src shell
 python -m venv myenv # Create a Python virtual environment
 source myenv/bin/activate # Activate the virtual environment
 pip install package-name # Install Python packages using pip
+#+end_src
+
 #+begin_src nix
     windowManager.i3 = {
       enable = true;

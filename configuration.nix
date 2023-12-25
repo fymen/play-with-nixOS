@@ -9,9 +9,10 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+
   # Bootloader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -23,7 +24,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
+  virtualisation.vmware.guest.enable = true;
   # Set your time zone.
   time.timeZone = "America/Toronto";
 
@@ -41,7 +42,6 @@
   services.xserver = {
     layout = "us";
     xkbVariant = "";
-
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -81,6 +81,7 @@
     isNormalUser = true;
     description = "oscar";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
     #  thunderbird
@@ -93,43 +94,17 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    inconsolata
-    tmux
+    vim
+    wget
+    curl
     git
     python3
     python3Packages.pip
-    python3Packages.pyqt6
-    wget
-    # Image viewer
-     feh
-    gnome.eog
-     flameshot
-    # Editor
-    vim
-     emacs29
-    # Shells
-     zsh
-     oh-my-zsh
-     j4-dmenu-desktop
-    # Browsers
-     firefox
-     chromium
-    # Data visualization
-     gnuplot
-    # Player
-     mplayer
-     mpv
-    # Program
+
+    zsh
     gcc
     gnumake
     cmake
-    opencv4
-    # Download
-    qbittorrent
-    # Password Manager
-    bitwarden
-
-    multimarkdown
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -139,6 +114,7 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+  programs.zsh.enable = true;
 
   # List services that you want to enable:
 

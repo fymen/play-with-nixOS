@@ -33,7 +33,7 @@ exec --no-startup-id feh --bg-scale ~/Pictures/wall-paper.jpg
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kgx -e tmux
+bindsym $mod+Return exec alacritty -e tmux
 # bindsym $mod+i exec "firefox"
 # bindsym $mod+m exec "emacs"
 
