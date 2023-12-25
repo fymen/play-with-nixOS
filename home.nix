@@ -18,7 +18,45 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
+    # Adds the 'hello' command to your environment. It prints a friendly
+    inconsolata
+    tmux
+    git
+    python3
+    python3Packages.pip
+    python3Packages.pyqt6
+    wget
+    # Image viewer
+     feh
+    gnome.eog
+     flameshot
+    # Editor
+    vim
+     emacs29
+    # Shells
+     zsh
+     oh-my-zsh
+     j4-dmenu-desktop
+    # Browsers
+     firefox
+     chromium
+    # Data visualization
+     gnuplot
+    # Player
+     mplayer
+     mpv
+    # Program
+    gcc
+    gnumake
+    cmake
+    opencv4
+    # Download
+    qbittorrent
+    # Password Manager
+    bitwarden
+
+    multimarkdown
+
     # gnome.gnome-terminal
      graphviz
     # # Download

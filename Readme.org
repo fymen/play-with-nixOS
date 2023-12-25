@@ -7,3 +7,14 @@ sudo nixos-rebuild test --flake .
 python -m venv myenv # Create a Python virtual environment
 source myenv/bin/activate # Activate the virtual environment
 pip install package-name # Install Python packages using pip
+#+begin_src nix
+    windowManager.i3 = {
+      enable = true;
+      extraPackages = with pkgs; [
+        dmenu #application launcher most people use
+        i3status # gives you the default i3 status bar
+        i3lock #default i3 screen locker
+        i3blocks #if you are planning on using i3blocks over i3status
+      ];
+    };
+#+end_src
