@@ -1,5 +1,34 @@
 { config, pkgs, ... }:
 
+let
+  my-python-packages = python-packages: with python-packages; [
+    pandas
+    requests
+    lxml # for eaf
+    qrcode # eaf-file-browser
+    pysocks # eaf-browser
+    pymupdf # eaf-pdf-viewer
+    pypinyin # eaf-file-manager
+    psutil # eaf-system-monitor
+    retry # eaf-markdown-previewer
+    markdown
+
+    python
+    venvShellHook
+    numpy
+    pandas
+    opencv4
+    matplotlib
+    pyqt6
+    pyqt6-sip
+    pyqt6-webengine
+    epc
+    sexpdata
+    browser-cookie3
+  ];
+  python-with-my-packages = pkgs.python3.withPackages my-python-packages;
+in
+
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -18,23 +47,17 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # Fonts
-    inconsolata
     # Terminal
     tmux
     alacritty
 
-    git
-    wget
+    python-with-my-packages
     # Image viewer
     feh
-    gnome.eog
     flameshot
     # Editor
-    vim
     emacs29
     # Shells
-    zsh
     oh-my-zsh
     j4-dmenu-desktop
     # Browsers
@@ -45,8 +68,7 @@
     # Player
     mplayer
     mpv
-    # Program
-    opencv4
+
     # Download
     qbittorrent
     # Password Manager
@@ -65,7 +87,7 @@
     gdb
 
     libreoffice
-    coreutils
+
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -115,6 +137,7 @@
     #   recursive = true;
     # };
   };
+
   programs = {
     git = {
       enable = true;
@@ -128,21 +151,12 @@
         theme = "af-magic";
       };
     };
-    alacritty = {
-      enable = true;
-      settings = {
-        font = {
-          size = 15.0;
-        };
-        colors = {
-          primary = {
-            background = "#1D1F21";
-            foreground = "#C5C8C6";
-          };
-        };
-      };
-    };
   };
+
+  imports = [
+    ./apps/alacritty.nix
+  ];
+
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
