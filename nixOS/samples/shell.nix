@@ -15,6 +15,10 @@ in pkgs.mkShell rec {
     pythonPackages.pyqt6
     pythonPackages.pyqt6-sip
     pythonPackages.pyqt6-webengine
+    pythonPackages.epc
+    pythonPackages.sexpdata
+    pythonPackages.browser-cookie3
+
 
     # In this particular example, in order to compile any binary extensions they may
     # require, the Python modules listed in the hypothetical requirements.txt need

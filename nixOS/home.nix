@@ -25,9 +25,6 @@
     alacritty
 
     git
-    python3
-    python3Packages.pip
-    python3Packages.pyqt6
     wget
     # Image viewer
     feh

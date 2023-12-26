@@ -99,7 +99,7 @@
     curl
     git
     python3
-    python3Packages.pip
+
     mesa
 
     zsh
