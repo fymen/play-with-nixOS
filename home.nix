@@ -56,9 +56,19 @@
     bitwarden
 
     multimarkdown
-
-    # gnome.gnome-terminal
     graphviz
+
+    unzip
+    gnupg
+    ripgrep
+    yt-dlp
+
+    gimp
+    imagemagick
+    gdb
+
+    libreoffice
+    coreutils
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -88,8 +98,26 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
-  };
 
+    # "org/roam" = {
+    #   source = builtins.fetchGit {
+    #     url = "ssh://git@github.com/fymen/roaming.git";
+    #     ref = "master";
+    #     rev = "8a10ae2faf15d564c9ed0cf9b9a9d65d27356cd9";
+    #   };
+    # recursive = true;
+    # };
+
+    # ".emacs.d" = {
+    #   source = pkgs.fetchFromGitHub {
+    #     owner = "fymen";
+    #     repo = ".emacs.d";
+    #     rev = "410a958";
+    #     sha256 = "sha256-jEvDbukPuF31zVWy+PnduPp0Lb7tZY4UaFiL09HPA94=";
+    #   };
+    #   recursive = true;
+    # };
+  };
   programs = {
     git = {
       enable = true;
@@ -101,6 +129,20 @@
       oh-my-zsh = {
         enable = true;
         theme = "af-magic";
+      };
+    };
+    alacritty = {
+      enable = true;
+      settings = {
+        font = {
+          size = 15.0;
+        };
+        colors = {
+          primary = {
+            background = "#1D1F21";
+            foreground = "#C5C8C6";
+          };
+        };
       };
     };
   };

@@ -100,11 +100,13 @@
     git
     python3
     python3Packages.pip
+    mesa
 
     zsh
     gcc
     gnumake
     cmake
+    file
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -120,6 +122,17 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      libva-utils
+      libGL
+    ];
+    setLdLibraryPath = true;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

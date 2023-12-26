@@ -24,3 +24,17 @@ pip install package-name # Install Python packages using pip
       ];
     };
 #+end_src
+
+#+begin_src shell
+git clone git@github.com:fymen/.emacs.d.git
+mkdir -p ~/org/ && git clone git@github.com:fymen/roaming.git ~/org/roam
+#+end_src
+
+
+Get sha-256 hash for package from github
+#+begin_src shell
+nix-prefetch fetchFromGitHub --owner fymen --repo .emacs.d --rev 410a958
+#+end_src
+
+
+python -m venv myenv && source myenv/bin/activate && pip install PyQt6 PyQt6-Qt6 PyQt6-sip PyQt6-WebEngine PyQt6-WebEngine-Qt6 epc sexpdata browser_cookie3
