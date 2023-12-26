@@ -10,6 +10,8 @@
     qbittorrent
     # Password Manager
     bitwarden
+    discord
+    zoom-us
   ];
 
   home.file = {
@@ -21,6 +23,6 @@
   imports = [
     ./apps/alacritty.nix
   ];
-
+  nixpkgs.config.allowUnfree = true;
   programs.home-manager.enable = true;
 }
