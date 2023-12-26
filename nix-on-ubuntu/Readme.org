@@ -1,0 +1,12 @@
+Follow the guide of [[https://github.com/DeterminateSystems/nix-installer][nix-installer]] to install =nix=.
+
+#+begin_src shell
+home-manager switch --flake ~/gitest/play-with-nixOS/nix-on-ubuntu/#$USER
+#+end_src
+
+#+begin_src shell
+# Update channel
+nix flake update
+# Clear garbage
+nix store gc
+#+end_src
