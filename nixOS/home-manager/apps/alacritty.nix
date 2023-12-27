@@ -3,7 +3,7 @@
     enable = true;
     settings = {
       font = {
-        size = 15.0;
+        size = 8.0;
       };
       colors = {
         primary = {

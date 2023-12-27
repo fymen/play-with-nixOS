@@ -13,11 +13,11 @@
   };
   outputs = { self, nixpkgs, home-manager, ... }: {
     # NOTE: 'nixos' is the default hostname set by the installer
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       # NOTE: Change this to aarch64-linux if you are on ARM
       system = "x86_64-linux";
       modules = [
-        ./configuration.nix
+        ./hosts/laptop/configuration.nix
         home-manager.nixosModules.home-manager
         {
           home-manager = {
@@ -32,5 +32,26 @@
         }
       ];
     };
+
+    nixosConfigurations.vmware = nixpkgs.lib.nixosSystem {
+      # NOTE: Change this to aarch64-linux if you are on ARM
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/vm/configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.oscar = import ./home-manager/home.nix;
+          };
+
+           nix = {
+             settings.experimental-features = ["nix-command" "flakes" ];
+           };
+        }
+      ];
+    };
+
   };
 }

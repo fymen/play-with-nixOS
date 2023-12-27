@@ -101,7 +101,7 @@ in
     pavucontrol
 
     networkmanager
-    texliveFull
+    # texliveFull
 
     # Download
     qbittorrent
