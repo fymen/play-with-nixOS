@@ -13,6 +13,7 @@ let
     retry # eaf-markdown-previewer
     markdown
 
+    pygments
     python
     venvShellHook
     numpy
@@ -47,6 +48,20 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    aspell
+    aspellDicts.en
+    zsh
+    gcc
+    gnumake
+    cmake
+    file
+
+    xclip
+    unzip
+    gnupg
+    ripgrep
+    silver-searcher
+
     # Terminal
     tmux
     alacritty
@@ -69,24 +84,30 @@ in
     mplayer
     mpv
 
-    # Download
-    qbittorrent
-    # Password Manager
-    bitwarden
 
     multimarkdown
     graphviz
 
-    unzip
-    gnupg
-    ripgrep
     yt-dlp
 
     gimp
     imagemagick
+
     gdb
 
+    evince
     libreoffice
+    # Sound volume control
+    pavucontrol
+
+    networkmanager
+    texliveFull
+
+    # Download
+    qbittorrent
+    # Password Manager
+    bitwarden
+    zoom-us
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -109,9 +130,18 @@ in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
     # ".screenrc".source = dotfiles/screenrc;
-    ".tmux.conf" .source = dotfiles/tmux.conf;
+    # ".tmux.conf" .source = dotfiles/tmux.conf;
     ".config/i3/config" .source = dotfiles/i3/config;
-    ".zshrc" .source = dotfiles/zshrc;
+    # ".zshrc" .source = dotfiles/zshrc;
+
+    ".tmux.conf" = {
+      text = ''
+      set -g prefix C-l
+      set-window-option -g mode-keys vi
+      set -g default-terminal "screen-256color"
+      set -ga terminal-overrides ',screen-256color:Tc'
+      '';
+      };
     # # You can also set the file content immediately.
     # ".gradle/gradle.properties".text = ''
     #   org.gradle.console=verbose
@@ -174,7 +204,7 @@ in
   #  /etc/profiles/per-user/oscar/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "vim";
   };
 
   # Let Home Manager install and manage itself.

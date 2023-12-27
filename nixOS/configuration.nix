@@ -91,23 +91,38 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  fonts.packages = with pkgs; [
+    inconsolata
+    wqy_zenhei
+    wqy_microhei
+    open-sans
+
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    # Fonts
-    inconsolata
+    nix-index
+    nix-prefetch-git
+    nix-prefetch-scripts
+
     coreutils
+    pass
     vim
     wget
     curl
     git
-    mesa
 
-    zsh
-    gcc
-    gnumake
-    cmake
-    file
+    mesa
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
