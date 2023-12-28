@@ -103,21 +103,12 @@
   nixpkgs.config.allowUnfree = true;
 
   fonts.packages = with pkgs; [
-    os-prober
     inconsolata
     wqy_zenhei
     wqy_microhei
     open-sans
-
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
-    mplus-outline-fonts.githubRelease
-    dina-font
-    proggyfonts
+    times-newer-roman
+    font-awesome
   ];
 
   # List packages installed in system profile. To search, run:
@@ -135,6 +126,9 @@
     git
 
     mesa
+
+    brightnessctl
+    acpi
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -145,7 +139,6 @@
   #   enableSSHSupport = true;
   # };
   programs.zsh.enable = true;
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.

@@ -28,6 +28,12 @@ let
     browser-cookie3
   ];
   python-with-my-packages = pkgs.python3.withPackages my-python-packages;
+
+  tex = (pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-full
+      dvisvgm dvipng # for preview and export as html
+      wrapfig amsmath ulem hyperref capt-of minted;
+  });
 in
 
 {
@@ -48,14 +54,14 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    aspell
-    aspellDicts.en
+    xorg.xev                    # get key code
+    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
     zsh
     gcc
     gnumake
     cmake
     file
-
+    tree
     xclip
     unzip
     gnupg
@@ -101,13 +107,15 @@ in
     pavucontrol
 
     networkmanager
-    # texliveFull
+
+    tex
 
     # Download
     qbittorrent
     # Password Manager
     bitwarden
     zoom-us
+
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -132,6 +140,17 @@ in
     # ".screenrc".source = dotfiles/screenrc;
     # ".tmux.conf" .source = dotfiles/tmux.conf;
     ".config/i3/config" .source = dotfiles/i3/config;
+    ".config/i3blocks/config" = {
+      text = ''
+      [battery]
+      command=acpi| tr -d ',' | awk '{print $3, $4}'
+      interval=60
+
+      [time_date]
+      command=date +" %a %d %b - %H:%M:%S"
+      interval=1
+      '';
+    };
     ".tmux.conf" = {
       text = ''
       set -g prefix C-l
@@ -141,7 +160,7 @@ in
       set -g default-terminal "screen-256color"
       set -ga terminal-overrides ',screen-256color:Tc'
       '';
-      };
+    };
     # # You can also set the file content immediately.
     # ".gradle/gradle.properties".text = ''
     #   org.gradle.console=verbose

@@ -47,6 +47,10 @@ bindsym $mod+Shift+q kill
 # installed.
 bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
+# Display brightness on ASUS vivobook
+bindcode 232 exec --no-startup-id /run/current-system/sw/bin/brightnessctl -d amdgpu_bl0 set 5%-
+bindcode 233 exec --no-startup-id /run/current-system/sw/bin/brightnessctl -d amdgpu_bl0 set +5%
+
 # change focus
 bindsym $mod+j focus left
 bindsym $mod+k focus down
