@@ -53,7 +53,7 @@
     xkbVariant = "";
     windowManager.i3 = {
       enable = true;
-       extraPackages = with pkgs; [
+      extraPackages = with pkgs; [
         dmenu #application launcher most people use
         i3status # gives you the default i3 status bar
         i3lock #default i3 screen locker
@@ -157,9 +157,10 @@
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
   environment.variables = {
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    GDK_SCALE = "1.2";
-    GDK_DPI_SCALE = "1.2";
-    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
+    QT_ENABLE_HIGHDPI_SCALING = "1";
+    GDK_SCALE = "1.8";
+    GDK_DPI_SCALE = "1.8";
+    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=1";
   };
 
   # Open ports in the firewall.
