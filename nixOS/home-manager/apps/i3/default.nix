@@ -19,6 +19,11 @@
       #SCONTROL=[determined automatically]
       #NATURAL_MAPPING=0
 
+      [brightness]
+      command=echo BRI`brightnessctl | awk -F'[()]' '/Current brightness/ {print $2}'`
+      interval=once
+      signal=11
+
       [battery]
       command=battery
       markup=pango

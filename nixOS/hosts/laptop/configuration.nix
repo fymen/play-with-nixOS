@@ -48,16 +48,17 @@
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
 
-    # dpi = 180;
+    dpi = 234;
+    upscaleDefaultCursor = true;
+
     layout = "us";
     xkbVariant = "";
     windowManager.i3 = {
       enable = true;
-       extraPackages = with pkgs; [
-        dmenu #application launcher most people use
-        i3status # gives you the default i3 status bar
-        i3lock #default i3 screen locker
-        i3blocks #if you are planning on using i3blocks over i3status
+      extraPackages = with pkgs; [
+        j4-dmenu-desktop
+        i3lock
+        i3blocks
       ];
     };
   };
@@ -154,13 +155,13 @@
   };
 
   # bigger tty fonts
-  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-  environment.variables = {
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    GDK_SCALE = "1.2";
-    GDK_DPI_SCALE = "1.2";
-    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
-  };
+  # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+  # environment.variables = {
+  #   QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+  #   GDK_SCALE = "1.2";
+  #   GDK_DPI_SCALE = "1.2";
+  #   _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
+  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -66,7 +66,6 @@ in
     emacs29
     # Shells
     oh-my-zsh
-    j4-dmenu-desktop
     # Browsers
     firefox
     chromium
@@ -97,11 +96,12 @@ in
     tex
 
     # Download
-    qbittorrent
+    transmission_4-gtk
+
     # Password Manager
     bitwarden
-    zoom-us
 
+    zoom-us
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
