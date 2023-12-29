@@ -42,15 +42,13 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   # Configure keymap in X11
   services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+
+    # dpi = 180;
     layout = "us";
     xkbVariant = "";
     windowManager.i3 = {
@@ -157,8 +155,8 @@
 
   # bigger tty fonts
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-  # services.xserver.dpi = 180;
   environment.variables = {
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     GDK_SCALE = "1.2";
     GDK_DPI_SCALE = "1.2";
     _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
@@ -169,6 +167,10 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  nix = {
+    settings.experimental-features = ["nix-command" "flakes" ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
