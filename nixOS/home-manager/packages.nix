@@ -63,10 +63,10 @@ in
     feh
     flameshot
     # Editor
-    emacs29-gtk3
+    emacs29
     # Shells
     oh-my-zsh
-
+    j4-dmenu-desktop
     # Browsers
     firefox
     chromium
