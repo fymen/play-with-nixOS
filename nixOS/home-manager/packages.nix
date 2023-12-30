@@ -39,21 +39,6 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    xorg.xev                    # get key code
-    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
-    zsh
-    gcc
-    gnumake
-    cmake
-    file
-    tree
-    killall
-    xclip
-    unzip
-    gnupg
-    ripgrep
-    silver-searcher
-
     # Terminal
     tmux
     alacritty
@@ -61,6 +46,7 @@ in
     python-with-my-packages
     # Image viewer
     feh
+    gnome.eog
     flameshot
     # Editor
     emacs29
@@ -74,7 +60,6 @@ in
     # Player
     mplayer
     mpv
-
 
     multimarkdown
     graphviz
@@ -101,7 +86,9 @@ in
     # Password Manager
     bitwarden
 
+    calibre
     zoom-us
+    discord
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

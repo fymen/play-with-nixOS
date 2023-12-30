@@ -118,6 +118,7 @@
     nix-prefetch-scripts
 
     coreutils
+    binutils
     pass
     vim
     wget
@@ -128,6 +129,38 @@
 
     brightnessctl
     acpi
+
+    xorg.xev                    # get key code
+    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
+    man-pages
+    zsh
+    gcc
+    gnumake
+    cmake
+    file
+    tree
+    killall
+    xclip
+    unzip
+    zip
+    xz
+    p7zip
+    gnupg
+    ripgrep
+    silver-searcher
+
+    # system call monitoring
+    strace # system call monitoring
+    ltrace # library call monitoring
+    lsof # list open files
+
+    # system tools
+    sysstat
+    lm_sensors # for `sensors` command
+    ethtool
+    pciutils # lspci
+    usbutils # lsusb
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -171,7 +204,21 @@
 
   nix = {
     settings.experimental-features = ["nix-command" "flakes" ];
+    settings.auto-optimise-store = true;
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 1w";
+    };
   };
+
+  # Optimize storage
+  # You can also manually optimize the store via:
+  #    nix-store --optimise
+  # Refer to the following link for more details:
+  # https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-auto-optimise-store
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
