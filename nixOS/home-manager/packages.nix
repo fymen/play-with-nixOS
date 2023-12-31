@@ -49,7 +49,7 @@ in
     gnome.eog
     flameshot
     # Editor
-    emacs29
+    emacs29-pgtk
     # Shells
     oh-my-zsh
     # Browsers
@@ -89,6 +89,8 @@ in
     calibre
     zoom-us
     discord
+
+    lutris
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

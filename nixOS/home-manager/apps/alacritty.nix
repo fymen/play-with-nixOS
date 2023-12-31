@@ -4,7 +4,7 @@
     settings = {
       env.TERM = "xterm-256color";
       font = {
-        size = 8.0;
+        size = 10.0;
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;

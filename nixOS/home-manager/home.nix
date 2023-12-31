@@ -23,6 +23,7 @@
     ./packages.nix
 
     ./apps/i3
+    ./apps/hyprland
     ./apps/tmux.nix
     ./apps/zsh.nix
     ./apps/git.nix

@@ -45,22 +45,23 @@
   # Configure keymap in X11
   services.xserver = {
     enable = true;
+    layout = "us";
+    xkbVariant = "";
+
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
 
-    dpi = 234;
-    upscaleDefaultCursor = true;
-
-    layout = "us";
-    xkbVariant = "";
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        j4-dmenu-desktop
-        i3lock
-        i3blocks
-      ];
-    };
+    ## Configurations for I3
+    # dpi = 234;
+    # upscaleDefaultCursor = true;
+    # windowManager.i3 = {
+    #   enable = true;
+    #   extraPackages = with pkgs; [
+    #     j4-dmenu-desktop
+    #     i3lock
+    #     i3blocks
+    #   ];
+    # };
   };
 
   # Enable CUPS to print documents.
@@ -130,7 +131,6 @@
     brightnessctl
     acpi
 
-    xorg.xev                    # get key code
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
     man-pages
     zsh
@@ -171,6 +171,8 @@
   #   enableSSHSupport = true;
   # };
   programs.zsh.enable = true;
+
+  programs.hyprland.enable = true;
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
