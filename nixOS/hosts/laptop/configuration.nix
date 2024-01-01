@@ -126,6 +126,7 @@
     curl
     git
 
+    wev                         # xev alternative in wayland
     mesa
 
     brightnessctl

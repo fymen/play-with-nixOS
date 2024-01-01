@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    rofi-wayland
+    tofi
     waybar
     hyprpaper
   ];
@@ -12,7 +12,26 @@
     ".config/hypr/hyprpaper.conf" .source = ./hypr/hyprpaper.conf;
     ".config/waybar/config" .source = ./waybar/config;
     ".config/waybar/style.css" .source = ./waybar/style.css;
-    ".config/rofi/config.rasi" .source = ./rofi/config.rasi;
+    ".config/tofi/config" = {
+      text = ''
+      anchor = top
+      width = 50%
+      height = 18
+      horizontal = true
+      font-size = 10
+      prompt-text = ""
+      font = monospace
+      outline-width = 0
+      border-width = 0
+      background-color = #0008
+      min-input-width = 30
+      result-spacing = 15
+      padding-top = 0
+      padding-bottom = 0
+      padding-left = 0
+      padding-right = 0
+      '';
+    };
   };
 
   home.sessionVariables = {
@@ -24,9 +43,15 @@
     WLR_RENDERER_ALLOW_SOFTWARE = "1";
     CLUTTER_BACKEND = "wayland";
     WLR_RENDERER = "vulkan";
+    NIXOS_OZONE_WL = "1";
+    GDK_SCALE = "1";
+
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
 
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_DESKTOP = "Hyprland";
     XDG_SESSION_TYPE = "wayland";
-    };
+  };
 }
