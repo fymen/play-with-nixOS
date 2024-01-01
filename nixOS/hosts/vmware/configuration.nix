@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../common/system-packages.nix
     ];
 
   # Bootloader.
@@ -92,36 +93,14 @@
   nixpkgs.config.allowUnfree = true;
 
   fonts.packages = with pkgs; [
-    inconsolata
-    wqy_zenhei
-    wqy_microhei
-    open-sans
-
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
-    mplus-outline-fonts.githubRelease
-    dina-font
-    proggyfonts
   ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    nix-index
-    nix-prefetch-git
-    nix-prefetch-scripts
-
-    coreutils
-    pass
-    vim
-    wget
-    curl
-    git
-
     mesa
   ];
 

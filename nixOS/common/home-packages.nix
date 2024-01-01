@@ -29,11 +29,6 @@ let
   ];
   python-with-my-packages = pkgs.python3.withPackages my-python-packages;
 
-  tex = (pkgs.texlive.combine {
-    inherit (pkgs.texlive) scheme-full
-      dvisvgm dvipng # for preview and export as html
-      wrapfig amsmath ulem hyperref capt-of minted;
-  });
 in
 {
   # The home.packages option allows you to install Nix packages into your
@@ -78,20 +73,6 @@ in
     pavucontrol
 
     networkmanager
-
-    tex
-
-    # Download
-    transmission_4-gtk
-
-    # Password Manager
-    bitwarden
-
-    calibre
-    zoom-us
-    discord
-
-    # lutris
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

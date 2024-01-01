@@ -20,7 +20,7 @@
   # plain files is through 'home.file'.
 
   imports = [
-    ./packages.nix
+    ../common/home-packages.nix
 
     ./apps/i3
     ./apps/hyprland
@@ -30,6 +30,27 @@
     ./apps/alacritty.nix
   ];
 
+  # The home.packages option allows you to install Nix packages into your
+  # environment.
+  home.packages = with pkgs; [
+    (pkgs.texlive.combine {
+      inherit (pkgs.texlive) scheme-full
+        dvisvgm dvipng # for preview and export as html
+        wrapfig amsmath ulem hyperref capt-of minted;
+    })
+
+    # Download
+    transmission_4-gtk
+
+    # Password Manager
+    bitwarden
+
+    calibre
+    zoom-us
+    discord
+
+    # lutris
+  ];
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
