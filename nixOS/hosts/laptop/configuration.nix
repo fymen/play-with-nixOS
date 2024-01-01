@@ -127,6 +127,8 @@
   programs.hyprland.enable = true;
   # List services that you want to enable:
 
+  # virtualisation.vmware.host.enable = true;
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 

@@ -22,7 +22,7 @@
   imports = [
     ../common/home-packages.nix
 
-    ./apps/i3
+#    ./apps/i3
     ./apps/hyprland
     ./apps/tmux.nix
     ./apps/zsh.nix
@@ -50,6 +50,8 @@
     discord
 
     # lutris
+    #    vmware-workstation
+
   ];
 
   # Home Manager can also manage your environment variables through
