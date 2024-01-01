@@ -32,13 +32,13 @@
 
       vmware = nixpkgs.lib.nixosSystem {
         modules = [
-          ./hosts/vm/configuration.nix
+          ./hosts/vmware/configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.oscar = import ./home-manager/home.nix;
+              users.oscar = import ./home-manager/home-vm.nix;
             };
           }
         ];
