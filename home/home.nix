@@ -48,15 +48,24 @@
     calibre
     zoom-us
     discord
+    telegram-desktop
 
     # Wayland
     wlr-randr
     libsForQt5.qt5.qtwayland
     qt6.qtwayland
 
-    # lutris
     #    vmware-workstation
 
+    # Gaming
+    # mangohud
+    # lutris
+    # heroic
+    # wineWowPackages.stable
+    # # wineWowPackages.waylandFull # unstable
+    # winetricks
+    # protonup-qt
+    # protontricks
   ];
 
   services.dunst = {

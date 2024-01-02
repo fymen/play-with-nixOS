@@ -2,21 +2,26 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../common/system-packages.nix
-    ];
+    ] ++ (with inputs.nixos-hardware.nixosModules; [
+      common-cpu-amd-pstate
+      common-gpu-amd
+      common-pc-ssd
+      asus-battery
+    ]);
 
   # Bootloader.
   # boot.loader.systemd-boot.enable = true;
   # boot.loader.efi.canTouchEfiVariables = true;
 
   boot.loader = {
-    timeout = 5;
+    timeout = 2;
 
     grub = {
       enable = true;
@@ -52,6 +57,8 @@
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
 
+    displayManager.defaultSession = "hyprland";
+
     ## Configurations for I3
     # dpi = 234;
     # upscaleDefaultCursor = true;
@@ -65,8 +72,47 @@
     # };
   };
 
+  # bigger tty fonts
+  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+
+  environment.variables = {
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    GDK_SCALE = "1.2";
+    GDK_DPI_SCALE = "1.2";
+    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
+
+    NIXOS_OZONE_WL = "1"; # Wayland support in Chromium and Electron based applications
+    MOZ_USE_XINPUT2 = "1";
+    MANGOHUD = "1"; # Enable for all Vulkan games
+
+  };
+
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  hardware.enableRedistributableFirmware = true;
+  # AMD GPU Configuration
+  hardware.amdgpu.amdvlk = true;
+  hardware.amdgpu.opencl = true;
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      libva-utils
+      libGL
+      rocmPackages.clr.icd
+    ];
+    setLdLibraryPath = true;
+  };
+
+
+
+  # Battery
+  hardware.asus.battery.chargeUpto = 75;
+
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -96,9 +142,24 @@
     shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
-    #  thunderbird
+      #  thunderbird
     ];
   };
+
+  # Enable automatic login for the user.
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "arvigeus";
+  security.sudo.wheelNeedsPassword = false;
+
+  # # Game
+  # programs.gamescope.enable = true;
+  # programs.steam = {
+  #   enable = true;
+  #   gamescopeSession.enable = true;
+  #   remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  #   dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  # };
+  # hardware.steam-hardware.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -132,25 +193,6 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      libva-utils
-      libGL
-    ];
-    setLdLibraryPath = true;
-  };
-
-  # bigger tty fonts
-  # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-  # environment.variables = {
-  #   QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-  #   GDK_SCALE = "1.2";
-  #   GDK_DPI_SCALE = "1.2";
-  #   _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
-  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -1,9 +1,11 @@
-# /etc/nixos/flake.nix
 {
+  description = "NixOS Flake Configuration";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home = {
@@ -12,37 +14,41 @@
     };
 
   };
-  outputs = { self, nixpkgs, home, ... }:{
-    system = "x86_64-linux";
+  outputs = { self, nixpkgs, home, ... }@inputs:
+    let
+      system = "x86_64-linux";
+      genericModules = [
+        {
+          # This fixes things that don't use Flakes, but do want to use NixPkgs.
+          nix.registry.nixos.flake = inputs.self;
+          environment.etc."nix/inputs/nixpkgs".source = nixpkgs.outPath;
+          nix.nixPath = [ "nixpkgs=${nixpkgs.outPath}" ];
+        }
 
-    nixosConfigurations = {
-      laptop = nixpkgs.lib.nixosSystem {
-        modules = [
-          ./hosts/laptop/configuration.nix
-          home.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.oscar = import ./home/home.nix;
-            };
-          }
-        ];
-      };
+        home.nixosModules.home-manager {
+          nix.registry.nixos.flake = inputs.self;
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+        }
+      ];
+    in
+      {
+        nixosConfigurations = {
+          "laptop" = nixpkgs.lib.nixosSystem {
+            inherit system;
 
-      vmware = nixpkgs.lib.nixosSystem {
-        modules = [
-          ./hosts/vmware/configuration.nix
-          home.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.oscar = import ./home/home-vm.nix;
-            };
-          }
-        ];
+            specialArgs = { inherit inputs; };
+            modules = genericModules ++ [ ./hosts/laptop/configuration.nix
+                                          { home-manager.users.oscar = import ./home/home.nix; } ];
+          };
+
+          "vmware" = nixpkgs.lib.nixosSystem {
+            inherit system;
+
+            specialArgs = { inherit inputs; };
+            modules = genericModules ++ [ ./hosts/vmware/configuration.nix
+                                          { home-manager.users.oscar = import ./home/home-vm.nix; } ];
+          };
+        };
       };
-    };
-  };
 }

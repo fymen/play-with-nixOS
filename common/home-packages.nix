@@ -50,7 +50,7 @@ in
     oh-my-zsh
     # Browsers
     firefox
-    chromium
+    google-chrome
     # Data visualization
     gnuplot
     # Player
