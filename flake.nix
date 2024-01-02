@@ -6,25 +6,25 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    home-manager = {
+    home = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
-  outputs = { self, nixpkgs, home-manager, ... }:{
+  outputs = { self, nixpkgs, home, ... }:{
     system = "x86_64-linux";
 
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem {
         modules = [
           ./hosts/laptop/configuration.nix
-          home-manager.nixosModules.home-manager
+          home.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.oscar = import ./home-manager/home.nix;
+              users.oscar = import ./home/home.nix;
             };
           }
         ];
@@ -33,12 +33,12 @@
       vmware = nixpkgs.lib.nixosSystem {
         modules = [
           ./hosts/vmware/configuration.nix
-          home-manager.nixosModules.home-manager
+          home.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.oscar = import ./home-manager/home-vm.nix;
+              users.oscar = import ./home/home-vm.nix;
             };
           }
         ];
