@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    # rofi-wayland
     tofi
     waybar
     hyprpaper
@@ -14,6 +15,7 @@
     ".config/hypr/hyprpaper.conf" .source = ./hypr/hyprpaper.conf;
     ".config/waybar/config" .source = ./waybar/config;
     ".config/waybar/style.css" .source = ./waybar/style.css;
+    # ".config/rofi/config.rasi" .source = ./rofi/config.rasi;
     ".config/tofi/config" = {
       text = ''
       anchor = top
@@ -21,12 +23,15 @@
       height = 32
       horizontal = true
       font-size = 20
+      hint-font = true
       prompt-text = ""
       font = monospace
       outline-width = 0
       border-width = 0
+      text-color = #D0BF8F
       background-color = #0008
-      min-input-width = 30
+      selection-color = #DFAF8F
+      min-input-width = 50
       result-spacing = 15
       padding-top = 0
       padding-bottom = 0

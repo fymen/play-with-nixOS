@@ -10,8 +10,8 @@
       selection.save_to_clipboard = true;
       colors = {
         primary = {
-          background = "#1D1F21";
-          foreground = "#C5C8C6";
+          background = "#2B2B2B";
+          foreground = "#DCDCCC";
         };
       };
     };
