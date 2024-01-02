@@ -42,11 +42,11 @@
                                           { home-manager.users.oscar = import ./home/home.nix; } ];
           };
 
-          "vmware" = nixpkgs.lib.nixosSystem {
+          "vm" = nixpkgs.lib.nixosSystem {
             inherit system;
 
             specialArgs = { inherit inputs; };
-            modules = genericModules ++ [ ./hosts/vmware/configuration.nix
+            modules = genericModules ++ [ ./hosts/vm/configuration.nix
                                           { home-manager.users.oscar = import ./home/home-vm.nix; } ];
           };
         };

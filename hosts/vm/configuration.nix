@@ -13,10 +13,10 @@
 
   # Bootloader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.useOSProber = true;
 
-  networking.hostName = "vmware"; # Define your hostname.
+  networking.hostName = "vm"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -25,7 +25,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  virtualisation.vmware.guest.enable = true;
+#  virtualisation.qemu.guestAgent.enable = true;
   # Set your time zone.
   time.timeZone = "America/Toronto";
 
