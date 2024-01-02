@@ -49,6 +49,7 @@
     zoom-us
     discord
 
+    wlr-randr
     # lutris
     #    vmware-workstation
 

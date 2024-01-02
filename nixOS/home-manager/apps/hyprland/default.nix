@@ -16,9 +16,9 @@
       text = ''
       anchor = top
       width = 50%
-      height = 18
+      height = 32
       horizontal = true
-      font-size = 10
+      font-size = 20
       prompt-text = ""
       font = monospace
       outline-width = 0
@@ -45,10 +45,11 @@
     WLR_RENDERER = "vulkan";
     NIXOS_OZONE_WL = "1";
     GDK_SCALE = "1";
+    GDK_DPI_SCALE = "1";
 
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "2";
     QT_QPA_PLATFORM = "wayland;xcb";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_AUTO_SCREEN_SCALE_FACTOR = "2";
 
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_DESKTOP = "Hyprland";
