@@ -6,6 +6,7 @@
     wqy_zenhei
     wqy_microhei
     open-sans
+    emacs-all-the-icons-fonts
   ];
 
   # List packages installed in system profile. To search, run:

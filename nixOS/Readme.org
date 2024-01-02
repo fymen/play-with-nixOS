@@ -4,7 +4,7 @@ nix-env -qa home-manager
 
 #+begin_src sh :dir (concat "/sudo::" (expand-file-name "./")) :cache no :results none
 # nixos-rebuild switch --flake .
-nixos-rebuild test --flake .
+sudo nixos-rebuild test --flake .
 #+end_src
 
 #+begin_src shell

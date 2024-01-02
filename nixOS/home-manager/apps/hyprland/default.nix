@@ -5,6 +5,8 @@
     tofi
     waybar
     hyprpaper
+    xdg-desktop-portal-hyprland
+    polkit_gnome
   ];
 
   home.file = {

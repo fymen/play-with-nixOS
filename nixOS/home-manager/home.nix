@@ -49,31 +49,86 @@
     zoom-us
     discord
 
+    # Wayland
     wlr-randr
+    libsForQt5.qt5.qtwayland
+    qt6.qtwayland
+
     # lutris
     #    vmware-workstation
 
   ];
 
-  # Home Manager can also manage your environment variables through
-  # 'home.sessionVariables'. If you don't want to manage your shell through Home
-  # Manager then you have to manually source 'hm-session-vars.sh' located at
-  # either
-  #
-  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  /etc/profiles/per-user/oscar/etc/profile.d/hm-session-vars.sh
-  #
-  home.sessionVariables = {
-    EDITOR = "vim";
+  services.dunst = {
+    enable = true;
+    settings = {
+      global = {
+        browser = "${config.programs.firefox.package}/bin/firefox -new-tab";
+        dmenu = "${pkgs.rofi}/bin/tofi-drun | xargs hyprctl dispatch exec --";
+        follow = "mouse";
+        font = "DejaVu Sans Mono 20";
+        format = "<b>%s</b>\\n%b";
+        frame_color = "#555555";
+        frame_width = 2;
+        geometry = "500x5-5+30";
+        horizontal_padding = 8;
+        icon_position = "off";
+        line_height = 0;
+        markup = "full";
+        padding = 8;
+        separator_color = "frame";
+        separator_height = 2;
+        transparency = 10;
+        word_wrap = true;
+      };
+
+      urgency_low = {
+        background = "#1d1f21";
+        foreground = "#4da1af";
+        frame_color = "#4da1af";
+        timeout = 10;
+      };
+
+      urgency_normal = {
+        background = "#1d1f21";
+        foreground = "#70a040";
+        frame_color = "#70a040";
+        timeout = 15;
+      };
+
+      urgency_critical = {
+        background = "#1d1f21";
+        foreground = "#dd5633";
+        frame_color = "#dd5633";
+        timeout = 0;
+      };
+
+      # shortcuts = {
+    #   context = "mod4+grave";
+    #   close = "mod4+shift+space";
+    #   };
+    };
   };
 
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-}
+# Home Manager can also manage your environment variables through
+# 'home.sessionVariables'. If you don't want to manage your shell through Home
+    # Manager then you have to manually source 'hm-session-vars.sh' located at
+    # either
+    #
+    #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+    #
+    # or
+    #
+    #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
+    #
+    # or
+    #
+    #  /etc/profiles/per-user/oscar/etc/profile.d/hm-session-vars.sh
+    #
+    home.sessionVariables = {
+      EDITOR = "vim";
+    };
+
+    # Let Home Manager install and manage itself.
+    programs.home-manager.enable = true;
+  }

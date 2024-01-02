@@ -19,6 +19,10 @@ clean:
 history:
 	nix profile history --profile /nix/var/nix/profiles/system
 
+#	sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+check_reboot:
+	./bin/nixos-checkreboot.sh
 clone:
 	git clone git@github.com:fymen/.emacs.d.git	~/.emacs.d
 	mkdir -p ~/org/ && git clone git@github.com:fymen/roaming.git ~/org/roam
+
