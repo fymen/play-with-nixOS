@@ -7,6 +7,9 @@
     waybar
     hyprpaper
     xdg-desktop-portal-hyprland
+    grim
+    slurp
+    wl-clipboard
     polkit_gnome
   ];
 
