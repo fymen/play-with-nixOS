@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, system, ... }:
 
 {
   imports =
@@ -171,11 +171,23 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    wev                         # xev alternative in wayland
-    mesa
+  environment.systemPackages = [
+    pkgs.wev                         # xev alternative in wayland
+    pkgs.mesa
+    pkgs.age
+    inputs.agenix.packages."${system}".default
   ];
 
+  age.identityPaths = [ "/home/oscar/.ssh/id_ed25519" ];
+  age.secrets.personal_org = {
+    symlink = true;
+    name = "private.org";
+    file = ./secrets/private_org.age;
+    path = "/home/oscar/personal/";
+    mode = "a+r";
+    owner = "oscar";
+    group = "users";
+  };
 
   # virtualisation.vmware.host.enable = true;
 

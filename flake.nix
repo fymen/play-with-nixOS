@@ -8,13 +8,15 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    agenix.url = "github:ryantm/agenix";
+
     home = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
-  outputs = { self, nixpkgs, home, ... }@inputs:
+  outputs = { self, nixpkgs, home, agenix, ... }@inputs:
     let
       system = "x86_64-linux";
       genericModules = [
@@ -37,9 +39,13 @@
           "laptop" = nixpkgs.lib.nixosSystem {
             inherit system;
 
-            specialArgs = { inherit inputs; };
+            specialArgs = { inherit inputs;
+                            inherit system;
+                          };
             modules = genericModules ++ [ ./hosts/laptop/configuration.nix
-                                          { home-manager.users.oscar = import ./home/home.nix; } ];
+                                          { home-manager.users.oscar = import ./home/home.nix; }
+                                          agenix.nixosModules.default];
+
           };
 
           "vm" = nixpkgs.lib.nixosSystem {
@@ -47,7 +53,8 @@
 
             specialArgs = { inherit inputs; };
             modules = genericModules ++ [ ./hosts/vm/configuration.nix
-                                          { home-manager.users.oscar = import ./home/home-vm.nix; } ];
+                                          { home-manager.users.oscar = import ./home/home-vm.nix; }
+                                          agenix.nixosModules.default];
           };
         };
       };
