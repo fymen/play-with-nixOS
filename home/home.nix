@@ -27,7 +27,7 @@
     ./apps/tmux.nix
     ./apps/zsh.nix
     ./apps/git.nix
-    ./apps/alacritty.nix
+    ./apps/foot.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your

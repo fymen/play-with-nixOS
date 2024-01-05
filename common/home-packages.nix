@@ -37,7 +37,8 @@ in
     font-manager
     # Terminal
     tmux
-    alacritty
+    foot
+    # alacritty
 
     python-with-my-packages
     # Image viewer

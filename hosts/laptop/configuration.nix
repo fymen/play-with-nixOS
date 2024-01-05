@@ -178,13 +178,15 @@
     inputs.agenix.packages."${system}".default
   ];
 
-  age.identityPaths = [ "/home/oscar/.ssh/id_ed25519" ];
-  age.secrets.personal_org = {
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.secrets."private.org" = {
     symlink = true;
-    name = "private.org";
-    file = ./secrets/private_org.age;
-    path = "/home/oscar/personal/";
-    mode = "a+r";
+    file = ./secrets/private.age;
+
+    # Decrypted file will be mount to
+    name = ".private.org";
+    path = "/home/oscar/";
+    mode = "600";
     owner = "oscar";
     group = "users";
   };
