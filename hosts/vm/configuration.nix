@@ -9,12 +9,21 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../common/system-packages.nix
+      ../../common/system.nix
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader = {
+    timeout = 2;
+
+    grub = {
+      enable = true;
+      efiSupport = true;
+      efiInstallAsRemovable = true; # Otherwise /boot/EFI/BOOT/BOOTX64.EFI isn't generated
+      devices = [ "nodev" ];
+      useOSProber = true;
+    };
+  };
 
   networking.hostName = "vm"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -25,13 +34,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-#  virtualisation.qemu.guestAgent.enable = true;
-  # Set your time zone.
-  time.timeZone = "America/Toronto";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_CA.UTF-8";
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -53,9 +55,6 @@
       ];
     };
   };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -85,24 +84,9 @@
     shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
-    #  thunderbird
+      #  thunderbird
     ];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-  ];
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    mesa
-  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -127,16 +111,6 @@
       libGL
     ];
     setLdLibraryPath = true;
-  };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  nix = {
-    settings.experimental-features = ["nix-command" "flakes" ];
   };
 
   # This value determines the NixOS release from which the default

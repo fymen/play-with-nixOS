@@ -42,8 +42,8 @@
             specialArgs = { inherit inputs;
                             inherit system;
                           };
-            modules = genericModules ++ [ ./hosts/laptop/configuration.nix
-                                          { home-manager.users.oscar = import ./home/home.nix; }
+            modules = genericModules ++ [ ./hosts/laptop
+                                          { home-manager.users.oscar = import ./home/oscar-laptop.nix; }
                                           agenix.nixosModules.default];
 
           };
@@ -53,7 +53,7 @@
 
             specialArgs = { inherit inputs; };
             modules = genericModules ++ [ ./hosts/vm/configuration.nix
-                                          { home-manager.users.oscar = import ./home/home-vm.nix; }
+                                          { home-manager.users.oscar = import ./home/oscar-vm.nix; }
                                           agenix.nixosModules.default];
           };
         };

@@ -8,7 +8,10 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../common/system.nix
       ../../common/system-packages.nix
+
+      ./secrets
     ] ++ (with inputs.nixos-hardware.nixosModules; [
       common-cpu-amd-pstate
       common-gpu-amd
@@ -42,24 +45,22 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "America/Toronto";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_CA.UTF-8";
-
   # Configure keymap in X11
   services.xserver = {
     enable = true;
     layout = "us";
     xkbVariant = "";
 
-    displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = true;
-    desktopManager.gnome.enable = true;
+    displayManager = {
+      gdm.enable = true;
+      # Enable automatic login for the user.
+      autoLogin.enable = true;
+      autoLogin.user = "oscar";
 
-    displayManager.defaultSession = "hyprland";
+      defaultSession = "hyprland";
+    };
 
+    # desktopManager.gnome.enable = true;
     ## Configurations for I3
     # dpi = 234;
     # upscaleDefaultCursor = true;
@@ -72,6 +73,8 @@
     #   ];
     # };
   };
+
+  security.sudo.wheelNeedsPassword = false;
 
   programs.hyprland.enable = true;
 
@@ -140,7 +143,7 @@
   users.users.oscar = {
     isNormalUser = true;
     description = "oscar";
-    linger = true;              # Start user services before login
+    # linger = true;              # Start user services before login
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
@@ -148,11 +151,6 @@
       #  thunderbird
     ];
   };
-
-  # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "oscar";
-  security.sudo.wheelNeedsPassword = false;
 
   # # Game
   # programs.gamescope.enable = true;
@@ -177,27 +175,7 @@
   environment.systemPackages = [
     pkgs.wev                         # xev alternative in wayland
     pkgs.mesa
-    pkgs.age
-    inputs.agenix.packages."${system}".default
   ];
-
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  age.secrets."private.org" = {
-    symlink = true;
-    file = ./secrets/private.age;
-
-    # Decrypted file will be mount to
-    name = ".private.org";
-    path = "/home/oscar/";
-    mode = "600";
-    owner = "oscar";
-    group = "users";
-  };
-
-  # virtualisation.vmware.host.enable = true;
-
-  # virtualisation.libvirtd.enable = true;
-  # programs.virt-manager.enable = true;
 
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -222,17 +200,6 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-
-  nix = {
-    settings.experimental-features = ["nix-command" "flakes" ];
-    settings.auto-optimise-store = true;
-
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 1w";
-    };
-  };
 
   # Optimize storage
   # You can also manually optimize the store via:

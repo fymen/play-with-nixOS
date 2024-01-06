@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./apps
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "oscar";
@@ -19,18 +23,6 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
 
-  imports = [
-    ../common/home-packages.nix
-    ../modules/emacs.nix
-
-    #    ./apps/i3
-    ./apps/hyprland
-    ./apps/tmux.nix
-    ./apps/zsh.nix
-    ./apps/git.nix
-    ./apps/foot.nix
-    # ./apps/firefox.nix
-  ];
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
@@ -70,61 +62,16 @@
     # protontricks
   ];
 
-  services.udiskie.enable = true;
-
-  services.dunst = {
+  services.udiskie = {
     enable = true;
-    settings = {
-      global = {
-        browser = "${config.programs.firefox.package}/bin/firefox -new-tab";
-        dmenu = "${pkgs.rofi}/bin/tofi-drun | xargs hyprctl dispatch exec --";
-        follow = "mouse";
-        font = "DejaVu Sans Mono 20";
-        format = "<b>%s</b>\\n%b";
-        frame_color = "#555555";
-        frame_width = 2;
-        geometry = "500x5-5+30";
-        horizontal_padding = 8;
-        icon_position = "off";
-        line_height = 0;
-        markup = "full";
-        padding = 8;
-        separator_color = "frame";
-        separator_height = 2;
-        transparency = 10;
-        word_wrap = true;
-      };
-
-      urgency_low = {
-        background = "#1d1f21";
-        foreground = "#4da1af";
-        frame_color = "#4da1af";
-        timeout = 10;
-      };
-
-      urgency_normal = {
-        background = "#1d1f21";
-        foreground = "#70a040";
-        frame_color = "#70a040";
-        timeout = 15;
-      };
-
-      urgency_critical = {
-        background = "#1d1f21";
-        foreground = "#dd5633";
-        frame_color = "#dd5633";
-        timeout = 0;
-      };
-
-      # shortcuts = {
-    #   context = "mod4+grave";
-    #   close = "mod4+shift+space";
-    #   };
-    };
+    automount = true;
+    notify = true;
   };
 
-  modules.editors.emacs.enable = true;
-  modules.editors.emacs.personal.enable = true;
+  modules.editors = {
+    emacs.enable = true;
+    emacs.personal.enable = true;
+  };
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
@@ -143,11 +90,6 @@
   #
   home.sessionVariables = {
     EDITOR = "vim";
-  };
-
-  home.shellAliases = {
-    et="emacsclient -t";
-    ec="emacsclient -c";
   };
 
   # Let Home Manager install and manage itself.

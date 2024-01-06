@@ -34,7 +34,7 @@ env = XCURSOR_SIZE,48
 # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 
 # Execute your favorite apps at launch
-# exec-once = emacs --daemon
+exec-once = emacs --daemon
 exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP
 exec-once = gsettings set org.gnome.desktop.interface text-scaling-factor 1.5

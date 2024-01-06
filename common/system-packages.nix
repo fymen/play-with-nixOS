@@ -6,7 +6,6 @@
     wqy_zenhei
     wqy_microhei
     open-sans
-    emacs-all-the-icons-fonts
   ];
 
   # List packages installed in system profile. To search, run:
@@ -27,7 +26,7 @@
     brightnessctl
     acpi
 
-    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
+
     man-pages
     zsh
     gcc
@@ -42,8 +41,6 @@
     xz
     p7zip
     gnupg
-    ripgrep
-    silver-searcher
 
     # system call monitoring
     strace # system call monitoring
@@ -56,6 +53,5 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
-
   ];
 }

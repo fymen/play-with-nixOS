@@ -41,14 +41,27 @@ in {
 
   config = mkIf cfg.enable {
     # Execute "systemctl --user enable emacs.service" after modifying this
-    services.emacs = {
-      package = pkgs.emacs29-pgtk;
-      enable = true;
-    };
+    # Do it when hyprland starts
+    # services.emacs = {
+    #   package = pkgs.emacs29-pgtk;
+    #   enable = true;
+    # };
 
     home.packages = with pkgs; [
       emacs29-pgtk
+      (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
+      mpv
+      yt-dlp
+      ripgrep
+      silver-searcher
+
+      emacs-all-the-icons-fonts
     ];
+
+    home.shellAliases = {
+      et="emacsclient -t";
+      ec="emacsclient -c";
+    };
 
     home.activation = mkIf cfg.personal.enable {
       installPersonalConfig = hm.dag.entryAfter [ "writeBoundary" ] ''

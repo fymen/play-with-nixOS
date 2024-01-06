@@ -31,6 +31,19 @@ let
 
 in
 {
+  imports = [
+    ./emacs.nix
+
+    # ./i3
+    ./hyprland
+    ./tmux.nix
+    ./zsh.nix
+    ./git.nix
+    ./terminals
+    ./dunst.nix
+    # ./firefox.nix
+  ];
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
@@ -56,12 +69,9 @@ in
     gnuplot
     # Player
     mplayer
-    mpv
 
     multimarkdown
     graphviz
-
-    yt-dlp
 
     gimp
     imagemagick
