@@ -7,7 +7,6 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ../../modules/emacs.nix
       ./hardware-configuration.nix
       ../../common/system-packages.nix
     ] ++ (with inputs.nixos-hardware.nixosModules; [
@@ -56,6 +55,7 @@
     xkbVariant = "";
 
     displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = true;
     desktopManager.gnome.enable = true;
 
     displayManager.defaultSession = "hyprland";
@@ -73,6 +73,8 @@
     # };
   };
 
+  programs.hyprland.enable = true;
+
   # bigger tty fonts
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
@@ -87,9 +89,6 @@
     MANGOHUD = "1"; # Enable for all Vulkan games
 
   };
-
-  modules.editors.emacs.enable = true;
-  modules.editors.emacs.personal.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -210,7 +209,6 @@
   # };
   programs.zsh.enable = true;
 
-  programs.hyprland.enable = true;
   # List services that you want to enable:
 
   # virtualisation.vmware.host.enable = true;

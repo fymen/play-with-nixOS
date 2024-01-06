@@ -21,8 +21,9 @@
 
   imports = [
     ../common/home-packages.nix
+    ../modules/emacs.nix
 
-#    ./apps/i3
+    #    ./apps/i3
     ./apps/hyprland
     ./apps/tmux.nix
     ./apps/zsh.nix
@@ -68,6 +69,8 @@
     # protonup-qt
     # protontricks
   ];
+
+  services.udiskie.enable = true;
 
   services.dunst = {
     enable = true;
@@ -120,30 +123,33 @@
     };
   };
 
-# Home Manager can also manage your environment variables through
-# 'home.sessionVariables'. If you don't want to manage your shell through Home
-    # Manager then you have to manually source 'hm-session-vars.sh' located at
-    # either
-    #
-    #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-    #
-    # or
-    #
-    #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
-    #
-    # or
-    #
-    #  /etc/profiles/per-user/oscar/etc/profile.d/hm-session-vars.sh
-    #
-    home.sessionVariables = {
-      EDITOR = "vim";
-    };
+  modules.editors.emacs.enable = true;
+  modules.editors.emacs.personal.enable = true;
 
-    home.shellAliases = {
-      et="emacsclient -t";
-      ec="emacsclient -c";
-    };
+  # Home Manager can also manage your environment variables through
+  # 'home.sessionVariables'. If you don't want to manage your shell through Home
+  # Manager then you have to manually source 'hm-session-vars.sh' located at
+  # either
+  #
+  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+  #
+  # or
+  #
+  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
+  #
+  # or
+  #
+  #  /etc/profiles/per-user/oscar/etc/profile.d/hm-session-vars.sh
+  #
+  home.sessionVariables = {
+    EDITOR = "vim";
+  };
 
-    # Let Home Manager install and manage itself.
-    programs.home-manager.enable = true;
-  }
+  home.shellAliases = {
+    et="emacsclient -t";
+    ec="emacsclient -c";
+  };
+
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+}

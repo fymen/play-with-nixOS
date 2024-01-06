@@ -44,13 +44,15 @@ in {
     services.emacs = {
       package = pkgs.emacs29-pgtk;
       enable = true;
-      install = true;
     };
 
-    system.userActivationScripts = mkIf cfg.personal.enable {
-      installPersonalConfig = ''
-      PATH=$PATH:${lib.makeBinPath [ pkgs.git ]}
+    home.packages = with pkgs; [
+      emacs29-pgtk
+    ];
 
+    home.activation = mkIf cfg.personal.enable {
+      installPersonalConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
+      PATH=$PATH:${lib.makeBinPath [ pkgs.git ]}
       if [ ! -d "$HOME/.emacs.d" ]; then
          git clone ${cfg.personal.configEmacsRepoUrl} $HOME/.emacs.d
       fi
