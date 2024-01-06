@@ -15,12 +15,14 @@ window#waybar.hidden {
 }
 
 #window {
+	font-weight: bold;
 	margin-top: 1px;
 	padding-left: 10px;
 	padding-right: 10px;
 	border-radius: 10px;
 	transition: none;
-    color: transparent;
+    /* color: transparent; */
+    color: #D0BF8F;
 	background: transparent;
 }
 #tags {

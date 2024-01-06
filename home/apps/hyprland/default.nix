@@ -6,6 +6,7 @@
     tofi
     waybar
     hyprpaper
+    pyprland
     xdg-desktop-portal-hyprland
     grim
     slurp

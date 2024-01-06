@@ -28,6 +28,7 @@
     ./apps/zsh.nix
     ./apps/git.nix
     ./apps/foot.nix
+    # ./apps/firefox.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
@@ -136,6 +137,11 @@
     #
     home.sessionVariables = {
       EDITOR = "vim";
+    };
+
+    home.shellAliases = {
+      et="emacsclient -t";
+      ec="emacsclient -c";
     };
 
     # Let Home Manager install and manage itself.

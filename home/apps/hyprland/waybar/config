@@ -1,6 +1,7 @@
 {
 	"layer": "top",
 	"modules-left": ["hyprland/workspaces","custom/media","tray"],
+    "modules-center": ["hyprland/window"],
 	"modules-right": ["backlight","pulseaudio","battery", "clock"],
 
     "hyprland/workspaces": {
@@ -31,6 +32,11 @@
         "4": ["eDP-1"], // Always show a workspace with name '4', on output 'eDP-1' if it does not exists
         },
        "sort-by-number": true
+    },
+    "hyprland/window": {
+        "format": "{}",   // <--- these is the default value
+        "max-length": 120,
+        //"format": "<span font='9' rise='-4444'>{}</span>"
     },
 	"pulseaudio": {
 		"tooltip": false,

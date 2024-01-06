@@ -2,11 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, system, ... }:
+{ config, pkgs, inputs, system, lib, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
+      ../../modules/emacs.nix
       ./hardware-configuration.nix
       ../../common/system-packages.nix
     ] ++ (with inputs.nixos-hardware.nixosModules; [
@@ -87,9 +88,11 @@
 
   };
 
+  modules.editors.emacs.enable = true;
+  modules.editors.emacs.personal.enable = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
   hardware.enableRedistributableFirmware = true;
   # AMD GPU Configuration
@@ -138,6 +141,7 @@
   users.users.oscar = {
     isNormalUser = true;
     description = "oscar";
+    linger = true;              # Start user services before login
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
@@ -148,7 +152,7 @@
 
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "arvigeus";
+  services.xserver.displayManager.autoLogin.user = "oscar";
   security.sudo.wheelNeedsPassword = false;
 
   # # Game

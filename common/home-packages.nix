@@ -46,7 +46,7 @@ in
     gnome.eog
     flameshot
     # Editor
-    emacs29-pgtk
+
     # Shells
     oh-my-zsh
     # Browsers
