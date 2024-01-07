@@ -1,7 +1,10 @@
+{ pkgs, ... }:
+
 {
   programs.foot = {
     enable = true;
     server.enable = true;
+    package = pkgs.foot;
     settings = {
       main = {
         term = "xterm-256color";

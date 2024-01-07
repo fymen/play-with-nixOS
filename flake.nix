@@ -6,6 +6,8 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
+    nur.url = "github:nix-community/NUR";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     agenix.url = "github:ryantm/agenix";
@@ -16,7 +18,7 @@
     };
 
   };
-  outputs = { self, nixpkgs, home, agenix, ... }@inputs:
+  outputs = { self, nixpkgs, home, agenix, nur, ... }@inputs:
     let
       system = "x86_64-linux";
       genericModules = [
@@ -43,7 +45,11 @@
                             inherit system;
                           };
             modules = genericModules ++ [ ./hosts/laptop
-                                          { home-manager.users.oscar = import ./home/oscar-laptop.nix; }
+                                          { home-manager.users.oscar.imports = [ ./home/oscar-laptop.nix
+                                                                                 nur.hmModules.nur
+                                                                               ];
+                                          }
+                                          nur.nixosModules.nur
                                           agenix.nixosModules.default];
 
           };

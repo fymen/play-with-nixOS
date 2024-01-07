@@ -51,27 +51,44 @@
     layout = "us";
     xkbVariant = "";
 
+    # Configure AMD graphics
+    videoDrivers = [ "amdgpu" ];
+
     displayManager = {
-      gdm.enable = true;
-      # Enable automatic login for the user.
       autoLogin.enable = true;
       autoLogin.user = "oscar";
 
       defaultSession = "hyprland";
+
+      gdm = {
+        enable = true;
+        wayland = true;
+      };
+
+      lightdm = {
+        enable = false;
+        greeters.enso = {
+          enable = true;
+        };
+      };
+      # Enable automatic login for the user.
     };
 
-    # desktopManager.gnome.enable = true;
+    desktopManager.gnome.enable = false;
     ## Configurations for I3
-    # dpi = 234;
-    # upscaleDefaultCursor = true;
-    # windowManager.i3 = {
-    #   enable = true;
-    #   extraPackages = with pkgs; [
-    #     j4-dmenu-desktop
-    #     i3lock
-    #     i3blocks
-    #   ];
-    # };
+    dpi = 234;
+    upscaleDefaultCursor = true;
+    windowManager= {
+      i3 = {
+        enable = false;
+        extraPackages = with pkgs; [
+          j4-dmenu-desktop
+          i3lock
+          i3blocks
+        ];
+      };
+    };
+
   };
 
   security.sudo.wheelNeedsPassword = false;
@@ -100,6 +117,8 @@
   # AMD GPU Configuration
   hardware.amdgpu.amdvlk = true;
   hardware.amdgpu.opencl = true;
+  # Load AMD CPU microcode
+  hardware.cpu.amd.updateMicrocode = true;
 
   hardware.opengl = {
     enable = true;
