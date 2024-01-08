@@ -1,0 +1,30 @@
+[pyprland]
+plugins = [
+  "scratchpads",
+  "expose",
+  "workspaces_follow_focus",
+]
+
+[workspaces_follow_focus]
+max_workspaces = 9
+
+[expose]
+include_special = false
+
+[scratchpads.emacs]
+animation = "fromBottom"
+command = "foot -e emacsclient --alternate-editor 'false' -t"
+class = "foot"
+lazy = true
+size = "75% 45%"
+# unfocus = "hide"
+margin = 0
+
+[scratchpads.chrome]
+animation = "fromRight"
+command = "google-chrome-stable"
+class = "Google-chrome"
+lazy = true
+size = "45% 90%"
+# unfocus = "hide"
+margin = 0

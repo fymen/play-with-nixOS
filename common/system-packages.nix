@@ -26,8 +26,9 @@
     brightnessctl
     acpi
 
-
+    bat
     man-pages
+    direnv
     zsh
     gcc
     gnumake

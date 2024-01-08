@@ -59,7 +59,7 @@ in {
     ];
 
     home.shellAliases = {
-      et="emacsclient -t";
+      ee="emacsclient -t";
       ec="emacsclient -c";
     };
 

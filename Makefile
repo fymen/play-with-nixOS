@@ -27,8 +27,4 @@ list-generations:
 list-packages:
 	nix-env -qa
 
-clone:
-	git clone git@github.com:fymen/.emacs.d.git	~/.emacs.d
-	mkdir -p ~/org/ && git clone git@github.com:fymen/roaming.git ~/org/roam
-
-.PHONY: all debug install update cleanup clean list-generations list-packages clone
+.PHONY: all debug install update cleanup clean list-generations list-packages

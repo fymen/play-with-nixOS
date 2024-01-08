@@ -34,7 +34,6 @@ env = XCURSOR_SIZE,48
 # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 
 # Execute your favorite apps at launch
-exec-once = emacs --daemon
 exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP
 exec-once = gsettings set org.gnome.desktop.interface text-scaling-factor 1.5
@@ -42,6 +41,9 @@ exec-once = /nix/store/$(ls -la /nix/store | grep polkit-gnome | grep '^d' | awk
 exec-once = hyprpaper & waybar
 exec-once = foot -e tmux
 exec-once = pypr
+# Emacs daemon executed by hyprland can't work with direnv mode. Wrapper it with tmux.
+exec-once = tmux -c "emacs --daemon"
+
 # Source a file (multi-file configs)
 # source = ~/.config/hypr/myColors.conf
 
@@ -173,7 +175,7 @@ bind = $mainMod SHIFT, Q, killactive,
 bind = $mainMod SHIFT, ESCAPE, exit,
 bind = $mainMod, E, exec, dolphin
 bind = $mainMod SHIFT, SPACE, togglefloating,
-bind = $mainMod, D, exec, tofi-drun | xargs hyprctl dispatch exec --
+bind = $mainMod, D, exec, tofi-drun --drun-launch=true
 bind = $mainMod, M, pseudo, # dwindle
 bind = $mainMod, J, togglesplit, # dwindle
 
@@ -245,6 +247,7 @@ bind = $mainMod SHIFT, PRINT, exec, grim -g "$(slurp -d)" - | wl-copy
   home.file = {
     # ".config/hypr/hyprland.conf" .source = ./hypr/hyprland.conf;
     ".config/hypr/hyprpaper.conf" .source = ./hypr/hyprpaper.conf;
+    ".config/hypr/pyprland.toml" .source = ./hypr/pyprland.toml;
     ".config/waybar/config" .source = ./waybar/config;
     ".config/waybar/style.css" .source = ./waybar/style.css;
     # ".config/rofi/config.rasi" .source = ./rofi/config.rasi;
