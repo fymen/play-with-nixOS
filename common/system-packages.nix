@@ -27,7 +27,6 @@
     acpi
 
     man-pages
-    direnv
     zsh
     gcc
     gnumake

@@ -1,0 +1,18 @@
+scheme: "alect-light"
+author: "alezost(https://github.com/alezost/alect-themes)"
+base00: "101010" # ----
+base01: "262626" # ---
+base02: "ccc19b" # --
+base03: "d2c9b0" # --
+base04: "d9ceb2" # --
+base05: "dcd2bd" # -
+base06: "ded6c5" # -
+base07: "f0f0b0" # +
+base08: "f6f0e1" # ++
+base09: "ff6868" # red
+base0A: "dddd44" # yellow
+base0B: "077707" # green
+base0C: "358d8d" # aqua/cyan
+base0D: "1111ff" # blue
+base0E: "a020f0" # purple
+base0F: "e98bb7" # magenta

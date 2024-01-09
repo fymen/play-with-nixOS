@@ -2,6 +2,9 @@
 {
   programs.firefox = {
     enable = true;
+    package = if pkgs.stdenv.hostPlatform.isDarwin
+              then pkgs.firefox-bin
+              else pkgs.firefox;
 
     # Privacy about:config settings
     profiles.oscar = {
@@ -19,29 +22,6 @@
         dictionaries
         grammarly
       ];
-      search = {
-        engines = {
-          "Nix Packages" = {
-            urls = [{
-              template = "https://search.nixos.org/packages";
-              params = [
-                { name = "type"; value = "packages"; }
-                { name = "query"; value = "{searchTerms}"; }
-              ];
-            }];
-            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = [ "@np" ];
-          };
-          "NixOS Wiki" = {
-            urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
-            iconUpdateURL = "https://nixos.wiki/favicon.png";
-            updateInterval = 24 * 60 * 60 * 1000; # every day
-            definedAliases = [ "@nw" ];
-          };
-          "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
-        };
-        default = "Google";
-      };
       settings = {
         "browser.startup.homepage" = "https://search.nixos.org/packages";
         "browser.urlbar.placeholderName" = "Google";

@@ -5,8 +5,8 @@
     tofi
   ];
 
-  home.file = {
-    ".config/tofi/config" = {
+  xdg.configFile = {
+    "tofi/config" = {
       text = ''
       anchor = top
       width = 50%

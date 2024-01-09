@@ -5,9 +5,7 @@
     pyprland
   ];
 
-
-  home.file = {
-    ".config/hypr/pyprland.toml" .source = ./pyprland.toml;
+  xdg.configFile = {
+    "hypr/pyprland.toml" .source = ./pyprland.toml;
   };
-
 }

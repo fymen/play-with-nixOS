@@ -5,8 +5,8 @@
     waybar
   ];
 
-  home.file = {
-    ".config/waybar/config" .source = ./config;
-    ".config/waybar/style.css" .source = ./style.css;
+  xdg.configFile = {
+    "waybar/config" .source = ./config;
+    "waybar/style.css" .source = ./style.css;
   };
 }

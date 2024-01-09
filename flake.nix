@@ -12,13 +12,16 @@
 
     agenix.url = "github:ryantm/agenix";
 
+    # colorscheme
+    nix-colors.url = "github:Misterio77/nix-colors";
+
     home = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
-  outputs = { self, nixpkgs, home, agenix, nur, ... }@inputs:
+  outputs = { self, nixpkgs, home, nix-colors, ... }@inputs:
     let
       system = "x86_64-linux";
       genericModules = [
@@ -33,6 +36,9 @@
           nix.registry.nixos.flake = inputs.self;
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {inherit inputs;
+                                           inherit system;
+                                          };
         }
       ];
     in
@@ -41,17 +47,20 @@
           "laptop" = nixpkgs.lib.nixosSystem {
             inherit system;
 
-            specialArgs = { inherit inputs;
-                            inherit system;
+            specialArgs = {inherit inputs;
+                           inherit system;
                           };
-            modules = genericModules ++ [ ./hosts/laptop
-                                          { home-manager.users.oscar.imports = [ ./home/oscar-laptop.nix
-                                                                                 nur.hmModules.nur
-                                                                               ];
-                                          }
-                                          nur.nixosModules.nur
-                                          agenix.nixosModules.default];
-
+            modules = genericModules ++
+                      [ ./hosts/laptop
+                        { home-manager.users.oscar.imports =
+                            [ ./home/home.nix
+                              inputs.nix-colors.homeManagerModules.default
+                              inputs.nur.hmModules.nur
+                            ];
+                        }
+                        inputs.nur.nixosModules.nur
+                        inputs.agenix.nixosModules.default
+                      ];
           };
 
           "vm" = nixpkgs.lib.nixosSystem {
@@ -60,7 +69,8 @@
             specialArgs = { inherit inputs; };
             modules = genericModules ++ [ ./hosts/vm/configuration.nix
                                           { home-manager.users.oscar = import ./home/oscar-vm.nix; }
-                                          agenix.nixosModules.default];
+                                          inputs.agenix.nixosModules.default
+                                        ];
           };
         };
       };

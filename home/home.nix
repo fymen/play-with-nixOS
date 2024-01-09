@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ inputs, system, config, pkgs, ... }:
 
 {
   imports = [
@@ -24,7 +24,6 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
 
-
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
@@ -37,6 +36,7 @@
     # youtube-music
     ani-cli                     # Watch animation from cli
     rnnoise-plugin
+
 
     # Download
     transmission_4-gtk
@@ -77,6 +77,42 @@
     emacs.personal.enable = true;
   };
 
+  programs = {
+    # Easy shell environments
+    direnv = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
+
+    # Replacement for ls
+    eza = {
+      enable = true;
+      enableAliases = true;
+    };
+
+    # Fuzzy finder
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+  };
+
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = ["org.gnome.Evince.desktop"];
+      "text/html" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "application/vnd.mozilla.xul+xml" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/about" = "firefox.desktop";
+      "x-scheme-handler/unknown" = "firefox.desktop";
+    };
+  };
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
@@ -94,7 +130,8 @@
   #  /etc/profiles/per-user/oscar/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "vim";
+    EDITOR = "${pkgs.vim}/bin/vim";
+    DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
   };
 
   # Let Home Manager install and manage itself.

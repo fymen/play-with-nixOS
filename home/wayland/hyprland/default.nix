@@ -237,9 +237,9 @@ bind = $mainMod SHIFT, PRINT, exec, grim -g "$(slurp -d)" - | wl-copy
     '';
   };
 
-  home.file = {
-    # ".config/hypr/hyprland.conf" .source = ./hyprland.conf;
-    ".config/hypr/hyprpaper.conf" .source = ./hyprpaper.conf;
+  xdg.configFile = {
+    # "hypr/hyprland.conf" .source = ./hyprland.conf;
+    "hypr/hyprpaper.conf" .source = ./hyprpaper.conf;
   };
 
   home.sessionVariables = {

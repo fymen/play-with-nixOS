@@ -5,7 +5,7 @@
     rofi-wayland
   ];
 
-  home.file = {
-    ".config/rofi/config.rasi" .source = ./config.rasi;
+  xdg.configFile = {
+    "rofi/config.rasi" .source = ./config.rasi;
   };
 }

@@ -42,18 +42,18 @@ in
     ./firefox.nix
     ./chromium.nix
     ./mpv.nix
+    ./zathura.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    du-dust                     # Modernized du
-    bat
-    btop
-    eza
-    fzf
+    du-dust                     # Modernized "du"
+    bat                         # Alternative to "cat"
+    btop                        # Alternative to "top"
+    nvtop-amd                       # Monitor GPU process
     starship
-    fd
+    fd                          # Alternative to "find"
     lazygit                     # Magit alternative
 
     grc                         # Colorize command output
