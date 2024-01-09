@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./wayland
     ./apps
   ];
 
@@ -35,7 +36,6 @@
 
     # youtube-music
     ani-cli                     # Watch animation from cli
-    xwaylandvideobridge         # Share desktop of X on wayland.
     rnnoise-plugin
 
     # Download
@@ -52,11 +52,6 @@
     telegram-desktop
 
     # obs-studio                  # Recorder and streaming
-    # Wayland
-    wf-recorder
-    wlr-randr
-    libsForQt5.qt5.qtwayland
-    qt6.qtwayland
 
     #    vmware-workstation
 

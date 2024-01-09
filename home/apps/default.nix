@@ -34,7 +34,6 @@ in
   imports = [
     ./emacs.nix
     ./i3
-    ./hyprland
     ./tmux.nix
     ./zsh.nix
     ./git.nix
