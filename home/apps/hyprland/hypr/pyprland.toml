@@ -20,10 +20,10 @@ size = "75% 45%"
 # unfocus = "hide"
 margin = 0
 
-[scratchpads.chrome]
+[scratchpads.chromium]
 animation = "fromRight"
-command = "google-chrome-stable"
-class = "Google-chrome"
+command = "chromium"
+class = "chromium-browser"
 lazy = true
 size = "45% 90%"
 # unfocus = "hide"

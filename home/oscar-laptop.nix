@@ -33,8 +33,15 @@
         wrapfig amsmath ulem hyperref capt-of minted;
     })
 
+    # youtube-music
+    ani-cli                     # Watch animation from cli
+    xwaylandvideobridge         # Share desktop of X on wayland.
+    rnnoise-plugin
+
     # Download
     transmission_4-gtk
+    # rtorrent
+    aria
 
     # Password Manager
     bitwarden
@@ -44,7 +51,9 @@
     discord
     telegram-desktop
 
+    # obs-studio                  # Recorder and streaming
     # Wayland
+    wf-recorder
     wlr-randr
     libsForQt5.qt5.qtwayland
     qt6.qtwayland
@@ -72,6 +81,7 @@
     emacs.enable = true;
     emacs.personal.enable = true;
   };
+
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home

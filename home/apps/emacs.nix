@@ -50,11 +50,6 @@ in {
     home.packages = with pkgs; [
       emacs29-pgtk
       (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
-      mpv
-      yt-dlp
-      ripgrep
-      silver-searcher
-
       emacs-all-the-icons-fonts
     ];
 

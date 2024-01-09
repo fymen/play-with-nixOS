@@ -1,19 +1,47 @@
-{ inputs, lib, config, ... }:
+{ pkgs, config, ... }:
 {
   programs.firefox = {
     enable = true;
 
     # Privacy about:config settings
     profiles.oscar = {
+      isDefault = true;
       extensions =  with config.nur.repos.rycee.firefox-addons; [
         decentraleyes
         ublock-origin
         clearurls
         sponsorblock
-        darkreader
+
         h264ify
         df-youtube
+
+        darkreader
+        dictionaries
+        grammarly
       ];
+      search = {
+        engines = {
+          "Nix Packages" = {
+            urls = [{
+              template = "https://search.nixos.org/packages";
+              params = [
+                { name = "type"; value = "packages"; }
+                { name = "query"; value = "{searchTerms}"; }
+              ];
+            }];
+            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+            definedAliases = [ "@np" ];
+          };
+          "NixOS Wiki" = {
+            urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
+            iconUpdateURL = "https://nixos.wiki/favicon.png";
+            updateInterval = 24 * 60 * 60 * 1000; # every day
+            definedAliases = [ "@nw" ];
+          };
+          "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
+        };
+        default = "Google";
+      };
       settings = {
         "browser.startup.homepage" = "https://search.nixos.org/packages";
         "browser.urlbar.placeholderName" = "Google";

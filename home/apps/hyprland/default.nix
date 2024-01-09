@@ -150,6 +150,7 @@ windowrule = float, ^(MPlayer)$
 windowrule = center, ^(MPlayer)$
 
 windowrule = float, calss:^(mpv)$
+windowrule = center, calss:^(mpv)$
 
 windowrule = float, ^(pavucontrol)$
 windowrule = center, ^(pavucontrol)$
@@ -158,7 +159,7 @@ windowrule = center, ^(pavucontrol)$
 windowrule = float, ^(popweb.py)$
 windowrule = center, ^(popweb.py)$
 
-windowrulev2 = float,class:^(Google-chrome)$
+windowrulev2 = float,class:^(chromium-browser)$
 
 workspace = 2, on-created-empty:[maximize] emacsclient --alternate-editor 'false' --create-frame
 # workspace = 2, on-created-empty:[maximize] emacs
@@ -178,12 +179,13 @@ bind = $mainMod SHIFT, SPACE, togglefloating,
 bind = $mainMod, D, exec, tofi-drun --drun-launch=true
 bind = $mainMod, M, pseudo, # dwindle
 bind = $mainMod, J, togglesplit, # dwindle
+bind = $mainMod SHIFT, F, fullscreen
 
 # Pypr
 bind = $mainMod, K, exec, pypr change_workspace +1
 bind = $mainMod, J, exec, pypr change_workspace -1
 bind = $mainMod, SPACE, exec, pypr toggle emacs
-bind = $mainMod, F, exec, pypr toggle chrome
+bind = $mainMod, F, exec, pypr toggle chromium
 
 # Function keys
 binde=, XF86AudioRaiseVolume, exec, amixer -q sset Master 5%+

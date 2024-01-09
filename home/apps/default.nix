@@ -41,33 +41,50 @@ in
     ./terminals
     ./dunst.nix
     ./firefox.nix
+    ./chromium.nix
+    ./mpv.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    du-dust                     # Modernized du
+    bat
+    btop
+    eza
+    fzf
+    starship
+    fd
+    lazygit                     # Magit alternative
+
+    grc                         # Colorize command output
+
+    ydotool                     # Desktop automation tool, move mouse or something
+    autojump                    # Jump around directories fastly
+
+    neofetch
+    pywal
+
     font-manager
     # Terminal
     tmux
-
-    # alacritty
 
     python-with-my-packages
     # Image viewer
     feh
     gnome.eog
-    flameshot
     # Editor
 
     # Shells
     oh-my-zsh
-    # Browsers
-    firefox
-    google-chrome
+
     # Data visualization
     gnuplot
-    # Player
-    mplayer
+    mpv
+    yt-dlp
+    ripgrep
+    silver-searcher
+
 
     multimarkdown
     graphviz
@@ -78,6 +95,8 @@ in
     gdb
 
     evince
+    zathura
+
     libreoffice
     # Sound volume control
     pavucontrol

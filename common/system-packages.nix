@@ -26,7 +26,6 @@
     brightnessctl
     acpi
 
-    bat
     man-pages
     direnv
     zsh
