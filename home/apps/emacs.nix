@@ -41,14 +41,18 @@ in {
 
   config = mkIf cfg.enable {
     # Execute "systemctl --user enable emacs.service" after modifying this
-    # Do it when hyprland starts
-    # services.emacs = {
-    #   package = pkgs.emacs29-pgtk;
-    #   enable = true;
-    # };
+    services.emacs = {
+      enable = true;
+      package = pkgs.emacs29-pgtk;
+      startWithUserSession = "graphical";
+    };
+
+    programs.emacs = {
+      enable = true;
+      package = pkgs.emacs29-pgtk;
+    };
 
     home.packages = with pkgs; [
-      emacs29-pgtk
       (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
       emacs-all-the-icons-fonts
     ];

@@ -1,7 +1,6 @@
 { inputs, system, config, pkgs, ... }:
 
 {
-  colorscheme = inputs.nix-colors.lib.schemeFromYAML "alect-light" (builtins.readFile ../../common/color-themes/alect-light.yaml);
 
   programs.zathura = {
     enable = true;

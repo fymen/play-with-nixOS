@@ -6,6 +6,10 @@
     ./apps
   ];
 
+  # colorscheme = inputs.nix-colors.colorSchemes.catppuccin-macchiato;
+  colorscheme = inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../common/color-themes/catppuccin-macchiato.yaml);
+
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "oscar";
@@ -81,7 +85,6 @@
     # Easy shell environments
     direnv = {
       enable = true;
-      enableNushellIntegration = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };

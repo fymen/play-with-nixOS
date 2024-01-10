@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
   programs.foot = {
@@ -18,27 +18,29 @@
         style = "block";
         beam-thickness = "0.8";
       };
-      colors = {
+      colors = with config.colorscheme.colors; {
         # Cattpuccin macchiato
         alpha = "1.0";
-        foreground = "DCDCCC"; # Text
-        background = "2B2B2B"; # Base
-        regular0 = "494d64"; # Surface 1
-        regular1 = "ed8796"; # red
-        regular2 = "a6da95"; # green
-        regular3 = "eed49f"; # yellow
-        regular4 = "8aadf4"; # blue
-        regular5 = "f5bde6"; # pink
-        regular6 = "8bd5ca"; # teal
-        regular7 = "b8c0e0"; # Subtext 1
-        bright0 = "5b6078"; # Surface 2
-        bright1 = "ed8796"; # red
-        bright2 = "a6da95"; # green
-        bright3 = "eed49f"; # yellow
-        bright4 = "8aadf4"; # blue
-        bright5 = "f5bde6"; # pink
-        bright6 = "8bd5ca"; # teal
-        bright7 = "a5adcb"; # Subtext 0
+
+        foreground = "${base05}"; # Text
+        background = "${base00}"; # Base
+        regular0 = "${base03}"; # Surface 1
+        regular1 = "${base08}"; # red
+        regular2 = "${base0B}"; # green
+        regular3 = "${base0A}"; # yellow
+        regular4 = "${base0D}"; # blue
+        regular5 = "${base09}"; # pink  ?
+        regular6 = "${base0C}"; # teal
+        regular7 = "${base07}"; # Subtext 1
+        bright0 = "${base04}"; # Surface 2
+        bright1 = "${base08}"; # red
+        bright2 = "${base0B}"; # green
+        bright3 = "${base0A}"; # yellow
+        bright4 = "${base0D}"; # blue
+        bright5 = "${base09}"; # pink
+        bright6 = "${base0C}"; # teal
+        bright7 = "${base07}";
+
       };
     };
   };

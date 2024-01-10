@@ -33,7 +33,7 @@ exec-once = hyprpaper & waybar
 exec-once = foot -e tmux
 exec-once = pypr
 # Emacs daemon executed by hyprland can't work with direnv mode. Wrapper it with tmux.
-exec-once = tmux -c "emacs --daemon"
+# exec-once = tmux -c "emacs --daemon"
 
 # Source a file (multi-file configs)
 # source = ~/.config/hypr/myColors.conf
