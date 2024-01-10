@@ -21,7 +21,7 @@
     };
 
   };
-  outputs = { self, nixpkgs, home, nix-colors, ... }@inputs:
+  outputs = { self, nixpkgs, home, ... }@inputs:
     let
       system = "x86_64-linux";
       genericModules = [
@@ -36,42 +36,30 @@
           nix.registry.nixos.flake = inputs.self;
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {inherit inputs;
-                                           inherit system;
-                                          };
+          home-manager.extraSpecialArgs = {inherit inputs system;};
         }
       ];
+
+      nixosSystemFor = user: hostname:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = {inherit inputs system;};
+          modules = genericModules ++
+                    [./hosts/${hostname}/configuration.nix
+                     { home-manager.users.${user}.imports =
+                         [ ./home/${user}/default.nix
+                           inputs.nix-colors.homeManagerModules.default
+                           inputs.nur.hmModules.nur
+                         ];
+                     }
+                     inputs.nur.nixosModules.nur
+                     inputs.agenix.nixosModules.default
+                    ];
+        };
     in
       {
         nixosConfigurations = {
-          "laptop" = nixpkgs.lib.nixosSystem {
-            inherit system;
-
-            specialArgs = {inherit inputs;
-                           inherit system;
-                          };
-            modules = genericModules ++
-                      [ ./hosts/laptop
-                        { home-manager.users.oscar.imports =
-                            [ ./home/home.nix
-                              inputs.nix-colors.homeManagerModules.default
-                              inputs.nur.hmModules.nur
-                            ];
-                        }
-                        inputs.nur.nixosModules.nur
-                        inputs.agenix.nixosModules.default
-                      ];
-          };
-
-          "vm" = nixpkgs.lib.nixosSystem {
-            inherit system;
-
-            specialArgs = { inherit inputs; };
-            modules = genericModules ++ [ ./hosts/vm/configuration.nix
-                                          { home-manager.users.oscar = import ./home/oscar-vm.nix; }
-                                          inputs.agenix.nixosModules.default
-                                        ];
-          };
+          "laptop" = nixosSystemFor "oscar" "laptop";
+          "vm" = nixosSystemFor "oscar" "vm";
         };
       };
 }
