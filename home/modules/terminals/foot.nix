@@ -12,10 +12,11 @@
         dpi-aware = true;
         pad = "2x2 center";
       };
+      mouse.hide-when-typing = "yes";
       cursor = {
         color = "1A1826 D9E0EE"; # Cattpuccin
         blink = false;
-        style = "block";
+        style = "beam";
         beam-thickness = "0.8";
       };
       colors = with config.colorscheme.colors; {

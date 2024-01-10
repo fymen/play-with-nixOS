@@ -5,12 +5,15 @@
       enable = true;
       theme = "af-magic";
     };
-  };
 
-  home.shellAliases = {
-    q = "exit";
-    c = "clear";
-    open = "xdg-open";
-  };
+    shellAliases = {
+      q = "exit";
+      c = "clear";
+      open = "xdg-open";
 
+      cat = "bat -p";
+      du = "dust";
+      grep = "rg";
+    };
+  };
 }

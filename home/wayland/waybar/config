@@ -1,6 +1,6 @@
 {
 	"layer": "top",
-	"modules-left": ["hyprland/workspaces","custom/media"],
+	"modules-left": ["hyprland/workspaces","custom/media", "tray"],
     "modules-center": ["hyprland/window"],
 	"modules-right": ["backlight","pulseaudio","battery", "clock"],
 
