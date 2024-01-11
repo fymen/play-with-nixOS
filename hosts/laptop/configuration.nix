@@ -191,9 +191,35 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = [
-    pkgs.wev                         # xev alternative in wayland
-    pkgs.mesa
+  environment.systemPackages = with pkgs; [
+    nix-index
+    nix-prefetch-git
+    nix-prefetch-scripts
+
+    mesa
+    brightnessctl
+    acpi
+    man-pages
+
+    coreutils
+    binutils
+    pass
+
+    gcc
+    gnumake
+    cmake
+
+    # system call monitoring
+    strace # system call monitoring
+    ltrace # library call monitoring
+    lsof # list open files
+
+    # system tools
+    sysstat
+    lm_sensors # for `sensors` command
+    ethtool
+    pciutils # lspci
+    usbutils # lsusb
   ];
 
 

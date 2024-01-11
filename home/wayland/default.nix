@@ -9,6 +9,7 @@
   ];
 
   home.packages = with pkgs; [
+    wev
     xdg-desktop-portal-hyprland
     grim
     slurp
