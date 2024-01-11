@@ -3,4 +3,5 @@ let
 in
 {
   "private.age".publicKeys = [ laptop ];
+  "misc.age".publicKeys = [ laptop ];
 }

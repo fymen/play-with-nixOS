@@ -32,7 +32,7 @@
   # environment.
   home.packages = with pkgs; [
     (pkgs.texlive.combine {
-      inherit (pkgs.texlive) scheme-full
+      inherit (pkgs.texlive) scheme-medium
         dvisvgm dvipng # for preview and export as html
         wrapfig amsmath ulem hyperref capt-of minted;
     })
@@ -103,11 +103,25 @@
       enable = true;
       enableZshIntegration = true;
     };
+
+    ssh = {
+      enable = true;
+      extraConfig = ''
+      Host racknerd
+        HostName 23.95.85.103
+        Port 22
+      '';
+    };
   };
 
 
   xdg.mimeApps = {
     enable = true;
+
+    associations.added = {
+      "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
+    };
+
     defaultApplications = {
       "application/pdf" = ["org.gnome.Evince.desktop"];
       "text/html" = "firefox.desktop";
@@ -117,6 +131,7 @@
       "x-scheme-handler/https" = "firefox.desktop";
       "x-scheme-handler/about" = "firefox.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
+      "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
     };
   };
 

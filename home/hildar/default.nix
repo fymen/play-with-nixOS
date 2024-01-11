@@ -29,6 +29,7 @@
   home.packages = with pkgs; [
     btop
     bat
+    du-dust
   ];
 
   programs = {

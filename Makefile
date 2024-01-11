@@ -27,4 +27,9 @@ list-generations:
 list-packages:
 	nix-env -qa
 
-.PHONY: all debug install update cleanup clean list-generations list-packages
+test_deploy:
+	  nixos-rebuild test --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose
+deploy:
+	  nixos-rebuild switch --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose
+
+.PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy
