@@ -185,6 +185,11 @@
   nixpkgs.config.allowUnfree = true;
 
   fonts.packages = with pkgs; [
+    inconsolata
+    wqy_zenhei
+    wqy_microhei
+    open-sans
+
     times-newer-roman
     font-awesome
   ];
@@ -207,7 +212,6 @@
 
     gcc
     gnumake
-    cmake
 
     # system call monitoring
     strace # system call monitoring

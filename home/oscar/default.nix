@@ -37,6 +37,8 @@
         wrapfig amsmath ulem hyperref capt-of minted;
     })
 
+    xclip
+
     # youtube-music
     ani-cli                     # Watch animation from cli
     rnnoise-plugin

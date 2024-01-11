@@ -59,7 +59,7 @@
       {
         nixosConfigurations = {
           "laptop" = nixosSystemFor "oscar" "laptop";
-          # "racknerd" = nixosSystemFor "hildar" "racknerd";
+          "racknerd" = nixosSystemFor "hildar" "racknerd";
           "vm" = nixosSystemFor "oscar" "vm";
         };
       };

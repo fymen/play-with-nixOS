@@ -3,7 +3,6 @@
 {
   imports = [
     ../modules/git.nix
-    ../modules/zsh.nix
     ../modules/tmux.nix
   ];
 
@@ -29,6 +28,7 @@
   # environment.
   home.packages = with pkgs; [
     btop
+    bat
   ];
 
   programs = {
@@ -42,6 +42,7 @@
     fzf = {
       enable = true;
       enableZshIntegration = true;
+      enableBashIntegration = true;
     };
   };
 
