@@ -43,6 +43,7 @@ in
     ./chromium.nix
     ./mpv.nix
     ./zathura.nix
+    ./misc.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your

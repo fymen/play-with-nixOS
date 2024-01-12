@@ -36,6 +36,10 @@ in {
         type = types.str;
         default = "${forgeUrl.default}/fymen/roaming.git";
       };
+      configPassRepoUrl = mkOption{
+        type = types.str;
+        default = "${forgeUrl.default}/fymen/p-words.git";
+      };
     };
   };
 
@@ -52,28 +56,28 @@ in {
       package = pkgs.emacs29-pgtk;
     };
 
+    home.activation = mkIf cfg.personal.enable {
+      installPersonalEmacsConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
+      PATH=$PATH:${lib.makeBinPath [ pkgs.git ]}
+
+      if [ ! -d "$HOME/.emacs.d" ]; then
+         git clone ${cfg.personal.configEmacsRepoUrl} $HOME/.emacs.d
+      fi
+      '';
+    };
+
     home.packages = with pkgs; [
       (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
       emacs-all-the-icons-fonts
+
+      (pkgs.writeShellScriptBin "espad" ''
+        emacsclient --alternate-editor='false' --no-wait --create-frame --frame-parameters='(quote (name . "scratchpad"))'
+        '')
     ];
 
     home.shellAliases = {
       ee="emacsclient -t";
       ec="emacsclient -c";
-    };
-
-    home.activation = mkIf cfg.personal.enable {
-      installPersonalConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
-      PATH=$PATH:${lib.makeBinPath [ pkgs.git ]}
-      if [ ! -d "$HOME/.emacs.d" ]; then
-         git clone ${cfg.personal.configEmacsRepoUrl} $HOME/.emacs.d
-      fi
-
-      if [ ! -d "$HOME/org/roam" ]; then
-         git clone ${cfg.personal.configRoamRepoUrl} $HOME/org/roam
-      fi
-
-      '';
     };
   };
 }

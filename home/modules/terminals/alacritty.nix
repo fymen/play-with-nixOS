@@ -8,10 +8,10 @@
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;
-      colors = {
+      colors = with config.colorscheme.colors; {
         primary = {
-          background = "#2B2B2B";
-          foreground = "#DCDCCC";
+          background = "${base00}";
+          foreground = "${base05}";
         };
       };
     };

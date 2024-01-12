@@ -13,8 +13,8 @@
         pad = "2x2 center";
       };
       mouse.hide-when-typing = "yes";
-      cursor = {
-        color = "1A1826 D9E0EE"; # Cattpuccin
+      cursor = with config.colorscheme.colors; {
+        color = "${base00} ${base05}"; # Cattpuccin
         blink = false;
         style = "beam";
         beam-thickness = "0.8";

@@ -79,9 +79,13 @@
     tray = "always";
   };
 
-  modules.editors = {
-    emacs.enable = true;
-    emacs.personal.enable = true;
+  modules = {
+    editors = {
+      emacs.enable = true;
+      emacs.personal.enable = true;
+    };
+
+    misc.enable = true;
   };
 
   programs = {
@@ -134,6 +138,7 @@
       "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
     };
   };
+
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
