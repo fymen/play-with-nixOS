@@ -1,3 +1,5 @@
+{ config, inputs, ... }:
+
 {
   programs.alacritty = {
     enable = true;
@@ -10,8 +12,8 @@
       selection.save_to_clipboard = true;
       colors = with config.colorscheme.colors; {
         primary = {
-          background = "${base00}";
-          foreground = "${base05}";
+          background = "#${base00}";
+          foreground = "#${base05}";
         };
       };
     };

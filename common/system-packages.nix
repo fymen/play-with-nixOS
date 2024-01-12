@@ -8,8 +8,8 @@
     wget
     curl
     git
+    jq
 
-    zsh
     file
     tree
     killall

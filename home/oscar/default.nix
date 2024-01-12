@@ -37,6 +37,9 @@
         wrapfig amsmath ulem hyperref capt-of minted;
     })
 
+    nix-output-monitor
+    nix-tree
+
     xclip
 
     # youtube-music

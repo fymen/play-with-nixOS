@@ -71,15 +71,16 @@
 
         # Extra
         "identity.fxaccounts.enabled" = false;
-        "browser.search.suggest.enabled" = false;
-        "browser.urlbar.shortcuts.bookmarks" = false;
-        "browser.urlbar.shortcuts.history" = false;
-        "browser.urlbar.shortcuts.tabs" = false;
-        "browser.urlbar.suggest.bookmark" = false;
-        "browser.urlbar.suggest.engines" = false;
-        "browser.urlbar.suggest.history" = false;
-        "browser.urlbar.suggest.openpage" = false;
-        "browser.urlbar.suggest.topsites" = false;
+        "browser.search.suggest.enabled" = true;
+        "browser.urlbar.shortcuts.bookmarks" = true;
+        "browser.urlbar.shortcuts.history" = true;
+        "browser.urlbar.shortcuts.tabs" = true;
+        "browser.urlbar.suggest.bookmark" = true;
+        "browser.urlbar.suggest.engines" = true;
+        "browser.urlbar.suggest.history" = true;
+        "browser.urlbar.suggest.openpage" = true;
+        "browser.urlbar.suggest.topsites" = true;
+        "browser.urlbar.showSearchSuggestionsFirst" = false;
         "browser.uidensity" = 1;
         "media.autoplay.enabled" = false;
         "toolkit.zoomManager.zoomValues" = ".8,.90,.95,1,1.1,1.2";

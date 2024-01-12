@@ -4,7 +4,6 @@
   imports = [
     ./hyprland
     ./waybar
-    ./pypr
     ./tofi
   ];
 

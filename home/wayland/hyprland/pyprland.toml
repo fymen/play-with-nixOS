@@ -13,8 +13,8 @@ include_special = false
 
 [scratchpads.emacs]
 animation = "fromBottom"
-command = "foot -e emacsclient --alternate-editor 'false' -t"
-class = "foot"
+command = "alacritty -e emacsclient --alternate-editor 'false' -t"
+class = "Alacritty"
 lazy = true
 size = "75% 45%"
 # unfocus = "hide"

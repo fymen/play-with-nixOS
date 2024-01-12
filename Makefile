@@ -1,5 +1,5 @@
 all:
-	sudo nixos-rebuild test --flake .
+	sudo nixos-rebuild test --flake . |& nom
 
 install:
 	sudo nixos-rebuild switch --flake .
@@ -28,7 +28,7 @@ list-packages:
 	nix-env -qa
 
 test_deploy:
-	  nixos-rebuild test --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose
+	  nixos-rebuild test --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose |& nom
 deploy:
 	  nixos-rebuild switch --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose
 
