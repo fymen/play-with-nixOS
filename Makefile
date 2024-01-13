@@ -1,11 +1,11 @@
 all:
-	sudo nixos-rebuild test --flake . |& nom
+	sudo nixos-rebuild test --flake .
 
 install:
 	sudo nixos-rebuild switch --flake .
 
 debug:
-	sudo nixos-rebuild test --flake . --show-trace
+	sudo nixos-rebuild test --flake . --show-trace  |& nom
 
 update:
 	nix flake update

@@ -14,23 +14,49 @@
     slurp
     wl-clipboard
     polkit_gnome
-    wlogout
 
     xwaylandvideobridge         # Share desktop of X on wayland.
     wf-recorder
     wlr-randr
     libsForQt5.qt5.qtwayland
     qt6.qtwayland
+
+    wlsunset
+    swaylock-effects
   ];
+
+  services.wlsunset = {
+    enable = true;
+    package = pkgs.wlsunset;
+    latitude = "43.6";
+    longitude = "-79.3";
+  };
+
+  programs.wlogout = {
+    enable = true;
+    package = pkgs.wlogout;
+    # layout = [  {    label = "shutdown";    action = "systemctl poweroff";    text = "Shutdown";    keybind = "s";  }];
+
+  };
 
   programs.swaylock = {
     enable = true;
+    package = pkgs.swaylock-effects;
     settings = {
-      color = "000000";
-      font-size = 24;
-      indicator-idle-visible = false;
+      screenshots = true;
+      clock = true;
+      indicator = true;
       indicator-radius = 100;
-      line-color = "ffffff";
+      indicator-thickness = 7;
+      effect-blur = "7x5";
+      effect-vignette = "0.5:0.5";
+      ring-color = "bb00cc";
+      key-hl-color = "880033";
+      line-color = "00000000";
+      inside-color = "00000088";
+      separator-color = "00000000";
+      grace = 2;
+      fade-in = 0.2;
       show-failed-attempts = true;
     };
   };

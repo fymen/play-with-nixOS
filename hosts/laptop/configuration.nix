@@ -155,6 +155,25 @@
         xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
       ];
+      config = {
+        common = {
+          default = [
+            "gtk"
+          ];
+        };
+        pantheon = {
+          default = [
+            "pantheon"
+            "gtk"
+          ];
+        };
+        x-cinnamon = {
+          default = [
+            "xapp"
+            "gtk"
+          ];
+        };
+      };
     };
   };
 
@@ -220,6 +239,11 @@
     nix-index
     nix-prefetch-git
     nix-prefetch-scripts
+
+    # xdg-desktop-portal
+    # xdg-desktop-portal-hyprland
+    # xdg-desktop-portal-gtk
+    # xdg-desktop-portal-gnome
 
     mesa
     brightnessctl
