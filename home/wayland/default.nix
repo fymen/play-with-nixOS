@@ -43,7 +43,7 @@
       { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock"; }
     ];
     timeouts = [
-      { timeout = 60; command = "${pkgs.swaylock}/bin/swaylock"; }
+      { timeout = 180; command = "${pkgs.swaylock}/bin/swaylock"; }
     ];
   };
 

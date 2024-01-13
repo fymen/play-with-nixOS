@@ -40,11 +40,11 @@
         }
       ];
 
-      nixosSystemFor = user: hostname:
+      mkNixosConfig = user: hostName:
         nixpkgs.lib.nixosSystem {
           specialArgs = {inherit inputs system;};
           modules = genericModules ++
-                    [./hosts/${hostname}/configuration.nix
+                    [./hosts/${hostName}/configuration.nix
                      { home-manager.users.${user}.imports =
                          [ ./home/${user}/default.nix
                            inputs.nix-colors.homeManagerModule
@@ -55,12 +55,28 @@
                      inputs.agenix.nixosModules.default
                     ];
         };
+
+
+      mkHomeManager = user: hostName: system: modules: home.lib.homeManagerConfiguration {
+        extraSpecialArgs = {
+          inherit inputs system;
+        };
+
+        modules = [
+          inputs.nur.nixosModules.nur
+          ./home/${user}-${hostName}
+        ];
+      } ++ modules;
     in
       {
         nixosConfigurations = {
-          "laptop" = nixosSystemFor "oscar" "laptop";
-          "racknerd" = nixosSystemFor "hildar" "racknerd";
-          "vm" = nixosSystemFor "oscar" "vm";
+          "laptop" = mkNixosConfig "oscar" "laptop";
+          "racknerd" = mkNixosConfig "hildar" "racknerd";
+          "vm" = mkNixosConfig "oscar" "vm";
+        };
+
+        homeConfigurations = {
+          "oscar@m2" = mkHomeManager "oscar" "m2" "aarch64-darwin" [ ];
         };
       };
 }
