@@ -41,6 +41,7 @@
     nix-tree
 
     xclip
+    handlr
 
     # youtube-music
     ani-cli                     # Watch animation from cli
@@ -60,6 +61,7 @@
     discord
     telegram-desktop
 
+    spotify
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
@@ -138,6 +140,13 @@
       "x-scheme-handler/https" = "firefox.desktop";
       "x-scheme-handler/about" = "firefox.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
+      "default-web-browser" = "firefox.desktop";
+      "default-url-scheme-handler" = "firefox.desktop";
+      "scheme-handler/http" = "firefox.desktop";
+      "scheme-handler/https" = "firefox.desktop";
+      "default-url-scheme-handler/http" = "firefox.desktop";
+      "default-url-scheme-handler/https" = "firefox.desktop";
+
       "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
     };
   };

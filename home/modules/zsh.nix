@@ -9,7 +9,7 @@
     shellAliases = {
       q = "exit";
       c = "clear";
-      open = "xdg-open";
+      open = "handlr open";
 
       cat = "bat -p";
       du = "dust";

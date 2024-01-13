@@ -23,21 +23,60 @@
     qt6.qtwayland
   ];
 
+  programs.swaylock = {
+    enable = true;
+    settings = {
+      color = "000000";
+      font-size = 24;
+      indicator-idle-visible = false;
+      indicator-radius = 100;
+      line-color = "ffffff";
+      show-failed-attempts = true;
+    };
+  };
+
+
+  services.swayidle = {
+    enable = true;
+    events = [
+      { event = "lock"; command = "${pkgs.swaylock}/bin/swaylock"; }
+      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock"; }
+    ];
+    timeouts = [
+      { timeout = 60; command = "${pkgs.swaylock}/bin/swaylock"; }
+    ];
+  };
+
   home.sessionVariables = {
-    __GL_VRR_ALLOWED="1";
     WLR_NO_HARDWARE_CURSORS = "1";
     WLR_RENDERER_ALLOW_SOFTWARE = "1";
-    CLUTTER_BACKEND = "wayland";
     WLR_RENDERER = "vulkan";
 
-    NIXOS_OZONE_WL = "1";
     GDK_SCALE = "1";
     GDK_DPI_SCALE = "1";
 
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "2";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "2";
-    QT_QPA_PLATFORM = "wayland";
+    MOZ_ENABLE_WAYLAND = 1; # Firefox Wayland
+    MOZ_DBUS_REMOTE = 1; # Firefox wayland
+    GDK_BACKEND = "wayland";
+
+    NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
+
     SDL_VIDEODRIVER = "wayland";
+    _JAVA_AWT_WM_NONREPARENTING = "1";
+
+    #NIXOS_XDG_OPEN_USE_PORTAL = "0";
     XDG_SESSION_TYPE = "wayland";
+
+    GTK_USE_PORTAL = "1";
+
+    CLUTTER_BACKEND = "wayland";
+
+    DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+    BROWSER = "${pkgs.firefox}/bin/firefox";
+
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    QT_QPA_PLATFORMTHEME = "qt5ct";
   };
 }

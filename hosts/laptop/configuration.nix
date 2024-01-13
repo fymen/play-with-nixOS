@@ -34,6 +34,7 @@
       useOSProber = true;
     };
   };
+  boot.initrd.kernelModules = [ "amdgpu" ];
 
   networking.hostName = "laptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -91,7 +92,11 @@
 
   };
 
-  security.sudo.wheelNeedsPassword = false;
+  security= {
+    sudo.wheelNeedsPassword = false;
+
+    pam.services.swaylock = {};
+  };
 
   programs.hyprland.enable = true;
 
@@ -113,30 +118,45 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  hardware.enableRedistributableFirmware = true;
-  # AMD GPU Configuration
-  hardware.amdgpu.amdvlk = true;
-  hardware.amdgpu.opencl = true;
-  # Load AMD CPU microcode
-  hardware.cpu.amd.updateMicrocode = true;
+  hardware = {
+    enableRedistributableFirmware = true;
+    # Load AMD CPU microcode
+    cpu.amd.updateMicrocode = true;
+    # AMD GPU Configuration
+    amdgpu = {
+      amdvlk = true;
+      opencl = true;
+    };
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      libva-utils
-      libGL
-      rocmPackages.clr.icd
-    ];
-    setLdLibraryPath = true;
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        libva-utils
+        libGL
+        rocmPackages.clr.icd
+      ];
+      setLdLibraryPath = true;
+    };
+    # Battery
+    asus.battery.chargeUpto = 85;
   };
 
-
-
-  # Battery
-  hardware.asus.battery.chargeUpto = 75;
-
+  xdg = {
+    portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-hyprland
+        xdg-desktop-portal-gtk
+      ];
+      configPackages = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
+      ];
+    };
+  };
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -222,6 +242,7 @@
     sysstat
     lm_sensors # for `sensors` command
     ethtool
+    iftop
     pciutils # lspci
     usbutils # lsusb
   ];

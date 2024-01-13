@@ -47,7 +47,7 @@
                     [./hosts/${hostname}/configuration.nix
                      { home-manager.users.${user}.imports =
                          [ ./home/${user}/default.nix
-                           inputs.nix-colors.homeManagerModules.default
+                           inputs.nix-colors.homeManagerModule
                            inputs.nur.hmModules.nur
                          ];
                      }

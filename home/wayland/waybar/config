@@ -2,7 +2,7 @@
 	"layer": "top",
 	"modules-left": ["hyprland/workspaces","custom/media", "tray"],
     "modules-center": ["hyprland/window"],
-	"modules-right": ["backlight","pulseaudio","battery", "clock"],
+	"modules-right": ["backlight","pulseaudio","battery", "clock", "custom/power"],
 
     "hyprland/workspaces": {
        "disable-scroll": true,
@@ -11,7 +11,7 @@
        "on-click": "activate",
        "format-icons": {
        "1": "",
-       "2": "",
+       "2": "",
        "3": "",
        "4": "",
        "5": "5",
@@ -43,7 +43,7 @@
 		"scroll-step": 5,
 		"format": "{icon} {volume}%",
 		"format-muted": "{icon} {volume}%",
-		"on-click":"pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"on-click":"amixer -q sset Master toggle",
 		"format-icons": {
 			"default": ["", "", ""]
 		}
@@ -108,11 +108,12 @@
         "on-click-right": "killall rofi"
     },
     "custom/power":{
-        "format": " ",
-        "on-click": "bash ~/.config/rofi/leave.sh",
+        "format": " ",
+        "on-click": "wlogout",
     },
     "custom/wallpaper":{
         "format":" ",
         "on-click": "bash ~/.config/system_scripts/pkill_bc"
     }
 }
+⬜
