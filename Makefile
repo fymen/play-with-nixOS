@@ -5,8 +5,11 @@ install:
 	sudo nixos-rebuild switch --flake .
 
 debug:
-	sudo nixos-rebuild test --flake . --show-trace  |& nom
+	sudo nixos-rebuild test --flake . --show-trace --fast |& nom
 
+build:
+	nix flake lock --update-input nix-colors
+	nixos-rebuild build --flake . --fast --show-trace |& nom
 update:
 	nix flake update
 	sudo nixos-rebuild switch --flake .
@@ -38,4 +41,4 @@ home:
 
 
 
-.PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy home
+.PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy home build

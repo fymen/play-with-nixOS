@@ -13,7 +13,8 @@
     agenix.url = "github:ryantm/agenix";
 
     # colorscheme
-    nix-colors.url = "github:Misterio77/nix-colors";
+    nix-colors.url = "github:fymen/nix-colors/test";
+    # nix-colors.url = "/home/oscar/gitest/nix/nix-colors";
 
     home = {
       url = "github:nix-community/home-manager/release-23.11";

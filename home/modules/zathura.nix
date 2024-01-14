@@ -4,52 +4,82 @@
 
   programs.zathura = {
     enable = true;
-    options = with config.colorscheme.colors; {
-
-      default-bg = "#${base00}";
+    options = with config.colorschemetest.colors; {
+      # Personal tuned scheme
+      default-bg = "#${base03}";
       default-fg = "#${base01}";
 
-      statusbar-bg = "#${base04}";
-      statusbar-fg = "#${base02}";
+      inputbar-bg = "#${base05}";
+      inputbar-fg = "#${base01}";
+      statusbar-bg = "#${base08}";
+      statusbar-fg = "#${base01}";
 
-      inputbar-bg = "#${base00}";
-      inputbar-fg = "#${base07}";
+      completion-bg = "#${base05}";
+      completion-fg = "#${base01}";
+      completion-group-bg = "#${base05}";
+      completion-group-fg = "#${base0B}";
+      completion-highlight-bg = "#${base02}";
+      completion-highlight-fg = "#${base01}";
 
-      notification-bg = "#${base00}";
-      notification-fg = "#${base07}";
+      notification-bg = "#${base05}";
+      notification-fg = "#${base00}";
+      notification-warning-bg = "#${base04}";
+      notification-warning-fg = "#${base00}";
+      notification-error-bg = "#${base09}";
+      notification-error-fg = "#${base00}";
 
-      notification-error-bg = "#${base00}";
-      notification-error-fg = "#${base08}";
+      index-bg = "#${base06}";
+      index-fg = "#${base01}";
+      index-active-bg = "#${base04}";
+      index-active-fg = "#${base01}";
 
-      notification-warning-bg = "#${base00}";
-      notification-warning-fg = "#${base08}";
-
-      highlight-color = "#${base0A}";
-      highlight-active-color = "#${base0D}";
-
-      completion-bg = "#${base01}";
-      completion-fg = "#${base0D}";
-
-      completion-highlight-bg = "#${base07}";
-      completion-highlight-fg = "#${base0D}";
-
-
-      # completion-group-bg = "#${base05}";
-      # completion-group-fg = "#${base0B}";
-
-      recolor-darkcolor = "#${base00}";
+      recolor-darkcolor = "#${base01}";
       recolor-lightcolor = "#${base06}";
 
-      # index-bg = "#${base06}";
-      # index-fg = "#${base01}";
-      # index-active-bg = "#${base04}";
-      # index-active-fg = "#${base01}";
+      ## Regular scheme
+      # default-bg = "#${base00}";
+      # default-fg = "#${base01}";
 
-      recolor = false;
+      # statusbar-bg = "#${base04}";
+      # statusbar-fg = "#${base02}";
+
+      # inputbar-bg = "#${base00}";
+      # inputbar-fg = "#${base07}";
+
+      # notification-bg = "#${base00}";
+      # notification-fg = "#${base07}";
+
+      # notification-error-bg = "#${base00}";
+      # notification-error-fg = "#${base08}";
+
+      # notification-warning-bg = "#${base00}";
+      # notification-warning-fg = "#${base08}";
+
+      # highlight-color = "#${base0A}";
+      # highlight-active-color = "#${base0D}";
+
+      # completion-bg = "#${base01}";
+      # completion-fg = "#${base0D}";
+
+      # completion-highlight-bg = "#${base07}";
+      # completion-highlight-fg = "#${base0D}";
+
+
+      # recolor-darkcolor = "#${base00}";
+      # recolor-lightcolor = "#${base06}";
+
+      # # completion-group-bg = "#${base05}";
+      # # completion-group-fg = "#${base0B}";
+
+      # # index-bg = "#${base06}";
+      # # index-fg = "#${base01}";
+      # # index-active-bg = "#${base04}";
+      # # index-active-fg = "#${base01}";
+
+      recolor = true;
       recolor-keephue = false;
 
       selection-clipboard = "clipboard";
-
     };
     #     extraConfig = ''
 

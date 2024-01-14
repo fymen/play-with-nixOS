@@ -1,9 +1,9 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    waybar
-  ];
+  programs.waybar = {
+    enable = true;
+  };
 
   xdg.configFile = {
     "waybar/config" .source = ./config;
