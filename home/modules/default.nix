@@ -32,6 +32,7 @@ let
 in
 {
   imports = [
+    ./wayland
     ./emacs.nix
     ./i3
     ./tmux.nix

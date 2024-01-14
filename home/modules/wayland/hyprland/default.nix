@@ -1,16 +1,16 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    hyprpaper
-    pyprland
-  ];
-
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     extraConfig = (builtins.readFile ./hyprland.conf);
   };
+
+  home.packages = with pkgs; [
+    hyprpaper
+    pyprland
+  ];
 
   xdg.configFile = {
     # "hypr/hyprland.conf" .source = ./hyprland.conf;

@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ../wayland
     ../modules
   ];
 
@@ -62,6 +61,8 @@
     telegram-desktop
 
     spotify
+
+    gnome.nautilus
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation

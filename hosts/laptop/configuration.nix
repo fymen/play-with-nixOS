@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../common/system.nix
       ../../common/system-packages.nix
+      # ../../common/virtualisation.nix
 
       ./secrets
     ] ++ (with inputs.nixos-hardware.nixosModules; [
@@ -18,10 +19,6 @@
       common-pc-ssd
       asus-battery
     ]);
-
-  # Bootloader.
-  # boot.loader.systemd-boot.enable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
 
   boot.loader = {
     timeout = 2;
