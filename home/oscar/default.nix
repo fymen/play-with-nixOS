@@ -39,8 +39,10 @@
     nix-output-monitor
     nix-tree
 
+    parallel
+
     xclip
-    handlr
+    handlr                      # Alternated xdg-utils
 
     # youtube-music
     ani-cli                     # Watch animation from cli
@@ -149,6 +151,9 @@
       "default-url-scheme-handler/https" = "firefox.desktop";
 
       "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
+
+      "video/x-matroska" = "mpv.desktop";
+
     };
   };
 

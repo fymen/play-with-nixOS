@@ -19,7 +19,7 @@
       outline-width = 0
       border-width = 0
       text-color = #D0BF8F
-      background-color = #0008
+      background-color = #000A
       selection-color = #DFAF8F
       min-input-width = 50
       result-spacing = 15

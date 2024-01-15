@@ -5,6 +5,7 @@
     ./hyprland
     ./waybar
     ./tofi
+    ./waylockout
   ];
 
   home.packages = with pkgs; [
@@ -22,7 +23,6 @@
     qt6.qtwayland
 
     wlsunset
-    swaylock-effects
   ];
 
   services.wlsunset = {
@@ -31,36 +31,6 @@
     latitude = "43.6";
     longitude = "-79.3";
   };
-
-  programs.wlogout = {
-    enable = true;
-    package = pkgs.wlogout;
-    # layout = [  {    label = "shutdown";    action = "systemctl poweroff";    text = "Shutdown";    keybind = "s";  }];
-
-  };
-
-  programs.swaylock = {
-    enable = true;
-    package = pkgs.swaylock-effects;
-    settings = {
-      screenshots = true;
-      clock = true;
-      indicator = true;
-      indicator-radius = 100;
-      indicator-thickness = 7;
-      effect-blur = "7x5";
-      effect-vignette = "0.5:0.5";
-      ring-color = "bb00cc";
-      key-hl-color = "880033";
-      line-color = "00000000";
-      inside-color = "00000088";
-      separator-color = "00000000";
-      grace = 2;
-      fade-in = 0.2;
-      show-failed-attempts = true;
-    };
-  };
-
 
   services.swayidle = {
     enable = true;
