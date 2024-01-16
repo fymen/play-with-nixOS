@@ -59,6 +59,8 @@ in
     fd                          # Alternative to "find"
     lazygit                     # Magit alternative
 
+    xdg-utils
+
     grc                         # Colorize command output
 
     ydotool                     # Desktop automation tool, move mouse or something

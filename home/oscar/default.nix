@@ -43,7 +43,6 @@
     parallel
 
     xclip
-    handlr                      # Alternated xdg-utils
 
     # youtube-music
     ani-cli                     # Watch animation from cli

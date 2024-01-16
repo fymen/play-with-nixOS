@@ -21,13 +21,6 @@
 
   programs.hyprland.enable = true;
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
-    ];
-  };
-
   environment.variables = {
     NIXOS_OZONE_WL = "1"; # Wayland support in Chromium and Electron based applications
   };
