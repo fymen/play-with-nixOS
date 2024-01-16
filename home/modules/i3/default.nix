@@ -2,8 +2,8 @@
 
 {
   xsession.windowManager.i3 = {
-    enable = false;
-
+    enable = true;
+    config.modifier = "Mod2";
     extraConfig = (builtins.readFile ./config);
   };
 

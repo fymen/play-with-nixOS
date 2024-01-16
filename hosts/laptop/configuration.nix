@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../common/system.nix
       ../../common/system-packages.nix
+      ../../common/window-systems
       # ../../common/virtualisation.nix
 
       ./secrets
@@ -31,7 +32,7 @@
       useOSProber = true;
     };
   };
-  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.initrd.kernelModules = [ ];
 
   networking.hostName = "laptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -43,67 +44,7 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    xkbVariant = "";
 
-    # Configure AMD graphics
-    videoDrivers = [ "amdgpu" ];
-
-    displayManager = {
-      autoLogin.enable = true;
-      autoLogin.user = "oscar";
-
-      defaultSession = "hyprland";
-
-      gdm = {
-        enable = false;
-        wayland = true;
-      };
-
-      lightdm = {
-        enable = false;
-        greeters.enso = {
-          enable = true;
-        };
-      };
-    };
-
-    desktopManager.gnome.enable = false;
-    ## Configurations for I3
-    dpi = 234;
-    upscaleDefaultCursor = true;
-    windowManager= {
-      i3 = {
-        enable = false;
-        extraPackages = with pkgs; [
-          j4-dmenu-desktop
-          i3lock
-          i3blocks
-        ];
-      };
-    };
-  };
-
-  services = {
-    greetd = {
-      enable = true;
-      settings = rec {
-        initial_session = {
-          command = "${pkgs.hyprland}/bin/Hyprland";
-          user = "oscar";
-        };
-        default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd ${pkgs.hyprland}/bin/Hyprland";
-          user = "oscar";
-        };
-      };
-    };
-
-    udisks2.enable = true;
-  };
 
   security= {
     sudo.wheelNeedsPassword = false;
@@ -115,18 +56,6 @@
 
   # bigger tty fonts
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-
-  environment.variables = {
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    GDK_SCALE = "1.2";
-    GDK_DPI_SCALE = "1.2";
-    _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2";
-
-    NIXOS_OZONE_WL = "1"; # Wayland support in Chromium and Electron based applications
-    MOZ_USE_XINPUT2 = "1";
-    MANGOHUD = "1"; # Enable for all Vulkan games
-
-  };
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -154,13 +83,6 @@
     };
     # Battery
     asus.battery.chargeUpto = 85;
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
-    ];
   };
 
   powerManagement.enable = true;
@@ -263,7 +185,6 @@
   #   enableSSHSupport = true;
   # };
   programs = {
-    hyprland.enable = true;
     zsh.enable = true;
     dconf.enable = true;
   };

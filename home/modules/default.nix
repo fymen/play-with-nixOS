@@ -33,8 +33,9 @@ in
 {
   imports = [
     ./wayland
+    # ./i3
     ./emacs.nix
-    ./i3
+
     ./tmux.nix
     ./zsh.nix
     ./git.nix
