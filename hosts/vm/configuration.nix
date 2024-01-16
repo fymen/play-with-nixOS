@@ -81,12 +81,30 @@
     isNormalUser = true;
     description = "oscar";
     extraGroups = [ "networkmanager" "wheel" ];
+    password = "test";
     shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
       #  thunderbird
     ];
   };
+
+
+  virtualisation.vmVariant = {
+    # following configuration is added only when building VM with build-vm
+    virtualisation = {
+      memorySize = 2048; # Use 2048MiB memory.
+      cores = 3;
+      graphics = true;
+    };
+  };
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = true;
+  };
+
+  networking.firewall.allowedTCPPorts = [ 22 ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
