@@ -9,13 +9,10 @@
 
   home.packages = with pkgs; [
     hyprpaper
-    pyprland
   ];
 
   xdg.configFile = {
-    # "hypr/hyprland.conf" .source = ./hyprland.conf;
     "hypr/hyprpaper.conf" .source = ./hyprpaper.conf;
-    "hypr/pyprland.toml" .source = ./pyprland.toml;
   };
 
   home.sessionVariables = {

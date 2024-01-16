@@ -59,7 +59,7 @@
       defaultSession = "hyprland";
 
       gdm = {
-        enable = true;
+        enable = false;
         wayland = true;
       };
 
@@ -69,7 +69,6 @@
           enable = true;
         };
       };
-      # Enable automatic login for the user.
     };
 
     desktopManager.gnome.enable = false;
@@ -86,7 +85,24 @@
         ];
       };
     };
+  };
 
+  services = {
+    greetd = {
+      enable = true;
+      settings = rec {
+        initial_session = {
+          command = "${pkgs.hyprland}/bin/Hyprland";
+          user = "oscar";
+        };
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd ${pkgs.hyprland}/bin/Hyprland";
+          user = "oscar";
+        };
+      };
+    };
+
+    udisks2.enable = true;
   };
 
   security= {
@@ -95,7 +111,7 @@
     pam.services.swaylock = {};
   };
 
-  programs.hyprland.enable = true;
+  environment.localBinInPath = true;
 
   # bigger tty fonts
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
@@ -140,42 +156,14 @@
     asus.battery.chargeUpto = 85;
   };
 
-  xdg = {
-    portal = {
-      enable = true;
-      xdgOpenUsePortal = false;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
-        xdg-desktop-portal-gtk
-      ];
-      configPackages = with pkgs; [
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-hyprland
-      ];
-      config = {
-        common = {
-          default = [
-            "gtk"
-          ];
-        };
-        pantheon = {
-          default = [
-            "pantheon"
-            "gtk"
-          ];
-        };
-        x-cinnamon = {
-          default = [
-            "xapp"
-            "gtk"
-          ];
-        };
-      };
-    };
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+    ];
   };
 
   powerManagement.enable = true;
-  services.tlp.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -240,11 +228,6 @@
     nix-prefetch-git
     nix-prefetch-scripts
 
-    # xdg-desktop-portal
-    # xdg-desktop-portal-hyprland
-    # xdg-desktop-portal-gtk
-    # xdg-desktop-portal-gnome
-
     mesa
     brightnessctl
     acpi
@@ -279,8 +262,11 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-  programs.zsh.enable = true;
-  programs.dconf.enable = true;
+  programs = {
+    hyprland.enable = true;
+    zsh.enable = true;
+    dconf.enable = true;
+  };
 
   # List services that you want to enable:
 

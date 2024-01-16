@@ -38,6 +38,7 @@
 
     nix-output-monitor
     nix-tree
+    # nix-alien
 
     parallel
 
@@ -65,6 +66,12 @@
     spotify
 
     gnome.nautilus
+
+    appimage-run
+
+    tor-browser
+
+    easyeffects
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
@@ -83,7 +90,6 @@
   services.udiskie = {
     enable = true;
     automount = true;
-    notify = true;
     tray = "always";
   };
 
