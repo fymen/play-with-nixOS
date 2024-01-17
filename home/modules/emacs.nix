@@ -14,6 +14,15 @@ in {
       Enable emacs configuration.
       '';
     };
+    service = {
+      enable = mkOption{
+        type = types.bool;
+        default = false;
+        description = ''
+        Enable systemd user service for Emacs.
+      '';
+      };
+    };
 
     personal = rec {
       enable = mkOption{
@@ -32,28 +41,20 @@ in {
         type = types.str;
         default = "${forgeUrl.default}fymen/.emacs.d.git";
       };
-      configRoamRepoUrl = mkOption{
-        type = types.str;
-        default = "${forgeUrl.default}/fymen/roaming.git";
-      };
-      configPassRepoUrl = mkOption{
-        type = types.str;
-        default = "${forgeUrl.default}/fymen/p-words.git";
-      };
     };
   };
 
   config = mkIf cfg.enable {
-    # Execute "systemctl --user enable emacs.service" after modifying this
-    services.emacs = {
-      enable = true;
-      package = pkgs.emacs29-pgtk;
-      startWithUserSession = "graphical";
-    };
 
     programs.emacs = {
       enable = true;
       package = pkgs.emacs29-pgtk;
+    };
+
+    services.emacs = mkIf cfg.service.enable {
+      enable = true;
+      package = pkgs.emacs29-pgtk;
+      startWithUserSession = "graphical";
     };
 
     home.activation = mkIf cfg.personal.enable {

@@ -91,6 +91,7 @@
     editors = {
       emacs.enable = true;
       emacs.personal.enable = true;
+      emacs.service.enable = true;
     };
 
     misc.enable = true;

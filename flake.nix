@@ -6,9 +6,6 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
 
-    # For downgrading gnupg to 2.4.0
-    nixpkgs-old.url = "github:NixOS/nixpkgs/nixos-23.05";
-
     nur.url = "github:nix-community/NUR";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -25,7 +22,7 @@
     };
 
   };
-  outputs = { self, nixpkgs, home, nixpkgs-old, ... }@inputs:
+  outputs = { self, nixpkgs, home, ... }@inputs:
     let
       system = "x86_64-linux";
       genericModules = [
@@ -41,12 +38,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs;
-                                           inherit system;
-                                           pkgs-old = import nixpkgs-old {
-                                             system = system;
-                                             config.allowUnfree = true;
-                                           };
-                                          };
+                                           inherit system;};
         }
       ];
 
