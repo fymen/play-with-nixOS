@@ -45,6 +45,7 @@ in
     ./chromium.nix
     ./mpv.nix
     ./zathura.nix
+    ./bitwarden.nix
     ./misc.nix
   ];
 

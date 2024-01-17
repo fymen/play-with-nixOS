@@ -3,5 +3,6 @@ let
 in
 {
   "private.age".publicKeys = [ laptop ];
+  "bw.age".publicKeys = [ laptop ];
   "misc.age".publicKeys = [ laptop ];
 }

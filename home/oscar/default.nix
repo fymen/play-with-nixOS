@@ -50,12 +50,7 @@
 
 
     # Download
-    transmission_4-gtk
-    # rtorrent
-    aria
-
-    # Password Manager
-    bitwarden
+    deluge
 
     calibre
     zoom-us

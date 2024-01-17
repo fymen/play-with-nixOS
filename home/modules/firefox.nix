@@ -7,7 +7,7 @@
               else pkgs.firefox-wayland;
 
     # Privacy about:config settings
-    profiles.oscar = {
+    profiles.${config.home.username} = {
       isDefault = true;
       extensions =  with config.nur.repos.rycee.firefox-addons; [
         decentraleyes

@@ -11,7 +11,6 @@
     symlink = true;
     file = ./private.age;
 
-    # Decrypted file will be mount to
     name = ".private.org";
     path = "/home/oscar";
     mode = "600";
@@ -23,8 +22,18 @@
     symlink = true;
     file = ./misc.age;
 
-    # Decrypted file will be mount to
     name = "misc.org";
+    path = "/home/oscar/.secrets/";
+    mode = "600";
+    owner = "oscar";
+    group = "users";
+  };
+
+  age.secrets."bw" = {
+    symlink = true;
+    file = ./bw.age;
+
+    name = "bw";
     path = "/home/oscar/.secrets/";
     mode = "600";
     owner = "oscar";

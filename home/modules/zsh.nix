@@ -6,13 +6,13 @@
       theme = "af-magic";
     };
 
+    initExtra = ''eval "$(bw completion --shell zsh); compdef _bw bw;"'';
+
     shellAliases = {
       q = "exit";
       c = "clear";
-      open = "handlr open";
 
       cat = "bat -p";
-      du = "dust";
       grep = "rg";
     };
   };
