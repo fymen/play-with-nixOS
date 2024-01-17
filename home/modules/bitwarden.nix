@@ -4,12 +4,14 @@
   systemd.user.services.bitwarden-session = {
     Unit = {
       Description = "bitwarden-session";
+      After = "graphical-session.target";
     };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
+    # Install = {
+    # WantedBy = [ "graphical-session.target" ];
+    # };
     Service = {
-      Type = "oneshot";
+      # Type = "oneshot";
+      Type = "idle";
       ExecStart = let
         bw = "${pkgs.bitwarden-cli}/bin/bw";
         script = pkgs.writeShellScript "bw-session" ''

@@ -157,7 +157,6 @@
 
     coreutils
     binutils
-    pass
 
     gcc
     gnumake

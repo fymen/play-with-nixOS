@@ -17,7 +17,6 @@
     zip
     xz
     p7zip
-    gnupg
 
     gnumake
   ];
