@@ -91,13 +91,14 @@
   services.openssh = {
     enable = true;
     # require public key authentication for better security
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDJkAMrxKB6NCUZmezjy2byWL1UbmlWNfeOKcfheIGjMbMQt+pnhJNTOzWkW08BttidzGAaN1QppPm+7kPLQh1xaBqfQI+gJuSozblT9POvtQrZwQ1VM+YoGQHrw7Fg7Z0wSF+wtM2nKWa2/sV+OzXrnSaA9gZtfnSpG1QXn+dsaWriZ9q/FmZMwGHw03VAWBVgOZzZDJYTgfcSoBGyVrByz9IGmW2RMsF2sMo+fAQJoKGBnM1DSEsftp96eVWKP9qGj7hyQDYjNeduzNTih89oLq1f4eEF5z9gUIIkK7rDQB6Ds2J0AciLm6zKg75EGKlvyQxgZU9QiQZa0zWBTZpjRDmBH+k5Oxu7alZbXPqzwFYJw2iy9hm8DN2V8158Mkfv2hM15GOkp9uA9YRwREw+zxTS/PLvbzmlgm9LGfyHc2NDzlJViZDsmZUkII8gNXAcoPwHgzLpAkqXrPzQJA9NZHUIC67iXq6xFxtWDlMc3VbcwHifK4a1P3mXq8pho68= oscar@oscar-Vivobook-ASUSLaptop-M5402RA-M5402RA'' ];
-  users.users.hildar.openssh.authorizedKeys.keys = [''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDJkAMrxKB6NCUZmezjy2byWL1UbmlWNfeOKcfheIGjMbMQt+pnhJNTOzWkW08BttidzGAaN1QppPm+7kPLQh1xaBqfQI+gJuSozblT9POvtQrZwQ1VM+YoGQHrw7Fg7Z0wSF+wtM2nKWa2/sV+OzXrnSaA9gZtfnSpG1QXn+dsaWriZ9q/FmZMwGHw03VAWBVgOZzZDJYTgfcSoBGyVrByz9IGmW2RMsF2sMo+fAQJoKGBnM1DSEsftp96eVWKP9qGj7hyQDYjNeduzNTih89oLq1f4eEF5z9gUIIkK7rDQB6Ds2J0AciLm6zKg75EGKlvyQxgZU9QiQZa0zWBTZpjRDmBH+k5Oxu7alZbXPqzwFYJw2iy9hm8DN2V8158Mkfv2hM15GOkp9uA9YRwREw+zxTS/PLvbzmlgm9LGfyHc2NDzlJViZDsmZUkII8gNXAcoPwHgzLpAkqXrPzQJA9NZHUIC67iXq6xFxtWDlMc3VbcwHifK4a1P3mXq8pho68= oscar@oscar-Vivobook-ASUSLaptop-M5402RA-M5402RA'' ];
-
+  users.users.root.openssh.authorizedKeys.keys = [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBjK6DOt7/zGUdDUpKTf1oB37+nZp8fiIBYcGAeDxS5y oscar@laptop'' ];
+  users.users.hildar.openssh.authorizedKeys.keys = [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBjK6DOt7/zGUdDUpKTf1oB37+nZp8fiIBYcGAeDxS5y oscar@laptop'' ];
 
   security.acme = {
     acceptTerms = true;
