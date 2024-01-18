@@ -6,8 +6,6 @@
       theme = "af-magic";
     };
 
-    initExtra = ''eval "$(bw completion --shell zsh); compdef _bw bw;"'';
-
     shellAliases = {
       q = "exit";
       c = "clear";

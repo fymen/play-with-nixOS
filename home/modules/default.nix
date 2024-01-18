@@ -31,8 +31,8 @@ in {
   imports = [
     ./wayland
     # ./i3
+    ./gtk.nix
     ./emacs.nix
-
     ./tmux.nix
     ./zsh.nix
     ./git.nix
@@ -43,7 +43,7 @@ in {
     ./mpv.nix
     ./zathura.nix
     ./gnupg.nix
-    ./bitwarden.nix
+    # ./bitwarden.nix
     ./password-store.nix
     ./misc.nix
   ];

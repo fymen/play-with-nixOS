@@ -2,7 +2,7 @@
 	"layer": "top",
 	"modules-left": ["hyprland/workspaces","custom/media", "tray"],
     "modules-center": ["hyprland/window"],
-	"modules-right": ["backlight","pulseaudio","battery", "clock", "custom/power"],
+	"modules-right": ["backlight","pulseaudio","battery", "network", "clock", "custom/power"],
 
     "hyprland/workspaces": {
        "disable-scroll": true,
