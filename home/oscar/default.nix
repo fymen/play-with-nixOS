@@ -52,6 +52,8 @@
     # Download
     deluge
 
+    qrencode
+
     calibre
     zoom-us
     discord
@@ -81,6 +83,7 @@
     # protontricks
   ];
 
+  services.ssh-agent.enable = true;
   services.udiskie = {
     enable = true;
     automount = true;

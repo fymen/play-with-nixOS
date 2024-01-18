@@ -12,7 +12,13 @@
 
     agenix.url = "github:ryantm/agenix";
 
-    # colorscheme
+    # Personal secrets
+    mysecrets = {
+      url = "git+ssh://git@github.com/fymen/secrets?ref=main";
+      flake = false;
+    };
+
+    # Colorscheme
     nix-colors.url = "github:fymen/nix-colors/test";
     # nix-colors.url = "/home/oscar/gitest/nix/nix-colors";
 
@@ -22,7 +28,7 @@
     };
 
   };
-  outputs = { self, nixpkgs, home, ... }@inputs:
+  outputs = { self, nixpkgs, home, mysecrets, ... }@inputs:
     let
       system = "x86_64-linux";
       genericModules = [
@@ -38,13 +44,14 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs;
-                                           inherit system;};
+                                           inherit system;
+                                           inherit mysecrets;};
         }
       ];
 
       mkNixosConfig = user: hostName:
         nixpkgs.lib.nixosSystem {
-          specialArgs = {inherit inputs system;};
+          specialArgs = {inherit inputs system mysecrets;};
           modules = genericModules ++
                     [./hosts/${hostName}/configuration.nix
                      { home-manager.users.${user}.imports =
@@ -54,7 +61,6 @@
                          ];
                      }
                      inputs.nur.nixosModules.nur
-                     inputs.agenix.nixosModules.default
                     ];
         };
 

@@ -101,6 +101,23 @@
         "type": "github"
       }
     },
+    "mysecrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1705538439,
+        "narHash": "sha256-gkIp/skpfXb5T9b+jMaaf3LKSsXKslv5gIHeKQy00fY=",
+        "ref": "main",
+        "rev": "2aa024c20d9b177f0771d861a43ae7e568e119db",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@github.com/fymen/secrets"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "ssh://git@github.com/fymen/secrets"
+      }
+    },
     "nix-colors": {
       "inputs": {
         "base16-schemes": "base16-schemes",
@@ -235,6 +252,7 @@
       "inputs": {
         "agenix": "agenix",
         "home": "home",
+        "mysecrets": "mysecrets",
         "nix-colors": "nix-colors",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",

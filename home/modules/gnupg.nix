@@ -1,5 +1,4 @@
-# From  https://github.com/ryan4yin/nix-config/blob/main/home/base/desktop/gpg/default.nix
-{ config, pkgs, ...}:
+{ config, pkgs, mysecrets, ...}:
 
 {
   services.gpg-agent.enable = true;
@@ -24,7 +23,7 @@
     publicKeys = [
       # https://www.gnupg.org/gph/en/manual/x334.html
       {
-        source = "${config.home.homeDirectory}/.secrets/gpg-keys.pub";
+        source = "${mysecrets}/gpg-keys.pub";
         trust = 5;
       } # ultimate trust, my own keys.
     ];

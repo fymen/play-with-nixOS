@@ -1,4 +1,3 @@
-# From https://github.com/ryan4yin/nix-config/blob/main/home/base/desktop/password-store/default.nix
 { pkgs, config, lib, ... }:
 
 {

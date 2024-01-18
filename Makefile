@@ -8,7 +8,7 @@ debug:
 	sudo nixos-rebuild test --flake . --show-trace --fast |& nom
 
 build:
-	nix flake lock --update-input nix-colors
+	nix flake lock --update-input mysecrets
 	nixos-rebuild build --flake . --fast --show-trace |& nom
 update:
 	nix flake update

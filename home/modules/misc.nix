@@ -26,7 +26,7 @@ in {
     };
     configPassRepoUrl = mkOption{
       type = types.str;
-      default = "${forgeUrl.default}/fymen/p-words.git";
+      default = "${forgeUrl.default}/fymen/pcodes.git";
     };
   };
 
