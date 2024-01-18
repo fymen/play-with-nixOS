@@ -1,10 +1,8 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
-    extraConfig = (builtins.readFile ./hyprland.conf);
+    extraConfig = builtins.readFile ./hyprland.conf;
   };
 
   home.packages = with pkgs; [

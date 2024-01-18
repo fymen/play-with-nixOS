@@ -1,6 +1,11 @@
-{ config, pkgs, inputs, system, lib, ... }:
-
 {
+  config,
+  pkgs,
+  inputs,
+  system,
+  lib,
+  ...
+}: {
   # Configure keymap in X11
   services.xserver = {
     enable = true;
@@ -8,7 +13,7 @@
     xkbVariant = "";
 
     # Configure AMD graphics
-    videoDrivers = [ "amdgpu" ];
+    videoDrivers = ["amdgpu"];
 
     displayManager = {
       autoLogin.enable = false;
@@ -33,7 +38,7 @@
     ## Configurations for I3
     dpi = 234;
     upscaleDefaultCursor = true;
-    windowManager= {
+    windowManager = {
       i3 = {
         enable = true;
         extraPackages = with pkgs; [

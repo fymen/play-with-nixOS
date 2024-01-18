@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hyprland
     ./waybar
@@ -17,7 +19,7 @@
     wl-clipboard
     polkit_gnome
 
-    xwaylandvideobridge         # Share desktop of X on wayland.
+    xwaylandvideobridge # Share desktop of X on wayland.
     wf-recorder
     wlr-randr
     libsForQt5.qt5.qtwayland
@@ -36,11 +38,20 @@
   services.swayidle = {
     enable = true;
     events = [
-      { event = "lock"; command = "${pkgs.swaylock-effects}/bin/swaylock"; }
-      { event = "before-sleep"; command = "${pkgs.swaylock-effects}/bin/swaylock"; }
+      {
+        event = "lock";
+        command = "${pkgs.swaylock-effects}/bin/swaylock";
+      }
+      {
+        event = "before-sleep";
+        command = "${pkgs.swaylock-effects}/bin/swaylock";
+      }
     ];
     timeouts = [
-      { timeout = 180; command = "${pkgs.swaylock-effects}/bin/swaylock"; }
+      {
+        timeout = 180;
+        command = "${pkgs.swaylock-effects}/bin/swaylock";
+      }
     ];
   };
 
@@ -50,7 +61,7 @@
         Description = "polkit-gnome-authentication-agent-1";
       };
       Install = {
-        WantedBy = [ "graphical-session.target" ];
+        WantedBy = ["graphical-session.target"];
       };
       Service = {
         Type = "simple";

@@ -1,6 +1,10 @@
-{ inputs, system, config, pkgs, ... }:
-
 {
+  inputs,
+  system,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../modules/git.nix
     ../modules/tmux.nix
@@ -19,7 +23,6 @@
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
-
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.

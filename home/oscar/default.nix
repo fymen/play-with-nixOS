@@ -1,6 +1,10 @@
-{ inputs, system, config, pkgs, ... }:
-
 {
+  inputs,
+  system,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../modules
   ];
@@ -23,7 +27,6 @@
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
-
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
 
@@ -31,9 +34,18 @@
   # environment.
   home.packages = with pkgs; [
     (pkgs.texlive.combine {
-      inherit (pkgs.texlive) scheme-medium
-        dvisvgm dvipng # for preview and export as html
-        wrapfig amsmath ulem hyperref capt-of minted;
+      inherit
+        (pkgs.texlive)
+        scheme-medium
+        dvisvgm
+        dvipng # for preview and export as html
+        wrapfig
+        amsmath
+        ulem
+        hyperref
+        capt-of
+        minted
+        ;
     })
 
     nix-output-monitor
@@ -45,9 +57,8 @@
     xclip
 
     # youtube-music
-    ani-cli                     # Watch animation from cli
+    ani-cli # Watch animation from cli
     rnnoise-plugin
-
 
     # Download
     deluge
@@ -68,6 +79,8 @@
     tor-browser
 
     easyeffects
+
+    alejandra
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
@@ -123,13 +136,12 @@
     ssh = {
       enable = true;
       extraConfig = ''
-      Host racknerd
-        HostName 23.95.85.103
-        Port 22
+        Host racknerd
+          HostName 23.95.85.103
+          Port 22
       '';
     };
   };
-
 
   xdg.mimeApps = {
     enable = true;
@@ -157,10 +169,8 @@
       "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
 
       "video/x-matroska" = "mpv.desktop";
-
     };
   };
-
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home

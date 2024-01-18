@@ -1,6 +1,9 @@
-{ config, pkgs, mysecrets, ...}:
-
 {
+  config,
+  pkgs,
+  mysecrets,
+  ...
+}: {
   services.gpg-agent.enable = true;
 
   programs.gpg = {

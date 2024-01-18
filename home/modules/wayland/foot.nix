@@ -1,6 +1,9 @@
-{ config, inputs, pkgs, ... }:
-
 {
+  config,
+  inputs,
+  pkgs,
+  ...
+}: {
   programs.foot = {
     enable = true;
     server.enable = true;
@@ -41,7 +44,6 @@
         bright5 = "${base09}"; # pink
         bright6 = "${base0C}"; # teal
         bright7 = "${base07}";
-
       };
     };
   };

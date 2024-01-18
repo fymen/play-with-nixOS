@@ -1,36 +1,33 @@
-{ pkgs, ... }:
+{pkgs, ...}: let
+  my-python-packages = python-packages:
+    with python-packages; [
+      pandas
+      requests
+      lxml # for eaf
+      qrcode # eaf-file-browser
+      pysocks # eaf-browser
+      pymupdf # eaf-pdf-viewer
+      pypinyin # eaf-file-manager
+      psutil # eaf-system-monitor
+      retry # eaf-markdown-previewer
+      markdown
 
-let
-  my-python-packages = python-packages: with python-packages; [
-    pandas
-    requests
-    lxml # for eaf
-    qrcode # eaf-file-browser
-    pysocks # eaf-browser
-    pymupdf # eaf-pdf-viewer
-    pypinyin # eaf-file-manager
-    psutil # eaf-system-monitor
-    retry # eaf-markdown-previewer
-    markdown
-
-    pygments
-    python
-    venvShellHook
-    numpy
-    pandas
-    opencv4
-    matplotlib
-    pyqt6
-    pyqt6-sip
-    pyqt6-webengine
-    epc
-    sexpdata
-    browser-cookie3
-  ];
+      pygments
+      python
+      venvShellHook
+      numpy
+      pandas
+      opencv4
+      matplotlib
+      pyqt6
+      pyqt6-sip
+      pyqt6-webengine
+      epc
+      sexpdata
+      browser-cookie3
+    ];
   python-with-my-packages = pkgs.python3.withPackages my-python-packages;
-
-in
-{
+in {
   imports = [
     ./wayland
     # ./i3
@@ -54,22 +51,21 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    du-dust                     # Modernized "du"
-    bat                         # Alternative to "cat"
-    btop                        # Alternative to "top"
-    nvtop-amd                       # Monitor GPU process
+    du-dust # Modernized "du"
+    bat # Alternative to "cat"
+    btop # Alternative to "top"
+    nvtop-amd # Monitor GPU process
     starship
-    fd                          # Alternative to "find"
-    lazygit                     # Magit alternative
-    glow                        # Markdown viewer in command line
-
+    fd # Alternative to "find"
+    lazygit # Magit alternative
+    glow # Markdown viewer in command line
 
     xdg-utils
 
-    grc                         # Colorize command output
+    grc # Colorize command output
 
-    ydotool                     # Desktop automation tool, move mouse or something
-    autojump                    # Jump around directories fastly
+    ydotool # Desktop automation tool, move mouse or something
+    autojump # Jump around directories fastly
 
     neofetch
     pywal
@@ -93,7 +89,6 @@ in
     yt-dlp
     ripgrep
     silver-searcher
-
 
     multimarkdown
     graphviz

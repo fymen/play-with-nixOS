@@ -1,6 +1,11 @@
-{pkgs, system, inputs, mysecrets, config, ... }:
-
 {
+  pkgs,
+  system,
+  inputs,
+  mysecrets,
+  config,
+  ...
+}: {
   imports = [
     inputs.agenix.nixosModules.default
   ];
@@ -10,7 +15,7 @@
     inputs.agenix.packages."${system}".default
   ];
 
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
   age.secrets."private.org" = {
     symlink = true;
     file = "${mysecrets}/private.age";
@@ -44,5 +49,4 @@
       user = "oscar";
     };
   };
-
 }

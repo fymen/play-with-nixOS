@@ -1,12 +1,17 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, inputs, system, lib, ... }:
-
 {
+  config,
+  pkgs,
+  inputs,
+  system,
+  lib,
+  ...
+}: {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../common/system.nix
       ../../common/system-packages.nix
@@ -14,7 +19,8 @@
       # ../../common/virtualisation.nix
 
       ./secrets
-    ] ++ (with inputs.nixos-hardware.nixosModules; [
+    ]
+    ++ (with inputs.nixos-hardware.nixosModules; [
       common-cpu-amd-pstate
       common-gpu-amd
       common-pc-ssd
@@ -28,11 +34,11 @@
       enable = true;
       efiSupport = true;
       efiInstallAsRemovable = true; # Otherwise /boot/EFI/BOOT/BOOTX64.EFI isn't generated
-      devices = [ "nodev" ];
+      devices = ["nodev"];
       useOSProber = true;
     };
   };
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [];
 
   networking.hostName = "laptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -44,9 +50,7 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-
-
-  security= {
+  security = {
     sudo.wheelNeedsPassword = false;
 
     pam.services.swaylock = {};
@@ -112,7 +116,7 @@
     isNormalUser = true;
     description = "oscar";
     # linger = true;              # Start user services before login
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
@@ -194,7 +198,6 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -207,7 +210,6 @@
   # Refer to the following link for more details:
   # https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-auto-optimise-store
 
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -215,5 +217,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

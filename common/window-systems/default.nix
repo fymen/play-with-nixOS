@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   imports = [
     ./wayland.nix
     # ./xorg.nix
@@ -15,5 +13,4 @@
     MOZ_USE_XINPUT2 = "1";
     MANGOHUD = "1"; # Enable for all Vulkan games
   };
-
 }

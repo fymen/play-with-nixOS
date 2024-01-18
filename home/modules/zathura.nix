@@ -1,7 +1,10 @@
-{ inputs, system, config, pkgs, ... }:
-
 {
-
+  inputs,
+  system,
+  config,
+  pkgs,
+  ...
+}: {
   programs.zathura = {
     enable = true;
     options = with config.colorschemetest.colors; {
@@ -63,7 +66,6 @@
 
       # completion-highlight-bg = "#${base07}";
       # completion-highlight-fg = "#${base0D}";
-
 
       # recolor-darkcolor = "#${base00}";
       # recolor-lightcolor = "#${base06}";

@@ -1,6 +1,11 @@
-{ config, pkgs, inputs, system, lib, ... }:
-
 {
+  config,
+  pkgs,
+  inputs,
+  system,
+  lib,
+  ...
+}: {
   services = {
     greetd = {
       enable = true;
@@ -28,9 +33,7 @@
     ];
   };
 
-
   environment.variables = {
     NIXOS_OZONE_WL = "1"; # Wayland support in Chromium and Electron based applications
   };
-
 }

@@ -1,5 +1,4 @@
 {
-
   programs.mpv = {
     enable = true;
     config = {
@@ -19,7 +18,7 @@
       cscale = "ewa_lanczossharp";
       video-sync = "display-resample";
       interpolation = true;
-      tscale="oversample";
+      tscale = "oversample";
     };
   };
 

@@ -1,6 +1,8 @@
-{ config, inputs, ... }:
-
 {
+  config,
+  inputs,
+  ...
+}: {
   programs.alacritty = {
     enable = true;
 

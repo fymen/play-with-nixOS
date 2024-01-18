@@ -1,6 +1,8 @@
-{ pkgs, config, ... }:
-
 {
+  pkgs,
+  config,
+  ...
+}: {
   home.packages = with pkgs; [
     waylogout
     swaylock-effects
@@ -31,30 +33,30 @@
   xdg.configFile = {
     "waylogout/config" = with config.colorscheme.colors; {
       text = ''
-      hide-cancel
-      screenshots
-      # font="Baloo 2"
-      # fa-font="Font Awesome 6 Free"
-      effect-blur=7x5
-      indicator-thickness=20
-      ring-color=888888aa
-      inside-color=88888866
-      text-color=eaeaeaaa
-      line-color=00000000
-      ring-selection-color=${base08}aa
-      inside-selection-color=${base08}66
-      text-selection-color=eaeaeaaa
-      line-selection-color=00000000
-      lock-command="swaylock"
-      logout-command="hyprctl dispatch exit 0"
-      suspend-command="swaylock -f && systemctl suspend"
-      # hibernate-command="echo hibernate"
-      reboot-command="systemctl reboot"
-      poweroff-command="systemctl poweroff"
-      # switch-user-command="echo switch"
-      selection-label
+        hide-cancel
+        screenshots
+        # font="Baloo 2"
+        # fa-font="Font Awesome 6 Free"
+        effect-blur=7x5
+        indicator-thickness=20
+        ring-color=888888aa
+        inside-color=88888866
+        text-color=eaeaeaaa
+        line-color=00000000
+        ring-selection-color=${base08}aa
+        inside-selection-color=${base08}66
+        text-selection-color=eaeaeaaa
+        line-selection-color=00000000
+        lock-command="swaylock"
+        logout-command="hyprctl dispatch exit 0"
+        suspend-command="swaylock -f && systemctl suspend"
+        # hibernate-command="echo hibernate"
+        reboot-command="systemctl reboot"
+        poweroff-command="systemctl poweroff"
+        # switch-user-command="echo switch"
+        selection-label
 
-      indicator-separation=10
+        indicator-separation=10
       '';
     };
   };

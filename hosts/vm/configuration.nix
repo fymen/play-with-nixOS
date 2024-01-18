@@ -1,16 +1,17 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../common/system-packages.nix
-      ../../common/system.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../common/system-packages.nix
+    ../../common/system.nix
+  ];
 
   # Bootloader.
   boot.loader = {
@@ -20,7 +21,7 @@
       enable = true;
       efiSupport = true;
       efiInstallAsRemovable = true; # Otherwise /boot/EFI/BOOT/BOOTX64.EFI isn't generated
-      devices = [ "nodev" ];
+      devices = ["nodev"];
       useOSProber = true;
     };
   };
@@ -80,7 +81,7 @@
   users.users.oscar = {
     isNormalUser = true;
     description = "oscar";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     password = "test";
     shell = pkgs.zsh;
     packages = with pkgs; [
@@ -88,7 +89,6 @@
       #  thunderbird
     ];
   };
-
 
   virtualisation.vmVariant = {
     # following configuration is added only when building VM with build-vm
@@ -104,7 +104,7 @@
     settings.PasswordAuthentication = true;
   };
 
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [22];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -138,5 +138,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
