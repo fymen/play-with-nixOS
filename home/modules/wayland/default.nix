@@ -6,6 +6,7 @@
     ./waybar
     ./tofi
     ./waylockout
+    ./foot.nix
   ];
 
   home.packages = with pkgs; [
@@ -60,6 +61,14 @@
       };
     };
   };
+
+  programs.chromium.commandLineArgs = [
+    "--gtk-version=4"
+    "--enable-features=UseOzonePlatform"
+    "--ozone-platform=wayland"
+    "--enable-wayland-ime"
+  ];
+  programs.firefox.package = pkgs.firefox-wayland;
 
   home.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";

@@ -3,12 +3,6 @@
 {
   programs.chromium = {
     enable = true;
-    package = pkgs.chromium.override {
-      commandLineArgs = [
-        "--enable-features=UseOzonePlatform"
-        "--ozone-platform=wayland"
-      ];
-    };
 
     dictionaries = [ pkgs.hunspellDictsChromium.en_US ];
     extensions = [

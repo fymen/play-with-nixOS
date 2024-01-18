@@ -2,9 +2,6 @@
 {
   programs.firefox = {
     enable = true;
-    package = if pkgs.stdenv.hostPlatform.isDarwin
-              then pkgs.firefox-bin
-              else pkgs.firefox-wayland;
 
     # Privacy about:config settings
     profiles.${config.home.username} = {

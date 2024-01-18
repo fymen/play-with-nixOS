@@ -3,9 +3,12 @@
 {
   xsession.windowManager.i3 = {
     enable = true;
-    config.modifier = "Mod2";
+
+    config = lib.mkForce null;
     extraConfig = (builtins.readFile ./config);
   };
+
+  programs.firefox.package = pkgs.firefox;
 
   xdg.configFile."i3blocks/config".text = ''
       [volume]
@@ -46,4 +49,6 @@
     };
 
   };
+
+  fonts.fontconfig.enable = true;
 }

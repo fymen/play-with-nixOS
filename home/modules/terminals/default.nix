@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./foot.nix
     ./alacritty.nix
   ];
 }

@@ -61,6 +61,8 @@ in
     starship
     fd                          # Alternative to "find"
     lazygit                     # Magit alternative
+    glow                        # Markdown viewer in command line
+
 
     xdg-utils
 
