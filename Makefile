@@ -5,7 +5,7 @@ install:
 	sudo nixos-rebuild switch --flake .
 
 debug:
-	sudo nixos-rebuild test --flake . --show-trace --fast |& nom
+	sudo nixos-rebuild test --flake . --show-trace --fast --option eval-cache false |& nom
 
 build:
 	nix flake lock --update-input mysecrets

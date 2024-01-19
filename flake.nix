@@ -48,27 +48,30 @@
         nix.registry.nixos.flake = inputs.self;
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
-          inherit inputs;
-          inherit system;
-          inherit mysecrets;
-        };
       }
     ];
 
-    mkNixosConfig = user: hostName:
+    mkNixosConfig = user: hostName: wm:
       nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs system mysecrets;};
+
+        specialArgs = {inherit inputs system mysecrets;
+                       windowSystem = wm;
+                      };
         modules =
           genericModules
           ++ [
             ./hosts/${hostName}/configuration.nix
             {
-              home-manager.users.${user}.imports = [
-                ./home/${user}/default.nix
-                inputs.nix-colors.homeManagerModule
-                inputs.nur.hmModules.nur
-              ];
+              home-manager = {
+                extraSpecialArgs = { inherit inputs system mysecrets;
+                                     windowSystem = wm;
+                                   };
+                users.${user}.imports = [
+                  ./home/${user}/default.nix
+                  inputs.nix-colors.homeManagerModule
+                  inputs.nur.hmModules.nur
+                ];
+              };
             }
             inputs.nur.nixosModules.nur
           ];
@@ -88,8 +91,9 @@
       ++ modules;
   in {
     nixosConfigurations = {
-      "laptop" = mkNixosConfig "oscar" "laptop";
-      "racknerd" = mkNixosConfig "hildar" "racknerd";
+      # username(can be find at ./home/), hostname(can be find at ./hosts/), desktop system ("wayland" or "xorg")
+      "laptop" = mkNixosConfig "oscar" "laptop" "wayland";
+      "racknerd" = mkNixosConfig "hildar" "racknerd" "";
       "vm" = mkNixosConfig "oscar" "vm";
     };
 

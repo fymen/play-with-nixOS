@@ -2,50 +2,64 @@
   config,
   pkgs,
   inputs,
-  system,
   lib,
   ...
-}: {
-  # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    xkbVariant = "";
+}:
+with lib; let
+  cfg = config.modules.windowSystem.xorg;
+in {
+  options.modules.windowSystem.xorg = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable Xorg window system.
+      '';
+    };
+  };
 
-    # Configure AMD graphics
-    videoDrivers = ["amdgpu"];
+  config = mkIf cfg.enable {
+    # Configure keymap in X11
+    services.xserver = {
+      enable = true;
+      layout = "us";
+      xkbVariant = "";
 
-    displayManager = {
-      autoLogin.enable = false;
-      autoLogin.user = "oscar";
+      # Configure AMD graphics
+      videoDrivers = ["amdgpu"];
 
-      defaultSession = "none+i3";
+      displayManager = {
+        autoLogin.enable = false;
+        autoLogin.user = "oscar";
 
-      gdm = {
-        enable = true;
-        wayland = true;
-      };
+        defaultSession = "none+i3";
 
-      lightdm = {
-        enable = false;
-        greeters.enso = {
+        gdm = {
           enable = true;
+          wayland = true;
+        };
+
+        lightdm = {
+          enable = false;
+          greeters.enso = {
+            enable = true;
+          };
         };
       };
-    };
 
-    desktopManager.gnome.enable = true;
-    ## Configurations for I3
-    dpi = 234;
-    upscaleDefaultCursor = true;
-    windowManager = {
-      i3 = {
-        enable = true;
-        extraPackages = with pkgs; [
-          j4-dmenu-desktop
-          i3lock
-          i3blocks
-        ];
+      desktopManager.gnome.enable = true;
+      ## Configurations for I3
+      dpi = 234;
+      upscaleDefaultCursor = true;
+      windowManager = {
+        i3 = {
+          enable = true;
+          extraPackages = with pkgs; [
+            j4-dmenu-desktop
+            i3lock
+            i3blocks
+          ];
+        };
       };
     };
   };

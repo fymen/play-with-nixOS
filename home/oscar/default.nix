@@ -2,9 +2,12 @@
   inputs,
   system,
   config,
+  windowSystem,
   pkgs,
   ...
-}: {
+}: let
+  windowManager = if windowSystem == "wayland" then "hyprland" else "i3";
+in {
   imports = [
     ../modules
   ];
@@ -110,6 +113,8 @@
       emacs.personal.enable = true;
       emacs.service.enable = true;
     };
+
+    windowManager."${windowManager}".enable = true;
 
     misc.enable = true;
   };

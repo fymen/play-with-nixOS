@@ -1,10 +1,13 @@
-{pkgs, ...}: {
+{pkgs, config, windowSystem, ...}: {
   imports = [
     ./wayland.nix
-    # ./xorg.nix
+    ./xorg.nix
   ];
 
-  environment.variables = {
+  config.modules.windowSystem."${windowSystem}".enable = true;
+
+
+  config.environment.variables = {
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     GDK_SCALE = "1.2";
     GDK_DPI_SCALE = "1.2";

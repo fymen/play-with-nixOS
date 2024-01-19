@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{pkgs, windowSystem, config, ...}: let
   my-python-packages = python-packages:
     with python-packages; [
       pandas
@@ -29,8 +29,8 @@
   python-with-my-packages = pkgs.python3.withPackages my-python-packages;
 in {
   imports = [
-    ./wayland
-    # ./i3
+    ./hyprland
+    ./i3
     ./gtk.nix
     ./emacs.nix
     ./tmux.nix
