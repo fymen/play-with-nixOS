@@ -3,13 +3,13 @@
   config,
   ...
 }: {
-  # home.pointerCursor = {
-  #   gtk.enable = false;
-  #   x11.enable = false;
-  #   package = pkgs.bibata-cursors;
-  #   name = "Bibata-Modern-Ice";
-  #   size = 32;
-  # };
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Original-Classic";
+    size = 32;
+  };
 
   # set dpi for 4k monitor
   xresources.properties = {
@@ -29,7 +29,7 @@
     font = {
       name = "Noto Sans";
       package = pkgs.noto-fonts;
-      size = 16;
+      size = 14;
     };
 
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";

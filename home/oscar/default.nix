@@ -81,6 +81,7 @@
     easyeffects
 
     alejandra
+    statix
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
