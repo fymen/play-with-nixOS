@@ -57,8 +57,6 @@ in {
 
     parallel
 
-    xclip
-
     # youtube-music
     ani-cli # Watch animation from cli
     rnnoise-plugin

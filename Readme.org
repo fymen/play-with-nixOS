@@ -1,14 +1,43 @@
+Personal NixOS configuration.
 
-#+begin_src shell
-python -m venv myenv # Create a Python virtual environment
-source myenv/bin/activate # Activate the virtual environment
-pip install package-name # Install Python packages using pip
-#+end_src
+Try to keep it straight and simple.
 
-Get sha-256 hash for package from github
-#+begin_src shell
-nix-prefetch fetchFromGitHub --owner fymen --repo .emacs.d --rev 410a958
-#+end_src
+Please refer to the [[file:Makefile][Makefile]] to find simple useage.
 
-* Reference
+|                      | wayland                | Xorg             |
+|----------------------+------------------------+------------------|
+| Window manager       | hyprland               | i3               |
+| Display manager      | greetd+tuigreet        | gdm              |
+| Emulator             | foot + tmux            | alacritty + tmux |
+| Bar                  | waybar                 | i3bar + i3blocks |
+| Application launcher | tofi                   | j4-dmenu-desktop |
+| Screenshot           | grim + slurp + wl-copy | flameshot        |
+| Screen locker        | swaylock-effects       |                  |
+| Logout               | waylogout              |                  |
+| Eye protection       | wlsunset               |                  |
+
+
+Other useful tools:
+| Tools        | Specification                       |
+|--------------+-------------------------------------|
+| mpv          | Media player                        |
+| ani-cli      | Watch animation from command line   |
+| qrencode     | Qrcode generate                     |
+| calibre      | E-book manager                      |
+| lazygit      | Git wrapper in command line         |
+| glow         | Markdown viewer in command line     |
+| grc          | Colorize command output             |
+| font-manager | As name                             |
+| zathura      | PDF reader can be deeply customized |
+
+* NixOS related
+[[https://github.com/fymen/roaming/blob/master/20231228093754-install_nixos_from_ubuntu.org][Install by ISO image from ubuntu]]
+
+* References
 https://github.com/ryan4yin/nix-config
+
+https://github.com/hlissner/dotfiles
+
+https://github.com/shaunsingh/nix-darwin-dotfiles
+
+https://github.com/HirschBerge/Public-dots

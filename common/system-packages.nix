@@ -3,19 +3,26 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim
+
     wget
     curl
+    # rtorrent
+
     git
+
     jq
 
     file
     tree
     killall
+
     unzip
     zip
     xz
     p7zip
 
     gnumake
+
+    lf                          # file manager
   ];
 }
