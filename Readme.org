@@ -2,8 +2,14 @@ Personal NixOS configuration.
 
 Try to keep it straight and simple.
 
-Please refer to the [[file:Makefile][Makefile]] to find simple useage.
+=make= to build this configuration without switch.
+=make debug= is the as =make=, but with more debug info and a colorized summary out put powered by [[https://github.com/maralorn/nix-output-monitor][nix-output-monitor]].
+=make install= to switch it.
+=make clean= to dump garbage.
+=make deploy= to deploy remote host.
 
+* Some features
+Please refer to the [[file:Makefile][Makefile]] to find specific useage.
 |                      | wayland                | Xorg             |
 |----------------------+------------------------+------------------|
 | Window manager       | hyprland               | i3               |
@@ -16,19 +22,44 @@ Please refer to the [[file:Makefile][Makefile]] to find simple useage.
 | Logout               | waylogout              |                  |
 | Eye protection       | wlsunset               |                  |
 
+I use Emacs as my primarily text Editor. I have used it for many years, and have developed my own personalized style for it. I find it difficult to switch to other text editors such as doom Emacs, Neovim or Vscode because I feel most comfortable with Emacs.
+
+To ensure that I can easily update and modify my [[https://github.com/fymen/.emacs.d][Emacs dot files]], I have stored them in a separate repository.
+
+Emacs is a handy tool that you can do almost everything in it. So I don't invest too much on other tools, although some of them are really cool.
 
 Other useful tools:
-| Tools        | Specification                       |
-|--------------+-------------------------------------|
-| mpv          | Media player                        |
-| ani-cli      | Watch animation from command line   |
-| qrencode     | Qrcode generate                     |
-| calibre      | E-book manager                      |
-| lazygit      | Git wrapper in command line         |
-| glow         | Markdown viewer in command line     |
-| grc          | Colorize command output             |
-| font-manager | As name                             |
-| zathura      | PDF reader can be deeply customized |
+| Tools        | Specification                                        |
+|--------------+------------------------------------------------------|
+| mpv          | Media player                                         |
+| ani-cli      | Watch animation from command line                    |
+| qrencode     | Qrcode generate                                      |
+| calibre      | E-book manager                                       |
+| lazygit      | Git wrapper in command line, like magit in Emacs     |
+| [[https://github.com/charmbracelet/glow][glow]]         | Markdown viewer in command line                      |
+| grc          | Colorize command output                              |
+| font-manager | As name                                              |
+| zathura      | PDF reader can be deeply customized                  |
+| distrobox    | Run bunch of Linux distributions on your host        |
+| [[https://github.com/gokcehan/lf][lf]]           | File manager in command line, recommended for server |
+| [[https://github.com/sxyazi/yazi][yazi]]         | Some as lf, but with richer feature and prettier.    |
+| bat          | cat alternative                                      |
+| btop         | top alternative                                      |
+| du-dust      | Modernized du                                        |
+| eza          | Modernized ls                                        |
+| fd           | find alternative                                     |
+| [[https://github.com/Syllo/nvtop][nvtop]]        | Monitor GPU process                                  |
+| [[https://github.com/rakshasa/rtorrent][rtorrent]]     | Torrent tool in command line, useful on server       |
+
+* Emacs on Hyprland
+[[file:samples/emacs-hyprland.jpg][Emacs on Hyprland]]
+
+Why [[https://github.com/bbatsov/zenburn-emacs][zenburn]] ?
+
+It may not be as fancy as other color themes such as [[https://github.com/catppuccin/catppuccin][Catppuccin]] or [[https://github.com/doomemacs/doomemacs][Doom Dracula]], but its low contrast color set is suitable for prolonged use.
+
+* Todo
+Support MacOS and standalone home-manager on other distribution.
 
 * NixOS related
 [[https://github.com/fymen/roaming/blob/master/20231228093754-install_nixos_from_ubuntu.org][Install by ISO image from ubuntu]]

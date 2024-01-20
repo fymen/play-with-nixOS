@@ -53,6 +53,7 @@ in {
 
     nix-output-monitor
     nix-tree
+    nil
     # nix-alien
 
     parallel
