@@ -56,6 +56,9 @@ in {
     nil
     # nix-alien
 
+    cmake
+    libtool
+
     parallel
 
     # youtube-music
@@ -110,7 +113,7 @@ in {
     editors = {
       emacs.enable = true;
       emacs.personal.enable = true;
-      emacs.service.enable = true;
+      emacs.service.enable = false;
     };
 
     windowManager."${windowManager}".enable = true;

@@ -11,6 +11,7 @@ in {
     ./hyprland
     ./waybar
     ./tofi
+    # ./rofi
     ./waylockout
     ./foot.nix
   ];

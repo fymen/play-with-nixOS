@@ -3,9 +3,13 @@ Personal NixOS configuration.
 Try to keep it straight and simple.
 
 =make= to build this configuration without switch.
+
 =make debug= is the as =make=, but with more debug info and a colorized summary out put powered by [[https://github.com/maralorn/nix-output-monitor][nix-output-monitor]].
+
 =make install= to switch it.
+
 =make clean= to dump garbage.
+
 =make deploy= to deploy remote host.
 
 * Some features
