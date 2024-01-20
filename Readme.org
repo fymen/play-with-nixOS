@@ -52,7 +52,8 @@ Other useful tools:
 | [[https://github.com/rakshasa/rtorrent][rtorrent]]     | Torrent tool in command line, useful on server       |
 
 * Emacs on Hyprland
-[[./samples/emacs-hyprland.jpg][Emacs on Hyprland]]
+#+attr_html: :width 800
+[[file:samples/emacs-hyprland.jpg]]
 
 Why [[https://github.com/bbatsov/zenburn-emacs][zenburn]] ?
 
