@@ -54,10 +54,17 @@ in {
     nix-output-monitor
     nix-tree
     nil
+    nix-index
+    nix-prefetch-git
+    nix-prefetch-scripts
+
+    mesa
+
     # nix-alien
 
     cmake
     libtool
+    clang-tools_15
 
     parallel
 
@@ -112,7 +119,7 @@ in {
   modules = {
     editors = {
       emacs.enable = true;
-      emacs.personal.enable = true;
+      emacs.personal.enable = false;
       emacs.service.enable = false;
     };
 

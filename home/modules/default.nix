@@ -31,8 +31,8 @@ in {
   imports = [
     ./hyprland
     ./i3
+    ./emacs
     ./gtk.nix
-    ./emacs.nix
     ./tmux.nix
     ./zsh.nix
     ./git.nix

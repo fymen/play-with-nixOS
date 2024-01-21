@@ -135,7 +135,10 @@
   # hardware.steam-hardware.enable = true;
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    config.allowUnfree = true;
+    overlays = [ inputs.emacs-overlay.overlay ];
+  };
 
   fonts.packages = with pkgs; [
     inconsolata
@@ -147,14 +150,14 @@
     font-awesome
   ];
 
+  # programs.nix-ld.enable = true;
+  # programs.nix-ld.libraries = with pkgs; [
+  #   clang-tools_15
+  # ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    nix-index
-    nix-prefetch-git
-    nix-prefetch-scripts
-
-    mesa
     brightnessctl
     acpi
     man-pages

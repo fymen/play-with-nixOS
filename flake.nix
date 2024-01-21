@@ -2,29 +2,37 @@
   description = "NixOS Flake Configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+    home = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    nur.url = "github:nix-community/NUR";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
+    emacs-overlay = {
+      url  = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    agenix.url = "github:ryantm/agenix";
+    
+    # Colorscheme
+    nix-colors.url = "github:fymen/nix-colors/test";
+    # nix-colors.url = "/home/oscar/gitest/nix/nix-colors";
 
     # Personal secrets
     mysecrets = {
       url = "git+ssh://git@github.com/fymen/secrets?ref=main";
       flake = false;
-    };
-
-    # Colorscheme
-    nix-colors.url = "github:fymen/nix-colors/test";
-    # nix-colors.url = "/home/oscar/gitest/nix/nix-colors";
-
-    home = {
-      url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs = {

@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   pkgs,
   lib,
@@ -7,6 +8,7 @@
 with lib; let
   cfg = config.modules.editors.emacs;
 in {
+
   options.modules.editors.emacs = {
     enable = mkOption {
       type = types.bool;
@@ -46,14 +48,34 @@ in {
   };
 
   config = mkIf cfg.enable {
+
     programs.emacs = {
       enable = true;
-      package = pkgs.emacs29-pgtk;
+      package = pkgs.emacs;
+
+      # package = pkgs.emacsWithPackagesFromUsePackage {
+      #   config = ./emacs.org;
+      #   defaultInitFile = true;
+      #   alwaysEnsure = true;
+      #   alwaysTangle = true;
+
+      #   # Optionally provide extra packages not in the configuration file.
+      #   extraEmacsPackages = epkgs: [
+      #     #  epkgs.cask
+      #   ];
+
+      #   # Optionally override derivations.
+      #   #      override = final: prev: {
+      #   #        weechat = prev.melpaPackages.weechat.overrideAttrs(old: {
+      #   #          patches = [ ./weechat-el.patch ];
+      #   #        });
+      #   #      };
+      # };
     };
 
     services.emacs = mkIf cfg.service.enable {
       enable = true;
-      package = pkgs.emacs29-pgtk;
+      package = pkgs.emacs;
       startWithUserSession = "graphical";
     };
 
@@ -70,7 +92,6 @@ in {
     home.packages = with pkgs; [
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))
       emacs-all-the-icons-fonts
-
       (pkgs.writeShellScriptBin "espad" ''
         emacsclient --alternate-editor='false' --no-wait --create-frame --frame-parameters='(quote (name . "scratchpad"))'
       '')

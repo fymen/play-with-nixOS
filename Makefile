@@ -35,10 +35,4 @@ test_deploy:
 deploy:
 	  nixos-rebuild switch --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose
 
-
-home:
-	home-manager --flake .#oscar@m2
-
-
-
-.PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy home build
+.PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy build
