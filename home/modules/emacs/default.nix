@@ -51,27 +51,29 @@ in {
 
     programs.emacs = {
       enable = true;
-      package = pkgs.emacs;
+      # package = pkgs.emacs;
 
-      # package = pkgs.emacsWithPackagesFromUsePackage {
-      #   config = ./emacs.org;
-      #   defaultInitFile = true;
-      #   alwaysEnsure = true;
-      #   alwaysTangle = true;
+      package = pkgs.emacsWithPackagesFromUsePackage {
+        config = ./emacs.org;
+        defaultInitFile = true;
+        alwaysEnsure = true;
+        alwaysTangle = true;
 
-      #   # Optionally provide extra packages not in the configuration file.
-      #   extraEmacsPackages = epkgs: [
-      #     #  epkgs.cask
-      #   ];
+        # Optionally provide extra packages not in the configuration file.
+        extraEmacsPackages = epkgs: [
+          #  epkgs.cask
+        ];
 
-      #   # Optionally override derivations.
-      #   #      override = final: prev: {
-      #   #        weechat = prev.melpaPackages.weechat.overrideAttrs(old: {
-      #   #          patches = [ ./weechat-el.patch ];
-      #   #        });
-      #   #      };
-      # };
+        # Optionally override derivations.
+        #      override = final: prev: {
+        #        weechat = prev.melpaPackages.weechat.overrideAttrs(old: {
+        #          patches = [ ./weechat-el.patch ];
+        #        });
+        #      };
+      };
     };
+
+    home.file.".emacs.d/emacs.org".source = config.lib.file.mkOutOfStoreSymlink "/home/oscar/gitest/play-with-nixOS/home/modules/emacs/emacs.org";
 
     services.emacs = mkIf cfg.service.enable {
       enable = true;

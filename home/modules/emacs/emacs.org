@@ -1,62 +1,7 @@
 #+OPTIONS: toc:4 h:4
 #+TITLE: Emacs init configuration
-* Package management
-#+begin_src emacs-lisp :tangle yes
-(require 'use-package)
-(setq use-package-always-ensure t)
-(setq use-package-verbose t)
 
-(setq package-archives
-    '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-      ("MELPA Stable" . "https://stable.melpa.org/packages/")
-      ("MELPA"        . "https://melpa.org/packages/"))
-    package-archive-priorities
-    '(("GNU ELPA"     . 10)
-      ("MELPA"        . 5)
-      ("MELPA Stable" . 0)))
-#+end_src
-** Straight
-#+begin_src emacs-lisp :tangle yes :lexical no
-;; bootstrap straight
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-;; use use-package
-(straight-use-package 'use-package)
-;; automatically ensure every package exists (like :ensure or :straight)
-;; (setq straight-use-package-by-default t)
-#+end_src
-** Paradox
-#+begin_src emacs-lisp :tangle yes
-(use-package async
-  :ensure t)
-(use-package paradox
-  :defer t
-  :config
-  (setq paradox-execute-asynchronously t
-        ;; Avoid being ask for the token
-        paradox-github-token 0))
-#+end_src
-** Auto compile
-#+begin_src emacs-lisp :tangle yes
-(setq load-prefer-newer t)
-(use-package auto-compile
-  :defer t
-  :ensure t
-  :config
-  ;; (auto-compile-on-save-mode 1)
-  (auto-compile-on-load-mode 1))
-#+end_src
+* Early init
 ** GUI
 #+begin_src emacs-lisp :tangle yes
 (when (functionp 'menu-bar-mode)
@@ -76,11 +21,8 @@
 (when (functionp 'line-number-mode)
     (line-number-mode 1))
 #+end_src
-* General
 ** Basics
 #+begin_src emacs-lisp :tangle yes
-(setq gc-cons-threshold 10000000)
-
 (setq-default tab-width 4                       ; Smaller tabs
               fill-column 75                    ; Maximum line width
               ;; auto-fill-function 'do-auto-fill  ; Auto-fill-mode everywhere
@@ -141,10 +83,6 @@
            show-paren-mode))            ; Highlight matching parentheses
   (funcall mode 1))
 
-(use-package recentf
-  :config
-  (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-  (recentf-mode 1))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -155,28 +93,63 @@
 (global-set-key (kbd "<f8>") 'eshell)
 #+end_src
 
+* Package management
+** Package
+#+begin_src emacs-lisp :tangle yes
+(require 'use-package)
+(setq use-package-always-ensure t)
+(setq use-package-verbose t)
+
+(setq package-archives
+    '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
+      ("MELPA Stable" . "https://stable.melpa.org/packages/")
+      ("MELPA"        . "https://melpa.org/packages/"))
+    package-archive-priorities
+    '(("GNU ELPA"     . 10)
+      ("MELPA"        . 5)
+      ("MELPA Stable" . 0)))
+#+end_src
+** Paradox
+#+begin_src emacs-lisp :tangle no
+(use-package async
+  :ensure t)
+(use-package paradox
+  :defer t
+  :config
+  (setq paradox-execute-asynchronously t
+        ;; Avoid being ask for the token
+        paradox-github-token 0))
+#+end_src
+** COMMENT Auto compile
+#+begin_src emacs-lisp :tangle no
+(setq load-prefer-newer t)
+(use-package auto-compile
+  :defer t
+  :ensure t
+  :config
+  ;; (auto-compile-on-save-mode 1)
+  (auto-compile-on-load-mode 1))
+#+end_src
+
+* General
 ** Auto save
 The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package auto-save
-  :straight (:host github :repo "manateelazycat/auto-save"
-                   :branch "master")
+(use-package super-save
+  :ensure t
   :config
-  (auto-save-enable)
-  :custom
-  (auto-save-silent t)
-  ;; (auto-save-delete-trailing-whitespace t)
+  ;; Disable Emacs default auto save
+  (setq auto-save-default nil)
 
-;;; custom predicates if you don't want auto save.
-;;; disable auto save mode when current filetype is an gpg file.
-  (auto-save-disable-predicates
-   '((lambda ()
-       (string-suffix-p
-        "age"
-        (file-name-extension (buffer-name)) t))))
-  )
+  (setq super-save-auto-save-when-idle t)
+  (setq super-save-remote-files nil)
+  (setq super-save-exclude '(".gpg" ".age" ".bin"))
+  ;; Save silently
+  (setq super-save-silent t)
+  ;; Save all opened buffers
+  (setq super-save-all-buffers t)
+  (super-save-mode +1))
 #+end_src
-
 ** Desktop save
 #+begin_src emacs-lisp :tangle yes
   (desktop-save-mode 1)
@@ -202,7 +175,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** OS related && fonts
 #+begin_src emacs-lisp :tangle yes
-(setq my-font-size 24)
+(setq my-font-size 26)
 (when (eq system-type 'darwin)
   (set-face-attribute 'default nil)
   (set-face-attribute 'default nil :height 150))
@@ -212,7 +185,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
       ;; Chinese Font
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (set-frame-font (concat "Inconsolata " (number-to-string my-font-size)))
-        ;; (set-frame-font "CascadiaCode 26")
+        ;; (set-frame-font "CascadiaCode 16")
         ;; (set-frame-font "Firacode 15")
         (set-fontset-font (frame-parameter nil 'font)
                           charset (font-spec :family "WenQuanYi Micro Hei Mono"
@@ -223,81 +196,8 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
               browse-url-new-window-flag t)
         )))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata 24"))
+(add-to-list 'default-frame-alist '(font . "Inconsolata 26"))
 #+end_src
-*** COMMENT Ligature
-    #+begin_src emacs-lisp :tangle no
-    (use-package ligature
-      :config
-      ;; Enable the "www" ligature in every possible major mode
-      (ligature-set-ligatures 't '("www"))
-      ;; Enable traditional ligature support in eww-mode, if the
-      ;; `variable-pitch' face supports it
-      (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-      ;; Enable all Cascadia and Fira Code ligatures in programming modes
-      (ligature-set-ligatures 'prog-mode
-                            '(;; == === ==== => =| =>>=>=|=>==>> ==< =/=//=// =~
-                              ;; =:= =!=
-                              ("=" (rx (+ (or ">" "<" "|" "/" "~" ":" "!" "="))))
-                              ;; ;; ;;;
-                              (";" (rx (+ ";")))
-                              ;; && &&&
-                              ("&" (rx (+ "&")))
-                              ;; !! !!! !. !: !!. != !== !~
-                              ("!" (rx (+ (or "=" "!" "\." ":" "~"))))
-                              ;; ?? ??? ?:  ?=  ?.
-                              ("?" (rx (or ":" "=" "\." (+ "?"))))
-                              ;; %% %%%
-                              ("%" (rx (+ "%")))
-                              ;; |> ||> |||> ||||> |] |} || ||| |-> ||-||
-                              ;; |->>-||-<<-| |- |== ||=||
-                              ;; |==>>==<<==<=>==//==/=!==:===>
-                              ("|" (rx (+ (or ">" "<" "|" "/" ":" "!" "}" "\]"
-                                              "-" "=" ))))
-                              ;; \\ \\\ \/
-                              ("\\" (rx (or "/" (+ "\\"))))
-                              ;; ++ +++ ++++ +>
-                              ("+" (rx (or ">" (+ "+"))))
-                              ;; :: ::: :::: :> :< := :// ::=
-                              (":" (rx (or ">" "<" "=" "//" ":=" (+ ":"))))
-                              ;; // /// //// /\ /* /> /===:===!=//===>>==>==/
-                              ("/" (rx (+ (or ">"  "<" "|" "/" "\\" "\*" ":" "!"
-                                              "="))))
-                              ;; .. ... .... .= .- .? ..= ..<
-                              ("\." (rx (or "=" "-" "\?" "\.=" "\.<" (+ "\."))))
-                              ;; -- --- ---- -~ -> ->> -| -|->-->>->--<<-|
-                              ("-" (rx (+ (or ">" "<" "|" "~" "-"))))
-                              ;; *> */ *)  ** *** ****
-                              ("*" (rx (or ">" "/" ")" (+ "*"))))
-                              ;; www wwww
-                              ("w" (rx (+ "w")))
-                              ;; <> <!-- <|> <: <~ <~> <~~ <+ <* <$ </  <+> <*>
-                              ;; <$> </> <|  <||  <||| <|||| <- <-| <-<<-|-> <->>
-                              ;; <<-> <= <=> <<==<<==>=|=>==/==//=!==:=>
-                              ;; << <<< <<<<
-                              ("<" (rx (+ (or "\+" "\*" "\$" "<" ">" ":" "~"  "!"
-                                              "-"  "/" "|" "="))))
-                              ;; >: >- >>- >--|-> >>-|-> >= >== >>== >=|=:=>>
-                              ;; >> >>> >>>>
-                              (">" (rx (+ (or ">" "<" "|" "/" ":" "=" "-"))))
-                              ;; #: #= #! #( #? #[ #{ #_ #_( ## ### #####
-                              ("#" (rx (or ":" "=" "!" "(" "\?" "\[" "{" "_(" "_"
-                                           (+ "#"))))
-                              ;; ~~ ~~~ ~=  ~-  ~@ ~> ~~>
-                              ("~" (rx (or ">" "=" "-" "@" "~>" (+ "~"))))
-                              ;; __ ___ ____ _|_ __|____|_
-                              ("_" (rx (+ (or "_" "|"))))
-                              ;; Fira code: 0xFF 0x12
-                              ("0" (rx (and "x" (+ (in "A-F" "a-f" "0-9")))))
-                              ;; Fira code:
-                              "Fl"  "Tl"  "fi"  "fj"  "fl"  "ft"
-                              ;; The few not covered by the regexps.
-                              "{|"  "[|"  "]#"  "(*"  "}#"  "$>"  "^="))
-      ;; Enables ligature checks globally in all buffers. You can also do it
-      ;; per mode with `ligature-mode'.
-      (global-ligature-mode t))
-    #+end_src
-
 ** Anzu mode (query & replace highlight)
 #+begin_src emacs-lisp :tangle yes
   (use-package anzu
@@ -316,10 +216,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 
 ** Open newline & move text
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package move-text
-  :defer t
-  :straight (:host github :repo "manateelazycat/move-text"))
-
 (defun scroll-up-one-line()
   "Scroll up one line."
   (interactive)
@@ -331,8 +227,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   (scroll-down 1))
 (global-set-key (kbd "s-p") 'scroll-up-one-line)
 (global-set-key (kbd "s-n") 'scroll-down-one-line)
-(global-set-key (kbd "s-P") 'move-text-up)
-(global-set-key (kbd "s-N") 'move-text-down)
 
 (defun open-newline-below (arg)
   "Move to the next line (like vi) and then opens a line."
@@ -358,19 +252,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Extra settings
 #+begin_src emacs-lisp :tangle yes
-(use-package winpoint
-    :defer t
-  ;; Keep cursor while opening two buffers for a file.
-  ;; https://raw.githubusercontent.com/manateelazycat/lazycat-emacs/47ed27a317c9d81b9ae4727a62c43bccc585b8b1/site-lisp/extensions/lazycat/winpoint.el
-  :if (file-exists-p
-       (expand-file-name "winpoint.el" local-elisp-directory))
-  :load-path local-elisp-directory
-  :config
-  (add-hook 'prog-mode-hook 'winpoint-mode)
-  (add-hook 'org-mode-hook 'winpoint-mode))
-
 (use-package cursor-chg
-    :defer t
   ;; make cursor terser
   ;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/cursor-chg.el
   :if (file-exists-p
@@ -400,19 +282,17 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Hippie expand
 #+begin_src emacs-lisp :tangle yes
-(use-package hippie-exp
-  :bind ([remap dabbrev-expand]. hippie-expand)
-  :config
-  (setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                           try-expand-dabbrev-all-buffers
-                                           try-expand-dabbrev-from-kill
-                                           try-complete-file-name-partially
-                                           try-complete-file-name
-                                           try-expand-all-abbrevs
-                                           try-expand-list
-                                           try-expand-line
-                                           try-complete-lisp-symbol-partially
-                                           try-complete-lisp-symbol)))
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-list
+                                         try-expand-line
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol))
+(bind-key [remap dabbrev-expand]  #'hippie-expand)
 #+end_src
 ** Smartscan
 =M-n= to next symbol, and =M-p= to previous symbol.
@@ -675,7 +555,7 @@ Never to lose your cursor again.
 #+begin_src emacs-lisp :tangle yes
 (use-package expand-region
   :defer t
-  :bind ("C-=" . er/expand-region))
+  :bind ("C-c e" . er/expand-region))
 #+end_src
 
 ** Key frequency
@@ -722,10 +602,9 @@ Never to lose your cursor again.
      :defer t
      :bind ("M-;" . comment-dwim-2))
    #+end_src
-** Auto completion
+** company-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package company
-  :defer t
   :ensure t
   :diminish company-mode
   :init
@@ -734,6 +613,7 @@ Never to lose your cursor again.
   (setq company-backends (delete 'company-semantic company-backends))
   (add-to-list 'company-backends 'company-c-headers)
   (add-to-list 'company-backends 'company-clang)
+  (add-to-list 'company-backends 'company-files)
   (with-eval-after-load 'company
     (company-flx-mode +1))
 
@@ -767,12 +647,6 @@ your project root:
                                        "-I/home/<user>/project_root/include2/")))))
 #+END_SRC
 
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package company-english-helper
-  :defer t
-  :straight (:host github :repo "manateelazycat/company-english-helper")
-  :config (setq company-english-helper-fuzz-search-p t))
-#+end_src
 ** COMMENT Corfu
 #+begin_src emacs-lisp :tangle no
 ;; Modular text completion framework
@@ -895,24 +769,13 @@ your project root:
   :after (lsp-mode)
   :demand t
   :custom
-  (lsp-nix-nil-formatter ["nixpkgs-fmt"]))
+  (lsp-nix-nil-formatter ["alejandra"]))
 
 (use-package nix-mode
   :hook (nix-mode . lsp-deferred)
   :mode "\\.nix\\'")
 #+end_src
 
-** Direnv
-#+begin_src emacs-lisp :tangle yes :lexical no
-;; (use-package direnv
-;;   :config
-;;   (direnv-mode))
-
-(use-package envrc
-  :defer t
-  :config
-  (envrc-global-mode))
-#+end_src
 ** dtrt-indent
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package dtrt-indent
@@ -947,7 +810,6 @@ your project root:
 ** Clear trailing spaces automatically
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package ws-butler
-  :defer t
   :config
   (ws-butler-global-mode))
 #+end_src
@@ -1008,33 +870,33 @@ the languages in ISPELL-LANGUAGES when invoked."
   (keymap-set vertico-map "C-j" #'vertico-insert)
   (keymap-set vertico-map "C-l" #'vertico-directory-delete-word))
 
-(use-package savehist
-  :config
-  (setq savehist-additional-variables
-        '(tablist-named-filter
-          projectile-project-command-history
-          kill-ring
-          command-history
-          set-variable-value-history
-          custom-variable-history
-          query-replace-history
-          read-expression-history
-          minibuffer-history
-          read-char-history
-          face-name-history
-          bookmark-history
-          file-name-history))
-  (put 'minibuffer-history         'history-length 50)
-  (put 'file-name-history          'history-length 50)
-  (put 'set-variable-value-history 'history-length 25)
-  (put 'custom-variable-history    'history-length 25)
-  (put 'query-replace-history      'history-length 25)
-  (put 'read-expression-history    'history-length 25)
-  (put 'read-char-history          'history-length 25)
-  (put 'face-name-history          'history-length 25)
-  (put 'bookmark-history           'history-length 25)
-  (setq history-delete-duplicates t)
-  (savehist-mode))
+(require 'savehist)
+(setq savehist-additional-variables
+      '(tablist-named-filter
+        projectile-project-command-history
+        kill-ring
+        command-history
+        set-variable-value-history
+        custom-variable-history
+        query-replace-history
+        read-expression-history
+        minibuffer-history
+        read-char-history
+        face-name-history
+        bookmark-history
+        file-name-history))
+(put 'minibuffer-history         'history-length 50)
+(put 'file-name-history          'history-length 50)
+(put 'set-variable-value-history 'history-length 25)
+(put 'custom-variable-history    'history-length 25)
+(put 'query-replace-history      'history-length 25)
+(put 'read-expression-history    'history-length 25)
+(put 'read-char-history          'history-length 25)
+(put 'face-name-history          'history-length 25)
+(put 'bookmark-history           'history-length 25)
+(setq history-delete-duplicates t)
+(savehist-mode)
+
 ;; Emacs completion style that matches multiple regexps in any order
 (use-package orderless
   :ensure t
@@ -1329,9 +1191,7 @@ need to be passed verbatim to shell commands."
 ** lsp-mode
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package lsp-mode
-  ;; 延时加载：仅当 (lsp) 函数被调用时再 (require)
   :commands (lsp)
-  ;; 在哪些语言 major mode 下启用 LSP
   :hook (((ruby-mode
            php-mode
            typescript-mode
@@ -1341,47 +1201,27 @@ need to be passed verbatim to shell commands."
            c++-ts-mode
            ;; ......
            ) . lsp))
-  :init ;; 在 (reuqire) 之前执行
-  (setq lsp-auto-configure t ;; 尝试自动配置自己
-        lsp-auto-guess-root t ;; 尝试自动猜测项目根文件夹
-        lsp-idle-delay 0.500 ;; 多少时间idle后向服务器刷新信息
-        lsp-session-file "~/.emacs/.cache/lsp-sessions") ;; 给缓存文件换一个位置
+  :init
+  (setq lsp-auto-configure t
+        lsp-auto-guess-root t
+        lsp-idle-delay 0.500
+        lsp-session-file "~/.emacs.d/.cache/lsp-sessions")
   )
 
-;; 内容呈现
 (use-package lsp-ui
-  ;; 仅在某软件包被加载后再加载
   :after (lsp-mode)
-  ;; 延时加载
   :commands (lsp-ui-mode)
   :bind
   (:map lsp-ui-mode-map
-        ;; 查询符号定义：使用 LSP 来查询。通常是 M-.
         ([remap xref-find-references] . lsp-ui-peek-find-references)
-        ;; 查询符号引用：使用 LSP 来查询。通常是 M-?
         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-        ;; 该文件里的符号列表：类、方法、变量等。前提是语言服务支持本功能。
         ("C-c u" . lsp-ui-imenu))
-  ;; 当 lsp 被激活时自动激活 lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
-  :init
-  ;; lsp-ui 有相当细致的功能开关。具体参考：
-  ;; https://github.com/emacs-lsp/lsp-mode/blob/master/docs/tutorials/how-to-turn-off.md
+  :init  ;;https://github.com/emacs-lsp/lsp-mode/blob/master/docs/tutorials/how-to-turn-off.md
   (setq lsp-enable-symbol-highlighting t
         lsp-ui-doc-enable t
         lsp-lens-enable t))
 
-#+end_src
-** COMMENT Eglot
-#+begin_src emacs-lisp :tangle no :lexical no
-(use-package eglot
-  :defer t
-  :hook (nix-mode . eglot-ensure)
-  :config
-  (add-to-list 'eglot-server-programs '(nix-mode . ("nil")))
-  (add-hook 'c-ts-mode-hook #'eglot-ensure)
-  (add-hook 'c++-mode-hook #'eglot-ensure)
-  (add-hook 'c++-ts-mode-hook #'eglot-ensure))
 #+end_src
 ** Editor config
 #+begin_src emacs-lisp :tangle yes
@@ -1862,7 +1702,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
    #+end_src
 
 ** Dictionary & popweb
-#+begin_src emacs-lisp :tangle yes :lexical no
+#+begin_src emacs-lisp :tangle no :lexical no
 (use-package popweb
   :defer t
   :straight (:host github :repo "manateelazycat/popweb"
@@ -2121,23 +1961,27 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 (setq epg-gpg-program "gpg2")
 #+end_src
 * test
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package format-all
-  :defer t
-  :hook (nix-mode . format-all-mode)
-  :config
-  (setq-default format-all-formatters '(("C"     (astyle "--mode=c"))
-                                        ("Shell" (shfmt "-i" "4" "-ci"))))
-  (add-to-list 'format-all-default-formatters '("Nix" alejandra)))
-#+end_src
+#+begin_src emacs-lisp :lexical no
+(use-package vterm
+  :ensure t)
 
-#+begin_src emacs-lisp :tangle yes :lexical no
 (server-start)
 #+end_src
 
+* Need late start
+** Direnv
 #+begin_src emacs-lisp :tangle yes :lexical no
+;; (use-package direnv
+;;   :config
+;;   (direnv-mode))
+(use-package envrc
+  :config
+  (envrc-global-mode))
+#+end_src
+
+* test
+#+begin_src emacs-lisp :lexical no
 (use-package edwina
-  :disabled
   :ensure t
   :config
   (setq display-buffer-base-action '(display-buffer-below-selected))
@@ -2145,3 +1989,36 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
   (edwina-mode 1))
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package wrap-region
+  :config
+  (wrap-region-add-wrappers
+   '(("$" "$")
+     ("{-" "-}" "#")
+     ("/" "/" nil org-mode)
+     ("=" "=" nil org-mode)
+     ("+" "+" nil org-mode)
+     ("_" "_" nil org-mode)
+     ("*" "*" nil org-mode)
+     ("~" "~" nil org-mode)
+     ("/* " " */" "#" (java-mode javascript-mode css-mode))
+     ("`" "`" nil (markdown-mode ruby-mode))))
+  (wrap-region-global-mode t))
+
+#+end_src
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package ctrlf
+  :config
+  (ctrlf-mode +1))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes :lexical no
+(require 'recentf)
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+(recentf-mode 1)
+#+end_src
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package ement
+  :defer t
+  )
+#+end_src
