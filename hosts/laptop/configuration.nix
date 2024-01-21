@@ -150,10 +150,10 @@
     font-awesome
   ];
 
-  # programs.nix-ld.enable = true;
-  # programs.nix-ld.libraries = with pkgs; [
-  #   clang-tools_15
-  # ];
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    clang-tools_15
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

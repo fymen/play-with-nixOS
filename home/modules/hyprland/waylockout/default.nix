@@ -6,7 +6,10 @@
   home.packages = with pkgs; [
     waylogout
     swaylock-effects
+    wlogout
   ];
+
+  programs.wlogout.enable = true;
 
   programs.swaylock = {
     enable = true;
