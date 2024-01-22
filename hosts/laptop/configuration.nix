@@ -198,8 +198,14 @@
 
   # virtualisation.vmware.host.enable = true;
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  # Enable the Open SSH daemon.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

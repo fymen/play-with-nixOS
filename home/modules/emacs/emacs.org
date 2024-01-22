@@ -175,7 +175,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** OS related && fonts
 #+begin_src emacs-lisp :tangle yes
-(setq my-font-size 26)
+(setq my-font-size 24)
 (when (eq system-type 'darwin)
   (set-face-attribute 'default nil)
   (set-face-attribute 'default nil :height 150))
@@ -196,7 +196,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
               browse-url-new-window-flag t)
         )))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata 26"))
+(add-to-list 'default-frame-alist '(font . "Inconsolata 25"))
 #+end_src
 ** Anzu mode (query & replace highlight)
 #+begin_src emacs-lisp :tangle yes
@@ -210,8 +210,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package mini-echo
   :config
-  (mini-echo-mode)
-  )
+  (mini-echo-mode))
 #+end_src
 
 ** Open newline & move text
@@ -255,9 +254,9 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 (use-package cursor-chg
   ;; make cursor terser
   ;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/cursor-chg.el
-  :if (file-exists-p
-       (expand-file-name "cursor-chg.el" local-elisp-directory))
-  :load-path local-elisp-directory
+  ;; :if (file-exists-p
+  ;; (expand-file-name "cursor-chg.el" local-elisp-directory))
+  ;; :load-path local-elisp-directory
   :config
   (setq curchg-default-cursor-color "White")
   (change-cursor-mode 1)
@@ -299,7 +298,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 Only in elisp and c mode.
 #+begin_src emacs-lisp :tangle yes
 (use-package smartscan
-  :defer t
   :config
   (add-hook 'emacs-lisp-mode-hook 'smartscan-mode)
   (add-hook 'c-mode-hook 'smartscan-mode))
@@ -307,7 +305,6 @@ Only in elisp and c mode.
 ** Hungry delete
 #+begin_src emacs-lisp :tangle yes
 (use-package hungry-delete
-  :defer t
   :config
   (global-hungry-delete-mode))
 #+end_src
@@ -454,7 +451,6 @@ point reaches the beginning or end of the buffer, stop there."
 ** ibuffer-vc
 #+begin_src emacs-lisp :tangle yes
 (use-package ibuffer-vc
-  :defer t
   :config
   (add-hook 'ibuffer-hook
             (lambda ()
@@ -512,8 +508,7 @@ point reaches the beginning or end of the buffer, stop there."
  ls-lisp-dirs-first t
  )
 (dired-async-mode 1)
-(use-package dired-filetype-face
-  :defer t)
+(use-package dired-filetype-face)
 
 ;; auto refresh dired when file changes
 (add-hook 'dired-mode-hook 'auto-revert-mode)
@@ -525,7 +520,6 @@ point reaches the beginning or end of the buffer, stop there."
 ** ace-window
 #+begin_src emacs-lisp :tangle yes
 (use-package ace-window
-  :defer t
   :ensure t
   :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
               aw-ignore-current nil
@@ -539,7 +533,6 @@ point reaches the beginning or end of the buffer, stop there."
 Never to lose your cursor again.
 #+begin_src emacs-lisp :tangle yes
 (use-package beacon
-  :defer t
   :diminish beacon-mode
   :init
   (beacon-mode 1)
@@ -554,14 +547,12 @@ Never to lose your cursor again.
 ** Expand region
 #+begin_src emacs-lisp :tangle yes
 (use-package expand-region
-  :defer t
   :bind ("C-c e" . er/expand-region))
 #+end_src
 
 ** Key frequency
 #+begin_src emacs-lisp :tangle yes
 (use-package keyfreq
-  :defer t
   :init
   :config
   (setq keyfreq-excluded-commands
@@ -578,7 +569,6 @@ Never to lose your cursor again.
 #+begin_src emacs-lisp :tangle yes
 ;; Minor mode for a nice writing environment
 (use-package olivetti
-  :defer t
   :bind ("C-c o" . olivetti-mode))
 #+end_src
 
@@ -590,7 +580,6 @@ Never to lose your cursor again.
 ** Multiple cursors
 #+begin_src emacs-lisp :tangle yes
 (use-package multiple-cursors
-  :defer t
   :bind (;("C-M" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
@@ -599,7 +588,6 @@ Never to lose your cursor again.
 ** Smart comment
    #+begin_src emacs-lisp :tangle yes
    (use-package comment-dwim-2
-     :defer t
      :bind ("M-;" . comment-dwim-2))
    #+end_src
 ** company-mode
@@ -635,7 +623,6 @@ Never to lose your cursor again.
 
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package company-c-headers
-  :defer t
   :config
   (add-to-list 'company-backends 'company-c-headers))
 #+end_src
@@ -711,7 +698,6 @@ your project root:
 (add-hook 'c++-ts-mode-hook 'linux-cpp-mode)
 
 (use-package color-identifiers-mode
-  :defer t
   :config
   (add-hook 'c-mode-hook 'color-identifiers-mode)
   (add-hook 'c++-mode-hook 'color-identifiers-mode)
@@ -720,9 +706,8 @@ your project root:
 
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package modern-cpp-font-lock
-  :defer t
   :diminish t
-  :init (modern-c++-font-lock-global-mode t))
+  :config (modern-c++-font-lock-global-mode t))
 #+end_src
 ** Cmake
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -789,7 +774,6 @@ your project root:
 ** Aggressive indent
    #+begin_src emacs-lisp :tangle yes
    (use-package aggressive-indent
-     :defer t
      :config
      (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
      (add-hook 'c-mode-hook #'aggressive-indent-mode)
@@ -800,7 +784,6 @@ your project root:
    #+end_src
    #+begin_src emacs-lisp :tangle yes :lexical no
    (use-package indent-guide
-     :defer t
      :config
      (indent-guide-global-mode)
      (set-face-background 'indent-guide-face "dimgray")
@@ -827,7 +810,6 @@ the languages in ISPELL-LANGUAGES when invoked."
         (ispell-change-dictionary (car (setq ispell-languages rotated)))))))
 
 (use-package flyspell
-  :defer t
   :bind
   (:map flyspell-mode-map
         ("C-." . embark-act))
@@ -845,7 +827,6 @@ the languages in ISPELL-LANGUAGES when invoked."
 #+begin_src emacs-lisp :tangle yes
 ;; A Git porcelain inside Emacs.
 (use-package magit
-  :defer t
   :bind ("C-x g" . magit-status))
 
 (use-package git-timemachine
@@ -854,10 +835,9 @@ the languages in ISPELL-LANGUAGES when invoked."
 ** Marginalia
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package marginalia
-  :defer t
   :ensure t
   :custom
-  (marginalia-align 'right)
+  (marginalia-align 'left)
   :config
   (marginalia-mode))
 #+end_src
@@ -1015,7 +995,6 @@ the languages in ISPELL-LANGUAGES when invoked."
 *** consult-dir
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package consult-dir
-  :defer t
   :ensure t
   :bind (("C-x C-d" . consult-dir)
          :map vertico-map
@@ -1072,7 +1051,6 @@ need to be passed verbatim to shell commands."
       pattern))))
 
 (use-package embark
-  :defer t
   :ensure t
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
@@ -1110,7 +1088,6 @@ need to be passed verbatim to shell commands."
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :defer t
   :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
@@ -1128,7 +1105,6 @@ need to be passed verbatim to shell commands."
 ** Yasnippet
 #+begin_src emacs-lisp :tangle yes
 (use-package yasnippet
-  :defer t
   :diminish t
   :init
   ;; (setq helm-yas-space-match-any-greedy t)
@@ -1160,7 +1136,6 @@ need to be passed verbatim to shell commands."
 
 
 (use-package smart-compile
-  :defer t
   :bind ("<f5>" . smart-compile)
   :config
   (add-to-list 'smart-compile-alist '("\\.c\\'"          . "gcc -O2 %f -lm -o %n && ./%n"))
@@ -1171,7 +1146,6 @@ need to be passed verbatim to shell commands."
 ** Smartparens
 #+begin_src emacs-lisp :tangle yes
 (use-package smartparens-mode
-  :defer t
   :ensure smartparens  ;; install the package
   :hook (emacs-lisp-mode prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
   :config
@@ -1182,7 +1156,6 @@ need to be passed verbatim to shell commands."
 ** Tree sit auto
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package treesit-auto
-  :defer t
   :config
   (setq treesit-auto-install 'prompt)
   (global-treesit-auto-mode))
@@ -1227,7 +1200,6 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes
 ;; EditorConfig Emacs Plugin
 (use-package editorconfig
-  :defer t
   :config
   (editorconfig-mode 1))
 #+end_src
@@ -1330,7 +1302,6 @@ need to be passed verbatim to shell commands."
 ** COMMENT Org auto tangle
 #+begin_src emacs-lisp :tangle no
 (use-package org-auto-tangle
-  :defer t
   :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 ** Org modern
@@ -1353,7 +1324,6 @@ need to be passed verbatim to shell commands."
 ** org-journal
 #+begin_src emacs-lisp :tangle yes
 (use-package org-journal
-  :defer t
   :init
   (setq org-journal-dir "~/org/journal/"
         org-journal-date-format "%A, %d %B %Y"
@@ -1367,7 +1337,6 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes
 (use-package org-download
     :after org
-    :defer t
     :bind
     (:map org-mode-map
     (("s-Y" . org-download-screenshot)
@@ -1421,7 +1390,6 @@ need to be passed verbatim to shell commands."
 ** org-roam
 #+begin_src emacs-lisp :tangle yes
 (use-package org-roam
-  :defer t
   :ensure t
   :init
   (when (file-directory-p "~/org/roam/")
@@ -1461,7 +1429,6 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package org-transclusion
   :after org
-  :defer t
   :bind
   (:map org-mode-map
         ("<f12>" . org-transclusion-mode)))
@@ -1702,39 +1669,14 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
    #+end_src
 
 ** Dictionary & popweb
-#+begin_src emacs-lisp :tangle no :lexical no
+#+begin_src emacs-lisp :tangle yes :lexical no
 (use-package popweb
   :defer t
-  :straight (:host github :repo "manateelazycat/popweb"
-                   :branch "main")
-  :load-path "straight/repos/popweb/"
   :custom
   (popweb-zoom-factor 1.5))
-
 (use-package popweb-dict
   :defer t
-  :load-path "straight/repos/popweb/extension/dict/"
-
-  :bind ("C-c d" . popweb-dict-collins-input)
-
-  :config
-  (popweb-dict-create "collins"
-                      "https://www.collinsdictionary.com/dictionary/english/%s"
-                      (concat
-                       "window.scrollTo(0, 340); "
-                       "document.getElementsByClassName('navigation')[0].style.display = 'none'; "
-                       "document.getElementsByTagName('body')[0].style.margin = '0'; "
-                       "document.getElementsByTagName('header')[0].style.display = 'none'; "
-                       "document.getElementsByTagName('footer')[0].style.display = 'none'; "
-                       "document.getElementsByClassName('search')[0].style.display = 'none'; "
-                       "document.getElementsByClassName('page')[0].style.visibility = 'visible' ; "
-                       "document.getElementsByClassName('page')[0].style.margin = '0' ; "
-                       "document.getElementsByClassName('padding-hub')[0].style.visibility = 'hidden' ; "
-                       "document.getElementsByClassName('padding-hub')[0].style.margin = '0' ; "
-
-                       "Array.from(document.querySelectorAll('ins')).forEach(e => { e.style.display = 'none' }); "
-                       "Array.from(document.querySelectorAll('iframe:not(#player)')).forEach(e => { e.style.display = 'none' }); "
-                       )))
+  :bind ("C-c d" . popweb-dict-collins-input))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -1757,7 +1699,6 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
                          (read-string "Google: "))))))
 
 (use-package elfeed
-  :defer t
   :bind
   ("C-x w" . elfeed)
   (:map elfeed-show-mode-map
@@ -1880,7 +1821,6 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 ** org-ai
 #+begin_src emacs-lisp :tangle yes
 (use-package org-ai
-  :defer t
   :ensure t
   :init
   (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
@@ -1960,9 +1900,17 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 #+begin_src emacs-lisp :tangle yes :lexical no
 (setq epg-gpg-program "gpg2")
 #+end_src
+** Privates
+#+begin_src emacs-lisp :tangle yes :lexical no
+(if (file-exists-p
+     (setq private-file
+           (expand-file-name ".private.org" "~/")))
+    (org-babel-load-file private-file))
+#+end_src
 * test
 #+begin_src emacs-lisp :lexical no
 (use-package vterm
+  :defer t
   :ensure t)
 
 (server-start)
@@ -2006,11 +1954,6 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
   (wrap-region-global-mode t))
 
 #+end_src
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package ctrlf
-  :config
-  (ctrlf-mode +1))
-#+end_src
 
 #+begin_src emacs-lisp :tangle yes :lexical no
 (require 'recentf)
@@ -2021,4 +1964,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 (use-package ement
   :defer t
   )
+#+end_src
+#+begin_src emacs-lisp :lexical no :tangle yes
+(server-start)
 #+end_src
