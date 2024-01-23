@@ -55,7 +55,7 @@ in {
         i3 = {
           enable = true;
           extraPackages = with pkgs; [
-            j4-dmenu-desktop
+            dmenu
             i3lock
             i3blocks
           ];

@@ -28,7 +28,7 @@ Please refer to the [[file:Makefile][Makefile]] to find specific useage.
 
 I use Emacs as my primarily text Editor. I have used it for many years, and have developed my own personalized style for it. I find it difficult to switch to other text editors such as doom Emacs, Neovim or Vscode because I feel most comfortable with Emacs.
 
-To ensure that I can easily update and modify my [[https://github.com/fymen/.emacs.d][Emacs dot files]], I have stored them in a separate repository.
+I manage my Emacs configuration by [[https://github.com/nix-community/emacs-overlay][Emacs overlay]] now, it is not bad for now. The literal configure file is [[file:home/modules/emacs/emacs.org][emacs.org]]. There are also [[https://github.com/fymen/roaming/blob/master/20240122102418-adding_package_outside_elpa_to_nixos.org][some tips]] on moving Emacs configuration to Nix.
 
 Emacs is a handy tool that you can do almost everything in it. So I don't invest too much on other tools, although some of them are really cool.
 

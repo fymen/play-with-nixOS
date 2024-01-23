@@ -11,6 +11,8 @@ with lib; let
 
   cfg = config.modules.editors.emacs;
 
+  pwd = "/home/oscar/gitest/play-with-nixOS/home/modules/emacs";
+
   chgcursor-el = pkgs.emacsPackages.trivialBuild rec {
     pname = "cursor-chg";
     version = "1.0";
@@ -105,7 +107,8 @@ in {
       };
     };
 
-    home.file.".emacs.d/emacs.org".source = config.lib.file.mkOutOfStoreSymlink "/home/oscar/gitest/play-with-nixOS/home/modules/emacs/emacs.org";
+    home.file.".emacs.d/emacs.org".source = config.lib.file.mkOutOfStoreSymlink (pwd + "/emacs.org");
+    home.file.".emacs.d/elfeed.org".source = config.lib.file.mkOutOfStoreSymlink (pwd + "/elfeed.org");
 
     services.emacs = mkIf cfg.service.enable {
       enable = true;
