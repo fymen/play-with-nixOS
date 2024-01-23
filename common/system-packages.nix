@@ -14,7 +14,6 @@
 
     file
     tree
-    killall
 
     unzip
     zip

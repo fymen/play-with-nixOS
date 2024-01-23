@@ -13,6 +13,8 @@ build:
 update:
 	nix flake update
 	sudo nixos-rebuild switch --flake .
+archive:
+	nix flake archive
 
 cleanup:
 	sudo nix profile wipe-history --older-than 7d --profile  /nix/var/nix/profiles/system
