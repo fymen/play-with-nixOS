@@ -13,6 +13,7 @@ in {
     ./tofi
     # ./rofi
     ./waylockout
+    ./wlogout
     ./foot.nix
   ];
 
