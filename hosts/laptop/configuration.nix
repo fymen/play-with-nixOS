@@ -147,6 +147,9 @@
     wqy_microhei
     open-sans
 
+    fira-code
+    source-sans-pro
+
     times-newer-roman
     font-awesome
   ];

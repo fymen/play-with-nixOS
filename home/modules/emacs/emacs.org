@@ -2,6 +2,9 @@
 #+TITLE: Emacs init configuration
 
 * Early init
+#+begin_src emacs-lisp :tangle yes :lexical no
+(setq gc-cons-threshold (* 50 1000 1000))
+#+end_src
 ** GUI
 #+begin_src emacs-lisp :tangle yes
 (when (functionp 'menu-bar-mode)
@@ -91,7 +94,6 @@
 (global-set-key (kbd "C-x C-k") 'kill-region)
 (global-set-key (kbd "C-x C-b") 'ibuffer-list-buffers)
 
-(global-set-key (kbd "<f8>") 'eshell)
 #+end_src
 
 * Package management
@@ -115,7 +117,7 @@
 (use-package async
   :ensure t)
 (use-package paradox
-  :defer t
+  :defer 5
   :config
   (setq paradox-execute-asynchronously t
         ;; Avoid being ask for the token
@@ -137,6 +139,7 @@
 The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package super-save
+  :defer 1
   :ensure t
   :config
   ;; Disable Emacs default auto save
@@ -150,10 +153,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; Save all opened buffers
   (setq super-save-all-buffers t)
   (super-save-mode +1))
-#+end_src
-** Desktop save
-#+begin_src emacs-lisp :tangle yes
-  (desktop-save-mode 1)
 #+end_src
 
 ** Color theme
@@ -177,7 +176,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 #+end_src
-** OS related && fonts
+** Fonts
 #+begin_src emacs-lisp :tangle yes
 (setq my-font-size 22)
 (when (eq system-type 'darwin)
@@ -193,22 +192,21 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
         ;; (set-frame-font "Firacode 15")
         (set-fontset-font (frame-parameter nil 'font)
                           charset (font-spec :family "WenQuanYi Micro Hei Mono"
-                                             :size my-font-size))
-        ;; Default Browser
-        (setq browse-url-browser-function 'browse-url-generic
-              browse-url-generic-program "firefox"
-              browse-url-new-window-flag t)
+                                             :size (+ my-font-size 5)))
         )))
 
 (add-to-list 'default-frame-alist '(font . "Inconsolata 22"))
+
+
 #+end_src
 ** Anzu mode (query & replace highlight)
 #+begin_src emacs-lisp :tangle yes
-  (use-package anzu
-    :config (global-anzu-mode 1)
-    (setq anzu-minimum-input-length 4)
-    (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
-    (global-set-key [remap query-replace] 'anzu-query-replace))
+(use-package anzu
+  :config
+  (global-anzu-mode 1)
+  (setq anzu-minimum-input-length 4)
+  (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
+  (global-set-key [remap query-replace] 'anzu-query-replace))
 #+end_src
 ** Mode line
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -261,6 +259,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; :if (file-exists-p
   ;; (expand-file-name "cursor-chg.el" local-elisp-directory))
   ;; :load-path local-elisp-directory
+  :defer 1
   :config
   (setq curchg-default-cursor-color "White")
   (change-cursor-mode 1)
@@ -276,12 +275,15 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 ** Uniquify
 #+begin_src emacs-lisp :tangle yes
 ;; Every buffer should have a unique name
-(require 'uniquify)
-(setq
- uniquify-buffer-name-style 'post-forward
- uniquify-separator " • "
- uniquify-after-kill-buffer-p t
- uniquify-ignore-buffers-re "^\\*")
+(use-package uniquify
+  :defer 3
+  :config
+  (setq
+   uniquify-buffer-name-style 'post-forward
+   uniquify-separator " • "
+   uniquify-after-kill-buffer-p t
+   uniquify-ignore-buffers-re "^\\*"))
+
 #+end_src
 ** Hippie expand
 #+begin_src emacs-lisp :tangle yes
@@ -302,6 +304,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 Only in elisp and c mode.
 #+begin_src emacs-lisp :tangle yes
 (use-package smartscan
+  :defer 1
   :config
   (add-hook 'emacs-lisp-mode-hook 'smartscan-mode)
   (add-hook 'c-mode-hook 'smartscan-mode))
@@ -309,6 +312,7 @@ Only in elisp and c mode.
 ** Hungry delete
 #+begin_src emacs-lisp :tangle yes
 (use-package hungry-delete
+  :defer 1
   :config
   (global-hungry-delete-mode))
 #+end_src
@@ -324,8 +328,11 @@ Only in elisp and c mode.
            fill-column)))
     (call-interactively #'fill-paragraph)))
 
-(bind-key "M-q"  #'my/fill-unfill)
-;; (bind-key [remap fill-paragraph]  #'my/fill-unfill)
+(use-package emacs
+  :defer t
+  :bind ("M-q" . 'my/fill-unfill)
+  ;; (bind-key [remap fill-paragraph]  #'my/fill-unfill)
+  )
 #+end_src
 ** Smart move to the beginning of line
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -455,6 +462,7 @@ point reaches the beginning or end of the buffer, stop there."
 ** ibuffer-vc
 #+begin_src emacs-lisp :tangle yes
 (use-package ibuffer-vc
+  :defer 1
   :config
   (add-hook 'ibuffer-hook
             (lambda ()
@@ -512,7 +520,8 @@ point reaches the beginning or end of the buffer, stop there."
  ls-lisp-dirs-first t
  )
 (dired-async-mode 1)
-(use-package dired-filetype-face)
+(use-package dired-filetype-face
+  :defer 6)
 
 ;; auto refresh dired when file changes
 (add-hook 'dired-mode-hook 'auto-revert-mode)
@@ -557,6 +566,7 @@ Never to lose your cursor again.
 ** Key frequency
 #+begin_src emacs-lisp :tangle yes
 (use-package keyfreq
+  :defer 5
   :init
   :config
   (setq keyfreq-excluded-commands
@@ -724,7 +734,8 @@ your project root:
 #+end_src
 ** Cmake
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package cmake-mode :defer t)
+(use-package cmake-mode
+  :defer t)
 #+end_src
 ** Web mode
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -788,6 +799,7 @@ your project root:
 ** Aggressive indent
    #+begin_src emacs-lisp :tangle yes
    (use-package aggressive-indent
+     :defer 1
      :config
      (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
      (add-hook 'c-mode-hook #'aggressive-indent-mode)
@@ -817,6 +829,7 @@ your project root:
 ** Clear trailing spaces automatically
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package ws-butler
+  :defer 1
   :config
   (ws-butler-global-mode))
 #+end_src
@@ -833,7 +846,8 @@ the languages in ISPELL-LANGUAGES when invoked."
       (let ((rotated (nconc (cdr ispell-languages) (list (car ispell-languages)))))
         (ispell-change-dictionary (car (setq ispell-languages rotated)))))))
 
-(use-package flyspell
+(use-package fly-spell
+  :defer t
   :bind
   (:map flyspell-mode-map
         ("C-." . embark-act))
@@ -859,6 +873,7 @@ the languages in ISPELL-LANGUAGES when invoked."
 ** Marginalia
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package marginalia
+  :defer 2
   :ensure t
   :custom
   (marginalia-align 'left)
@@ -1129,6 +1144,7 @@ need to be passed verbatim to shell commands."
 ** Yasnippet
 #+begin_src emacs-lisp :tangle yes
 (use-package yasnippet
+  :defer 2
   :diminish t
   :init
   ;; (setq helm-yas-space-match-any-greedy t)
@@ -1180,6 +1196,7 @@ need to be passed verbatim to shell commands."
 ** Tree sit auto
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package treesit-auto
+  :defer 7
   :config
   (setq treesit-auto-install 'prompt)
   (global-treesit-auto-mode))
@@ -1224,6 +1241,7 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes
 ;; EditorConfig Emacs Plugin
 (use-package editorconfig
+  :defer 1
   :config
   (editorconfig-mode 1))
 #+end_src
@@ -1345,54 +1363,43 @@ need to be passed verbatim to shell commands."
   :hook
   (org-mode . org-appear-mode))
 #+end_src
-** org-journal
-#+begin_src emacs-lisp :tangle yes
-(use-package org-journal
-  :init
-  (setq org-journal-dir "~/org/journal/"
-        org-journal-date-format "%A, %d %B %Y"
-        org-journal-file-type 'weekly)
-  :bind
-  ("<f6>" . org-journal-new-entry))
-#+end_src
-
-
 ** org-download
 #+begin_src emacs-lisp :tangle yes
 (use-package org-download
-    :after org
-    :bind
-    (:map org-mode-map
-    (("s-Y" . org-download-screenshot)
-        ("s-y" . org-download-yank)))
-    :config
-    (if (memq window-system '(mac ns))
-        (setq org-download-screenshot-method "screencapture -i %s")
-        (setq org-download-screenshot-method "flameshot gui --raw > %s")
-        )
-    (defun my-org-download-method (link)
-        "This is a helper function for org-download.
+  :defer t
+  :after org
+  :bind
+  (:map org-mode-map
+        (("s-Y" . org-download-screenshot)
+         ("s-y" . org-download-yank)))
+  :config
+  (if (memq window-system '(mac ns))
+      (setq org-download-screenshot-method "screencapture -i %s")
+    (setq org-download-screenshot-method "flameshot gui --raw > %s")
+    )
+  (defun my-org-download-method (link)
+    "This is a helper function for org-download.
     It creates a folder in the root directory (~/.org/img/) named after the
     org filename (sans extension) and puts all images from that file in there.
     Inspired by https://github.com/daviderestivo/emacs-config/blob/6086a7013020e19c0bc532770e9533b4fc549438/init.el#L701"
-        (let ((filename
-            (file-name-nondirectory
-                (car (url-path-and-query
-                    (url-generic-parse-url link)))))
-            ;; Create folder name with current buffer name, and place in root dir
-            (dirname (concat "./images/"
-                            (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
+    (let ((filename
+           (file-name-nondirectory
+            (car (url-path-and-query
+                  (url-generic-parse-url link)))))
+          ;; Create folder name with current buffer name, and place in root dir
+          (dirname (concat "./images/"
+                           (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
 
-        ;; Add timestamp to filename
-        (setq filename-with-timestamp (format "%s%s.%s"
-                                                (file-name-sans-extension filename)
-                                                (format-time-string org-download-timestamp)
-                                                (file-name-extension filename)))
-        ;; Create folder if necessary
-        (unless (file-exists-p dirname)
-            (make-directory dirname t))
-        (expand-file-name filename-with-timestamp dirname)))
-    (setq org-download-method 'my-org-download-method))
+      ;; Add timestamp to filename
+      (setq filename-with-timestamp (format "%s%s.%s"
+                                            (file-name-sans-extension filename)
+                                            (format-time-string org-download-timestamp)
+                                            (file-name-extension filename)))
+      ;; Create folder if necessary
+      (unless (file-exists-p dirname)
+        (make-directory dirname t))
+      (expand-file-name filename-with-timestamp dirname)))
+  (setq org-download-method 'my-org-download-method))
 #+end_src
 
 ** COMMENT org-capture
@@ -1481,48 +1488,51 @@ need to be passed verbatim to shell commands."
 #+end_src
 ** Latex
 #+begin_src emacs-lisp :tangle yes
-(require 'ox-latex)
-(require 'ox-beamer)
-(setq org-latex-images-centered 't)
+(use-package emacs
+  :defer 30
+  :config
+  (require 'ox-latex)
+  (require 'ox-beamer)
+  (setq org-latex-images-centered 't)
 
-(setq org-latex-coding-system 'utf-8)
+  (setq org-latex-coding-system 'utf-8)
 
-(setf org-latex-default-packages-alist
-      (remove '("AUTO" "inputenc" t) org-latex-default-packages-alist))
-(setf org-latex-default-packages-alist
-      (remove '("T1" "fontenc" t) org-latex-default-packages-alist))
-(setf org-latex-default-packages-alist
-      (remove '("" "hyperref" nil) org-latex-default-packages-alist))
-(setq org-latex-with-hyperref nil)
+  (setf org-latex-default-packages-alist
+        (remove '("AUTO" "inputenc" t) org-latex-default-packages-alist))
+  (setf org-latex-default-packages-alist
+        (remove '("T1" "fontenc" t) org-latex-default-packages-alist))
+  (setf org-latex-default-packages-alist
+        (remove '("" "hyperref" nil) org-latex-default-packages-alist))
+  (setq org-latex-with-hyperref nil)
 
-(setq org-latex-pdf-process '("xelatex -8bit -shell-escape  %f"
-                              "xelatex -8bit -shell-escape  %f"))
-;; (setq org-latex-packages-alist
-;;       '("
-;;         \\hypersetup{ colorlinks,% 
-;;                 linkcolor=blue,% 
-;;                 citecolor=black,%
-;;                 urlcolor=black,%
-;;                 filecolor=black
-;;                }
+  (setq org-latex-pdf-process '("xelatex -8bit -shell-escape  %f"
+                                "xelatex -8bit -shell-escape  %f"))
+  ;; (setq org-latex-packages-alist
+  ;;       '("
+  ;;         \\hypersetup{ colorlinks,%
+  ;;                 linkcolor=blue,%
+  ;;                 citecolor=black,%
+  ;;                 urlcolor=black,%
+  ;;                 filecolor=black
+  ;;                }
 
-;;         \\usepackage{array}
-;;         \\usepackage{xcolor}
-;;         \\definecolor{bg}{rgb}{0.95,0.95,0.95}"))
+  ;;         \\usepackage{array}
+  ;;         \\usepackage{xcolor}
+  ;;         \\definecolor{bg}{rgb}{0.95,0.95,0.95}"))
 
-(add-to-list 'org-latex-packages-alist '("" "minted")) 
-(setq org-latex-listings 'minted)
-(setq org-latex-minted-options
-      '(
-        ("bgcolor" "bg")
-        ("frame" "lines")
-        ("linenos" "")
-        ("fontsize" "\\scriptsize")
-        ))
+  (add-to-list 'org-latex-packages-alist '("" "minted"))
+  (setq org-latex-listings 'minted)
+  (setq org-latex-minted-options
+        '(
+          ("bgcolor" "bg")
+          ("frame" "lines")
+          ("linenos" "")
+          ("fontsize" "\\scriptsize")
+          ))
 
-(add-to-list 'org-latex-classes
-             '("article-cn"
-              "\\documentclass[11pt]{article}
+  (add-to-list 'org-latex-classes
+               '("article-cn"
+                 "\\documentclass[11pt]{article}
                 [DEFAULT-PACKAGES]
                 [PACKAGES]
                 \\usepackage{fontspec}
@@ -1542,35 +1552,36 @@ need to be passed verbatim to shell commands."
                 \\def\\verbatim@font{\\rmfamily\\small} %verbatim中使用roman字体族
                 \\makeatother"
 
-              ("\\section{%s}" . "\\section*{%s}")
-              ("\\subsection{%s}" . "\\subsection*{%s}")
-              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-              ("\\paragraph{%s}" . "\\paragraph*{%s}")
-              ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(add-to-list 'org-latex-classes
-             '("article-img"
-              "\\documentclass[11pt]{article}
+  (add-to-list 'org-latex-classes
+               '("article-img"
+                 "\\documentclass[11pt]{article}
                 [DEFAULT-PACKAGES]
                 [PACKAGES]
                 \\usepackage{geometry}
                 \\geometry{left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}"
-              ("\\section{%s}" . "\\section*{%s}")
-              ("\\subsection{%s}" . "\\subsection*{%s}")
-              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-              ("\\paragraph{%s}" . "\\paragraph*{%s}")
-              ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-(add-to-list 'org-latex-classes
-             '("letter"
-               "\\documentclass{letter}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ))
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (add-to-list 'org-latex-classes
+               '("letter"
+                 "\\documentclass{letter}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ))
+  )
 #+end_src
 ** auctex
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package tex
+(use-package emacs
   :ensure auctex
   :defer t
   :custom
@@ -1599,6 +1610,7 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes
 (setq eshell-scroll-to-bottom-on-input t) ; press any key to jump back to the prompt:
 (setq eshell-prefer-lisp-functions nil)
+(global-set-key (kbd "<f8>") 'eshell)
 #+end_src
 ** Exec-path-from-shell
 It will reset the =PATH= variable generated by =direnv=, disable it.
@@ -1684,6 +1696,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 #+begin_src emacs-lisp :tangle yes
 ;; Display available keybindings in popup
 (use-package which-key
+  :defer 9
   :config
   (which-key-mode 1))
 #+end_src
@@ -1849,6 +1862,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 ** org-ai
 #+begin_src emacs-lisp :tangle yes
 (use-package org-ai
+  :defer t
   :ensure t
   :init
   (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
@@ -1930,10 +1944,13 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 #+end_src
 ** Privates
 #+begin_src emacs-lisp :tangle yes :lexical no
-(if (file-exists-p
-     (setq private-file
-           (expand-file-name ".private.org" "~/")))
-    (org-babel-load-file private-file))
+(use-package emacs
+  :defer 10
+  :config
+  (if (file-exists-p
+       (setq private-file
+             (expand-file-name ".private.org" "~/")))
+      (org-babel-load-file private-file)))
 #+end_src
 
 * Need late start
@@ -1943,27 +1960,50 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 ;;   :config
 ;;   (direnv-mode))
 (use-package envrc
+  :defer 4
   :config
   (envrc-global-mode))
 #+end_src
 
 ** Start server
 #+begin_src emacs-lisp :lexical no :tangle yes
-(server-start)
+(use-package emacs
+  :defer 1
+  :config
+  (desktop-save-mode 1)
+  (server-start))
+
 #+end_src
 
-* test
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package recentf
+  :defer 1
+  :config
+  (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+  (recentf-mode 1))
+#+end_src
+
 #+begin_src emacs-lisp :lexical no
+(use-package restart-emacs
+  :defer 30)
+#+end_src
+* test
+#+begin_src emacs-lisp :tangle no :lexical no
 (use-package edwina
+  :defer 5
   :ensure t
   :config
   (setq display-buffer-base-action '(display-buffer-below-selected))
   (edwina-setup-dwm-keys)
-  (edwina-mode 1))
+  (edwina-mode 1)
+  (define-key edwina-mode-map (kbd "M-d") nil)
+  (define-key edwina-mode-map (kbd "M-<return>") nil)
+  )
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package wrap-region
+  :defer 5
   :config
   (wrap-region-add-wrappers
    '(("$" "$")
@@ -1976,15 +2016,11 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
      ("~" "~" nil org-mode)
      ("/* " " */" "#" (java-mode javascript-mode css-mode))
      ("`" "`" nil (markdown-mode ruby-mode))))
+
   (wrap-region-global-mode t))
-
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes :lexical no
-(require 'recentf)
-(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-(recentf-mode 1)
-#+end_src
+
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package ement
   :defer t
@@ -1995,10 +2031,8 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 (use-package vterm
   :defer t
   :ensure t)
-
-(server-start)
 #+end_src
-#+begin_src emacs-lisp :lexical no
-(use-package restart-emacs
-  :defer t)
+#+begin_src emacs-lisp :tangle yes :lexical no
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
 #+end_src

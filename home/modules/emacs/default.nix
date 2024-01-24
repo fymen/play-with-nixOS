@@ -85,7 +85,7 @@ in {
 
     programs.emacs = {
       enable = true;
-      # package = pkgs.emacs;
+#      package = pkgs.emacs29-pgtk;
 
       package = pkgs.emacsWithPackagesFromUsePackage {
         config = ./emacs.org;
