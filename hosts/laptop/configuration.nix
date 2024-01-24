@@ -16,6 +16,7 @@
       ../../common/system.nix
       ../../common/system-packages.nix
       ../../common/window-systems
+      ../../common/steam.nix
       # ../../common/virtualisation.nix
 
       ./secrets

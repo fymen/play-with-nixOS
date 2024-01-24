@@ -97,16 +97,6 @@ in {
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
-
-    # Gaming
-    # mangohud
-    # lutris
-    # heroic
-    # wineWowPackages.stable
-    # # wineWowPackages.waylandFull # unstable
-    # winetricks
-    # protonup-qt
-    # protontricks
   ];
 
   services.ssh-agent.enable = true;
