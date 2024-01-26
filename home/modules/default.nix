@@ -1,33 +1,5 @@
-{pkgs, windowSystem, config, ...}: let
-  my-python-packages = python-packages:
-    with python-packages; [
-      pandas
-      requests
-      lxml # for eaf
-      qrcode # eaf-file-browser
-      pysocks # eaf-browser
-      pymupdf # eaf-pdf-viewer
-      pypinyin # eaf-file-manager
-      psutil # eaf-system-monitor
-      retry # eaf-markdown-previewer
-      markdown
-
-      pygments
-      python
-      venvShellHook
-      numpy
-      pandas
-      opencv4
-      matplotlib
-      pyqt6
-      pyqt6-sip
-      pyqt6-webengine
-      epc
-      sexpdata
-      browser-cookie3
-    ];
-  python-with-my-packages = pkgs.python3.withPackages my-python-packages;
-in {
+{pkgs, windowSystem, config, ...}:
+{
   imports = [
     ./hyprland
     ./i3
@@ -74,7 +46,8 @@ in {
     # Terminal
     tmux
 
-    python-with-my-packages
+    python311Packages.pygments
+
     # Image viewer
     feh
     gnome.eog

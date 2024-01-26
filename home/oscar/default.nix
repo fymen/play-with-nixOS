@@ -36,21 +36,6 @@ in {
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    (pkgs.texlive.combine {
-      inherit
-        (pkgs.texlive)
-        scheme-medium
-        dvisvgm
-        dvipng # for preview and export as html
-        wrapfig
-        amsmath
-        ulem
-        hyperref
-        capt-of
-        minted
-        ;
-    })
-
     nix-output-monitor
     nix-tree
     nil

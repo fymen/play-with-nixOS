@@ -9,6 +9,15 @@ with lib; let
   inherit (pkgs) fetchurl;
   inherit (pkgs) fetchFromGitHub;
 
+  popweb-py-pkgs = pkgs.python311.withPackages (ps: [
+    ps.pyqt6
+    ps.pyqt6-sip
+    ps.pyqt6-webengine
+    ps.epc
+    ps.sexpdata
+    ps.browser-cookie3
+  ]);
+
   cfg = config.modules.editors.emacs;
 
   pwd = "/home/oscar/gitest/play-with-nixOS/home/modules/emacs";
@@ -127,8 +136,12 @@ in {
     };
 
     home.packages = with pkgs; [
+      texliveFull
+
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))
       emacs-all-the-icons-fonts
+
+      popweb-py-pkgs
 
       chgcursor-el
       popweb
