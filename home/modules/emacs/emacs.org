@@ -1245,7 +1245,7 @@ need to be passed verbatim to shell commands."
   (setq lsp-auto-configure t
         lsp-auto-guess-root t
         lsp-idle-delay 0.500
-        lsp-enable-file-watchers niln
+        lsp-enable-file-watchers nil
         lsp-session-file "~/.emacs.d/.cache/lsp-sessions")
   )
 

@@ -16,7 +16,7 @@
   programs.gpg = {
     enable = true;
 
-    package = pkgs.gnupg;
+    package = (pkgs.callPackage ../../packages/gpg.nix {});
 
     homedir = "${config.home.homeDirectory}/.gnupg";
     #  $GNUPGHOME/trustdb.gpg stores all the trust level you specified in `programs.gpg.publicKeys` option.

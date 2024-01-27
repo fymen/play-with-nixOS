@@ -81,6 +81,9 @@ in {
     statix
 
     electrum
+
+    # Diagram Editor
+    dia
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
