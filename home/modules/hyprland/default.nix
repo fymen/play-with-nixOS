@@ -88,6 +88,7 @@ in {
       };
     };
 
+    # For wayland only
     programs.chromium.commandLineArgs = [
       "--gtk-version=4"
       "--enable-features=UseOzonePlatform"
@@ -101,8 +102,8 @@ in {
       WLR_RENDERER_ALLOW_SOFTWARE = "1";
       WLR_RENDERER = "vulkan";
 
-      GDK_SCALE = "1";
-      GDK_DPI_SCALE = "1";
+      GDK_SCALE = "2";
+      GDK_DPI_SCALE = "1.2";
 
       MOZ_ENABLE_WAYLAND = 1; # Firefox Wayland
       MOZ_DBUS_REMOTE = 1; # Firefox wayland

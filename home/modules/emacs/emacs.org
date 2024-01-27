@@ -178,7 +178,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp :tangle yes
-(setq my-font-size 22)
+(setq my-font-size 15)
 (when (eq system-type 'darwin)
   (set-face-attribute 'default nil)
   (set-face-attribute 'default nil :height 150))
@@ -195,7 +195,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
                                              :size (+ my-font-size 5)))
         )))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata 22"))
+(add-to-list 'default-frame-alist '(font . "Inconsolata 15"))
 #+end_src
 *** All the icons
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -1240,12 +1240,12 @@ need to be passed verbatim to shell commands."
            c-mode
            c-ts-mode
            c++-ts-mode
-           ;; ......
            ) . lsp))
   :init
   (setq lsp-auto-configure t
         lsp-auto-guess-root t
         lsp-idle-delay 0.500
+        lsp-enable-file-watchers niln
         lsp-session-file "~/.emacs.d/.cache/lsp-sessions")
   )
 

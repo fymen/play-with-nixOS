@@ -94,13 +94,15 @@ in {
 
     programs.emacs = {
       enable = true;
-#      package = pkgs.emacs29-pgtk;
+
 
       package = pkgs.emacsWithPackagesFromUsePackage {
         config = ./emacs.org;
         defaultInitFile = true;
         alwaysEnsure = true;
         alwaysTangle = true;
+
+        package = pkgs.emacs29-pgtk;
 
         # Optionally provide extra packages not in the configuration file.
         extraEmacsPackages = epkgs: [

@@ -19,17 +19,13 @@
     "*.dpi" = 234;
   };
 
-  # gtk's theme settings, generate files:
-  #   1. ~/.gtkrc-2.0
-  #   2. ~/.config/gtk-3.0/settings.ini
-  #   3. ~/.config/gtk-4.0/settings.ini
   gtk = {
     enable = true;
 
     font = {
       name = "Noto Sans";
       package = pkgs.noto-fonts;
-      size = 14;
+      size = 10;
     };
 
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
@@ -40,13 +36,12 @@
     };
 
     theme = {
-      # https://github.com/catppuccin/gtk
-      name = "Catppuccin-Macchiato-Compact-Pink-dark";
+      name = "Catppuccin-Latte-Standard-Lavender-Light";
       package = pkgs.catppuccin-gtk.override {
-        # https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/data/themes/catppuccin-gtk/default.nix
-        accents = ["pink"];
-        size = "compact";
-        variant = "mocha";
+        accents = [ "lavender" ];
+        size = "standard";
+        tweaks = [ "rimless" "normal" ];
+        variant = "latte";
       };
     };
   };

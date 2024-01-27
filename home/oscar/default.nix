@@ -79,6 +79,8 @@ in {
 
     alejandra
     statix
+
+    electrum
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
@@ -137,7 +139,7 @@ in {
     enable = true;
 
     associations.added = {
-      "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
+      "image/png" = "feh.desktop";
     };
 
     defaultApplications = {
@@ -156,7 +158,9 @@ in {
       "default-url-scheme-handler/http" = "firefox.desktop";
       "default-url-scheme-handler/https" = "firefox.desktop";
 
-      "x-scheme-handler/magnet" = "userapp-transmission-gtk-SWL1G2.desktop";
+      "x-scheme-handler/magnet" = "deluge.desktop";
+
+      "image/png" = "org.gnome.eog.desktop";
 
       "video/x-matroska" = "mpv.desktop";
     };

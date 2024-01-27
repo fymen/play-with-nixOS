@@ -166,11 +166,11 @@
     acpi
     man-pages
 
-    coreutils
-    binutils
+    # coreutils
+    # binutils
 
-    gcc
-    gnumake
+    # gcc
+    # gnumake
 
     # system call monitoring
     strace # system call monitoring
