@@ -13,7 +13,8 @@ in {
   ];
 
   # colorschemetest = inputs.nix-colors.colorSchemes.gruvbox-light-soft;
-  colorscheme = inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../../system/color-themes/catppuccin-macchiato.yaml);
+  colorscheme = inputs.nix-colors.colorSchemes.catppuccin-macchiato;
+  # colorscheme = inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../../system/color-themes/catppuccin-macchiato.yaml);
   colorschemetest = inputs.nix-colors.lib.schemeFromYAML "alect-light" (builtins.readFile ../../system/color-themes/alect-light.yaml);
 
   # Home Manager needs a bit of information about you and the paths it should

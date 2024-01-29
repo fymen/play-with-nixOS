@@ -9,10 +9,9 @@
     (nerdfonts.override { fonts = [ "FiraCode"
                                     "JetBrainsMono"
                                     "InconsolataLGC"]; })
-    FreeMono
-    FreeSans
     open-sans
     source-sans-pro
+    font-awesome
 
     # Chinese fonts
     wqy_zenhei

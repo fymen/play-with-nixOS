@@ -178,24 +178,24 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp :tangle yes
-  (setq my-font-size 9)
-  (when (eq system-type 'darwin)
-    (set-face-attribute 'default nil)
-    (set-face-attribute 'default nil :height 150))
+(setq my-font-size 9)
+(when (eq system-type 'darwin)
+  (set-face-attribute 'default nil)
+  (set-face-attribute 'default nil :height 150))
 
-  (when (eq system-type 'gnu/linux)
-    (if window-system
-        ;; Chinese Font
-        (dolist (charset '(kana han symbol cjk-misc bopomofo))
-          (set-frame-font (concat "Inconsolata LGC Nerd Font Mono " (number-to-string my-font-size)))
-          ;; (set-frame-font "Inconsolata 16")
-          ;; (set-frame-font "Firacode 15")
-          (set-fontset-font (frame-parameter nil 'font)
-                            charset (font-spec :family "WenQuanYi Micro Hei Mono"
-                                               :size (+ my-font-size 5)))
-          )))
+(when (eq system-type 'gnu/linux)
+  (if window-system
+      ;; Chinese Font
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        ;; (set-frame-font (concat "Inconsolata LGC Nerd Font Mono " (number-to-string my-font-size)))
+        (set-frame-font "JetBrainsMono Nerd Font Mono 9")
+        ;; (set-frame-font "Firacode 15")
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset (font-spec :family "WenQuanYi Micro Hei Mono"
+                                             :size (+ my-font-size 5)))
+        )))
 
-  (add-to-list 'default-frame-alist '(font . "Inconsolata LGC Nerd Font Mono 9"))
+(add-to-list 'default-frame-alist '(font . "Inconsolata LGC Nerd Font Mono 9"))
 #+end_src
 *** All the icons
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -2213,16 +2213,6 @@ Generate QR code in Emacs.
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package theme-changer
-  :defer 60
-  :config
-  (setq calendar-location-name "Newyork, US")
-  (setq calendar-latitude 43.6)
-  (setq calendar-longitude -79.3)
-  (change-theme 'doom-one-light 'doom-one)  ;; day and night theme
-  )
-
-
 (defun my-window-half-height ()
   (max 1 (/ (1- (window-height (selected-window))) 2)))
 
