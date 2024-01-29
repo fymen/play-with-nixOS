@@ -178,24 +178,24 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp :tangle yes
-(setq my-font-size 15)
-(when (eq system-type 'darwin)
-  (set-face-attribute 'default nil)
-  (set-face-attribute 'default nil :height 150))
+  (setq my-font-size 9)
+  (when (eq system-type 'darwin)
+    (set-face-attribute 'default nil)
+    (set-face-attribute 'default nil :height 150))
 
-(when (eq system-type 'gnu/linux)
-  (if window-system
-      ;; Chinese Font
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (set-frame-font (concat "Inconsolata " (number-to-string my-font-size)))
-        ;; (set-frame-font "CascadiaCode 16")
-        ;; (set-frame-font "Firacode 15")
-        (set-fontset-font (frame-parameter nil 'font)
-                          charset (font-spec :family "WenQuanYi Micro Hei Mono"
-                                             :size (+ my-font-size 5)))
-        )))
+  (when (eq system-type 'gnu/linux)
+    (if window-system
+        ;; Chinese Font
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          (set-frame-font (concat "Inconsolata LGC Nerd Font Mono " (number-to-string my-font-size)))
+          ;; (set-frame-font "Inconsolata 16")
+          ;; (set-frame-font "Firacode 15")
+          (set-fontset-font (frame-parameter nil 'font)
+                            charset (font-spec :family "WenQuanYi Micro Hei Mono"
+                                               :size (+ my-font-size 5)))
+          )))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata 15"))
+  (add-to-list 'default-frame-alist '(font . "Inconsolata LGC Nerd Font Mono 9"))
 #+end_src
 *** All the icons
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -257,9 +257,8 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
       (indent-according-to-mode)
     (beginning-of-line)))
 
-(global-set-key (kbd "C-l") 'open-newline-below)
+(global-set-key (kbd "C-O") 'open-newline-below)
 (global-set-key (kbd "C-o") 'open-newline-above)
-(global-set-key (kbd "M-,") 'goto-last-change)
 #+end_src
 ** Extra settings
 #+begin_src emacs-lisp :tangle yes
@@ -271,7 +270,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; :load-path local-elisp-directory
   :defer 1
   :config
-  (setq curchg-default-cursor-color "White")
+  (setq curchg-default-cursor-color "IndianRed")
   (change-cursor-mode 1)
   (toggle-cursor-type-when-idle 1))
 #+end_src
@@ -472,7 +471,7 @@ point reaches the beginning or end of the buffer, stop there."
 ** ibuffer-vc
 #+begin_src emacs-lisp :tangle yes
 (use-package ibuffer-vc
-  :defer 1
+  :defer 10
   :config
   (add-hook 'ibuffer-hook
             (lambda ()
@@ -522,24 +521,94 @@ point reaches the beginning or end of the buffer, stop there."
 
 ** Dired
 #+begin_src emacs-lisp :tangle yes
-(setq
- dired-dwim-target t            ; if another Dired buffer is visibpple in another window, use that directory as target for Rename/Copy
- dired-recursive-copies 'always         ; "always" means no asking
- dired-recursive-deletes 'top           ; "top" means ask once for top level directory
- dired-listing-switches "-lha"          ; human-readable listing
- ls-lisp-dirs-first t
- )
-(dired-async-mode 1)
 (use-package dired-filetype-face
-  :defer 6)
+  :defer t)
 
-;; auto refresh dired when file changes
-(add-hook 'dired-mode-hook 'auto-revert-mode)
+(use-package emacs
+  :defer 10
+  :config
+  (setq dired-dwim-target t            ; if another Dired buffer is visible in another window, use that directory as target for Rename/Copy
+        dired-recursive-copies 'always         ; "always" means no asking
+        dired-recursive-deletes 'top           ; "top" means ask once for top level directory
+        dired-listing-switches "-lha"          ; human-readable listing
+        ls-lisp-dirs-first t
+        )
+  (dired-async-mode 1)
+  ;; auto refresh dired when file changes
+  (add-hook 'dired-mode-hook 'auto-revert-mode)
 
-(with-eval-after-load 'dired  (require 'dired-filetype-face))
+  (with-eval-after-load 'dired  (require 'dired-filetype-face)))
+
+#+end_src
+
+*** Dired preview
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package dired-preview
+  :ensure t
+  :defer 110
+  :config
+  (setq dired-preview-delay 0.3)
+  (setq dired-preview-max-size (expt 2 20))
+  (setq dired-preview-ignored-extensions-regexp
+        (concat "\\."
+                "\\(mkv\\|webm\\|mp4\\|mp3\\|ogg\\|m4a"
+                "\\|gz\\|zst\\|tar\\|xz\\|rar\\|zip"
+                "\\|iso\\|epub\\|pdf\\|age\\)"))
+
+  ;; Enable `dired-preview-mode' in a given Dired buffer or do it
+  ;; globally:
+  (dired-preview-global-mode 1)
+
+  (add-to-list 'dired-preview-trigger-commands 'diredp-previous-line)
+  (add-to-list 'dired-preview-trigger-commands 'diredp-next-line)
+  )
 #+end_src
 
 * Extensions
+
+** Hydra
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package hydra
+  :ensure t
+  :config
+  (defhydra win (global-map "M-l")
+    "eyebrowse"
+    ("p" eyebrowse-prev-window-config :color red)
+    ("n" eyebrowse-next-window-config :color red)
+    ("<tab>" eyebrowse-last-window-config nil :color red)
+    ;; ("r" eyebrowse-rename-window-config nil :color red)
+    ;; ("c" eyebrowse-create-window-config nil :color red)
+    ("C" eyebrowse-close-window-config nil :color red)
+    ("0" eyebrowse-switch-to-window-config-0 nil :color blue)
+    ("1" eyebrowse-switch-to-window-config-1 nil :color blue)
+    ("2" eyebrowse-switch-to-window-config-2 nil :color blue)
+    ("3" eyebrowse-switch-to-window-config-3 nil :color blue)
+    ("4" eyebrowse-switch-to-window-config-4 nil :color blue)
+    ("5" eyebrowse-switch-to-window-config-5 nil :color blue)
+    ("6" eyebrowse-switch-to-window-config-6 nil :color blue)
+    ("7" eyebrowse-switch-to-window-config-7 nil :color blue)
+    ("8" eyebrowse-switch-to-window-config-8 nil :color blue)
+    ("9" eyebrowse-switch-to-window-config-9 nil :color blue)
+
+    ("q" delete-window nil :color blue)
+    ("m" delete-other-windows nil :color blue)
+    ("v" my/vsplit-last-buffer nil :color blue)
+    ("h" my/hsplit-last-buffer nil :color blue)
+    )
+  (defhydra win (global-map "M-l")
+    "window"
+    ("," popper-toggle nil :color blue)
+    ("." popper-cycle nil :color blue)
+
+    ("e" er/expand-region nil :color blue)
+
+    ;; ("g" text-scale-increase "in")
+    ;; ("l" text-scale-decrease "out")
+    ("g" magit-status nil :color blue)
+    )
+  )
+
+#+end_src
 ** ace-window
 #+begin_src emacs-lisp :tangle yes
 (use-package ace-window
@@ -610,7 +679,8 @@ Never to lose your cursor again.
 #+begin_src emacs-lisp :tangle yes
 ;; Minor mode for a nice writing environment
 (use-package olivetti
-  :bind ("C-c o" . olivetti-mode))
+  :defer t
+  :bind ("C-c O" . olivetti-mode))
 #+end_src
 
 ** Word count
@@ -703,6 +773,15 @@ your project root:
   (default-input-method "rime"))
 #+end_src
 * Program
+** Dumb jump
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package dumb-jump
+  :config
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  (dumb-jump-mode))
+#+end_src
+
 ** Elisp
 #+begin_src emacs-lisp :tangle yes :lexical no
 (add-hook 'emacs-lisp-mode-hook 'display-line-numbers-mode)
@@ -915,33 +994,6 @@ the languages in ISPELL-LANGUAGES when invoked."
   :config
   (keymap-set vertico-map "C-j" #'vertico-insert)
   (keymap-set vertico-map "C-l" #'vertico-directory-delete-word))
-
-(require 'savehist)
-(setq savehist-additional-variables
-      '(tablist-named-filter
-        projectile-project-command-history
-        kill-ring
-        command-history
-        set-variable-value-history
-        custom-variable-history
-        query-replace-history
-        read-expression-history
-        minibuffer-history
-        read-char-history
-        face-name-history
-        bookmark-history
-        file-name-history))
-(put 'minibuffer-history         'history-length 50)
-(put 'file-name-history          'history-length 50)
-(put 'set-variable-value-history 'history-length 25)
-(put 'custom-variable-history    'history-length 25)
-(put 'query-replace-history      'history-length 25)
-(put 'read-expression-history    'history-length 25)
-(put 'read-char-history          'history-length 25)
-(put 'face-name-history          'history-length 25)
-(put 'bookmark-history           'history-length 25)
-(setq history-delete-duplicates t)
-(savehist-mode)
 
 ;; Emacs completion style that matches multiple regexps in any order
 (use-package orderless
@@ -1166,7 +1218,12 @@ need to be passed verbatim to shell commands."
   (projectile-mode +1))
 
 (use-package consult-projectile
-  :bind ("C-c p" . consult-projectile))
+  :init
+
+  :bind (("C-c p" . consult-projectile)
+         ("C-c o" . consult-projectile-switch-project)
+         ))
+
 #+end_src
 ** Yasnippet
 #+begin_src emacs-lisp :tangle yes
@@ -1303,6 +1360,78 @@ need to be passed verbatim to shell commands."
         org-outline-path-complete-in-steps nil) ; No steps in path display
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
   (add-hook 'org-mode-hook (lambda () (olivetti-mode t))))
+#+end_src
+** Smart Return
+#+begin_src emacs-lisp :lexical no
+(require 'org-inlinetask)
+
+(defun scimax/org-return (&optional ignore)
+  "Add new list item, heading or table row with RET.
+A double return on an empty element deletes it.
+Use a prefix arg to get regular RET. "
+  (interactive "P")
+  (if ignore
+      (org-return)
+    (cond
+
+     ((eq 'line-break (car (org-element-context)))
+      (org-return-indent))
+
+     ;; Open links like usual, unless point is at the end of a line.
+     ;; and if at beginning of line, just press enter.
+     ((or (and (eq 'link (car (org-element-context))) (not (eolp)))
+          (bolp))
+      (org-return))
+
+     ;; It doesn't make sense to add headings in inline tasks. Thanks Anders
+     ;; Johansson!
+     ((org-inlinetask-in-task-p)
+      (org-return))
+
+     ;; checkboxes too
+     ((org-at-item-checkbox-p)
+      (org-insert-todo-heading nil))
+
+     ;; lists end with two blank lines, so we need to make sure we are also not
+     ;; at the beginning of a line to avoid a loop where a new entry gets
+     ;; created with only one blank line.
+     ((org-in-item-p)
+      (if (save-excursion (beginning-of-line) (org-element-property :contents-begin (org-element-context)))
+          (org-insert-heading)
+        (beginning-of-line)
+        (delete-region (line-beginning-position) (line-end-position))
+        (org-return)))
+
+     ;; org-heading
+     ((org-at-heading-p)
+      (if (not (string= "" (org-element-property :title (org-element-context))))
+          (progn (org-end-of-meta-data)
+                 (org-insert-heading-respect-content)
+                 (outline-show-entry))
+        (beginning-of-line)
+        (setf (buffer-substring
+               (line-beginning-position) (line-end-position)) "")))
+
+     ;; tables
+     ((org-at-table-p)
+      (if (-any?
+           (lambda (x) (not (string= "" x)))
+           (nth
+            (- (org-table-current-dline) 1)
+            (org-table-to-lisp)))
+          (org-return)
+        ;; empty row
+        (beginning-of-line)
+        (setf (buffer-substring
+               (line-beginning-position) (line-end-position)) "")
+        (org-return)))
+
+     ;; fall-through case
+     (t
+      (org-return)))))
+
+(define-key org-mode-map (kbd "RET")
+            'scimax/org-return)
 #+end_src
 ** org-babel
 #+begin_src emacs-lisp :tangle yes
@@ -1705,8 +1834,13 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 #+begin_src emacs-lisp :tangle yes
 ;; Display available keybindings in popup
 (use-package which-key
-  :defer 2
+  :defer 30
   :config
+  (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⌦" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("ESC" . nil) . ("⎋" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
   (which-key-mode 1))
 #+end_src
 ** Pdf tools
@@ -1800,6 +1934,14 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
               ("v" . elfeed-tube-mpv)
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
+#+end_src
+** Qrencode
+Generate QR code in Emacs.
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package qrencode
+  :ensure t
+  :defer 110
+  )
 #+end_src
 * AGI
 ** org-ai
@@ -1897,28 +2039,55 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
   (envrc-global-mode))
 #+end_src
 
-** Start server
-#+begin_src emacs-lisp :lexical no :tangle yes
-(use-package emacs
-  :defer 1
-  :config
-  (desktop-save-mode 1)
-  (server-start))
-#+end_src
-
+** Save status
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package recentf
-  :defer 1
+  :defer 30
   :config
   (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
   (recentf-mode 1))
+
+(use-package emacs
+  :defer 10
+  :config
+  (setq savehist-additional-variables
+        '(tablist-named-filter
+          projectile-project-command-history
+          kill-ring
+          command-history
+          set-variable-value-history
+          custom-variable-history
+          query-replace-history
+          read-expression-history
+          minibuffer-history
+          read-char-history
+          face-name-history
+          bookmark-history
+          file-name-history))
+  (put 'minibuffer-history         'history-length 50)
+  (put 'file-name-history          'history-length 50)
+  (put 'set-variable-value-history 'history-length 25)
+  (put 'custom-variable-history    'history-length 25)
+  (put 'query-replace-history      'history-length 25)
+  (put 'read-expression-history    'history-length 25)
+  (put 'read-char-history          'history-length 25)
+  (put 'face-name-history          'history-length 25)
+  (put 'bookmark-history           'history-length 25)
+  (setq history-delete-duplicates t)
+  (savehist-mode)
+
+  (desktop-save-mode 1)
+  )
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+** Start server or Restart Emacs
+#+begin_src emacs-lisp :tangle yes :lexical no
 (use-package restart-emacs
-  :defer 30)
+  :defer 120)
 #+end_src
-
+#+begin_src emacs-lisp :tangle yes :lexical no
+(server-start)
+#+end_src
 ** Restore GC
 #+begin_src emacs-lisp :tangle yes :lexical no
 ;; Make gc pauses faster by decreasing the threshold.
@@ -1926,7 +2095,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 #+end_src
 
 * test
-#+begin_src emacs-lisp :tangle yes :lexical no
+#+begin_src emacs-lisp :tangle no :lexical no
 (use-package edwina
   :defer 5
   :ensure t
@@ -1950,3 +2119,133 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
   :defer t
   :ensure t)
 #+end_src
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package eyebrowse
+  :defer 10
+  ;; :init
+  ;; (setq eyebrowse-keymap-prefix (kbd "C-;"))
+  :config
+  (eyebrowse-mode t))
+
+#+end_src
+#+begin_src emacs-lisp :lexical no
+(defun my-vsplit-last-buffer ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1 nil)
+  (switch-to-next-buffer))
+
+(defun my-hsplit-last-buffer ()
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1 nil)
+  (switch-to-next-buffer))
+
+(bind-key "C-x 2" 'my-vsplit-last-buffer)
+(bind-key "C-x 3" 'my-hsplit-last-buffer)
+
+
+(setq bookmark-save-flag 1) ;; save bookmarks on every change
+
+(setq bookmark-default-file (concat user-emacs-directory "/var/bookmark-default.el"))
+
+(use-package popwin
+  :config
+  (popwin-mode 1)
+  )
+#+end_src
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  ;; Set the title
+  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+  ;; Set the banner
+  (setq dashboard-startup-banner 'official)
+  ;; Value can be
+  ;; - nil to display no banner
+  ;; - 'official which displays the official emacs logo
+  ;; - 'logo which displays an alternative emacs logo
+  ;; - 1, 2 or 3 which displays one of the text banners
+  ;; - "path/to/your/image.gif", "path/to/your/image.png", "path/to/your/text.txt" or "path/to/your/image.xbm" which displays whatever gif/image/text/xbm you would prefer
+  ;; - a cons of '("path/to/your/image.png" . "path/to/your/text.txt")
+
+  ;; Content is not centered by default. To center, set
+  (setq dashboard-center-content t)
+
+  ;; To disable shortcut "jump" indicators for each section, set
+  (setq dashboard-show-shortcuts nil)
+
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)
+                          (registers . 5)))
+  )
+#+end_src
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package popper
+  :ensure t
+  :bind (("C-`"   . popper-toggle)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode))
+
+  (setq popper-reference-buffers
+        (append popper-reference-buffers
+                '("^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+                  "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
+                  "^\\*term.*\\*$"   term-mode   ;term as a popup
+                  "^\\*vterm.*\\*$"  vterm-mode  ;vterm as a popup
+                  )))
+
+  (setq popper-group-function #'popper-group-by-directory)
+
+  (popper-mode +1)
+  (popper-echo-mode +1))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package theme-changer
+  :defer 60
+  :config
+  (setq calendar-location-name "Newyork, US")
+  (setq calendar-latitude 43.6)
+  (setq calendar-longitude -79.3)
+  (change-theme 'doom-one-light 'doom-one)  ;; day and night theme
+  )
+
+
+(defun my-window-half-height ()
+  (max 1 (/ (1- (window-height (selected-window))) 2)))
+
+(defun my-scroll-up-half ()
+  (interactive)
+  (scroll-up (my-window-half-height)))
+
+(defun my-scroll-down-half ()
+  (interactive)
+  (scroll-down (my-window-half-height)))
+#+end_src
+
+
+
+* References
+https://github.com/novoid/dot-emacs/blob/master/config.org
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package dogears
+  ;; These bindings are optional, of course:
+  :bind (:map global-map
+              ("M-g d" . dogears-go)
+              ("M-g M-b" . dogears-back)
+              ("M-g M-f" . Dogears-ForWard)
+              ("M-G M-D" . dogears-list)
+              ("M-g M-D" . dogears-sidebar)))
+#+End_Src

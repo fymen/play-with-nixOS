@@ -11,7 +11,7 @@
     settings = {
       main = {
         term = "xterm-256color";
-        font = "Inconsolata:size=9";
+        font = "DejaVu Sans Mono:size=7";
         dpi-aware = true;
         pad = "2x2 center";
       };

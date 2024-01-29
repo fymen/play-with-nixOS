@@ -50,7 +50,7 @@
 	},
 	"network": {
 		"tooltip": false,
-		"format-wifi": "  {essid}",
+		"format-wifi": "  {bandwidthUpBytes}",
 		"format-ethernet": ""
 	},
 	"backlight": {

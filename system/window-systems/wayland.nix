@@ -49,7 +49,33 @@ in {
     };
 
     environment.variables = {
-      NIXOS_OZONE_WL = "1"; # Wayland support in Chromium and Electron based applications
+      WLR_NO_HARDWARE_CURSORS = "1";
+      WLR_RENDERER_ALLOW_SOFTWARE = "1";
+      WLR_RENDERER = "vulkan";
+
+      GDK_SCALE = "2";
+      GDK_DPI_SCALE = "1.5";
+
+      MOZ_ENABLE_WAYLAND = "1"; # Firefox Wayland
+      MOZ_DBUS_REMOTE = "1"; # Firefox wayland
+      GDK_BACKEND = "wayland";
+
+      NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
+
+      SDL_VIDEODRIVER = "wayland";
+      _JAVA_AWT_WM_NONREPARENTING = "1";
+
+      #NIXOS_XDG_OPEN_USE_PORTAL = "0";
+      XDG_SESSION_TYPE = "wayland";
+
+      GTK_USE_PORTAL = "1";
+
+      CLUTTER_BACKEND = "wayland";
+
+      QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+      QT_QPA_PLATFORM = "wayland;xcb";
+      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+      QT_QPA_PLATFORMTHEME = "qt5ct";
     };
   };
 }

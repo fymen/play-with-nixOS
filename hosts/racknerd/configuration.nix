@@ -10,8 +10,8 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../common/system.nix
-    ../../common/system-packages.nix
+    ../../system/system.nix
+    ../../system/system-packages.nix
   ];
 
   # Use the GRUB 2 boot loader.

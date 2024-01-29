@@ -13,10 +13,11 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../common/system.nix
-      ../../common/system-packages.nix
-      ../../common/window-systems
-      ../../common/steam.nix
+      ../../system/system.nix
+      ../../system/system-packages.nix
+      ../../system/window-systems
+      ../../system/fonts.nix
+      ../../system/steam.nix
       # ../../common/virtualisation.nix
 
       ./secrets
@@ -58,9 +59,6 @@
   };
 
   environment.localBinInPath = true;
-
-  # bigger tty fonts
-  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -140,19 +138,6 @@
     config.allowUnfree = true;
     overlays = [ inputs.emacs-overlay.overlay ];
   };
-
-  fonts.packages = with pkgs; [
-    inconsolata
-    wqy_zenhei
-    wqy_microhei
-    open-sans
-
-    fira-code
-    source-sans-pro
-
-    times-newer-roman
-    font-awesome
-  ];
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
