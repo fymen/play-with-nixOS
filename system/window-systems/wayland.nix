@@ -62,7 +62,6 @@ in {
 
       NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
 
-      SDL_VIDEODRIVER = "wayland";
       _JAVA_AWT_WM_NONREPARENTING = "1";
 
       #NIXOS_XDG_OPEN_USE_PORTAL = "0";
