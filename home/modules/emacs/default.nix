@@ -143,6 +143,11 @@ in {
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))
       emacs-all-the-icons-fonts
 
+      # (pkgs.callPackage ../../../packages/flameshot.nix {})
+      grim
+      slurp
+      swappy
+
       popweb-py-pkgs
 
       chgcursor-el

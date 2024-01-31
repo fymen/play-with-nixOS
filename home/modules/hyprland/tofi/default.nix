@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, config, ...}: {
   home.packages = with pkgs; [
     tofi
   ];
@@ -8,17 +8,17 @@
       text = ''
         anchor = top
         width = 50%
-        height = 32
+        height = 40
         horizontal = true
-        font-size = 20
+        font-size = 19
         hint-font = true
         prompt-text = ""
         font = monospace
         outline-width = 0
         border-width = 0
-        text-color = #D0BF8F
-        background-color = #000A
-        selection-color = #DFAF8F
+        text-color = #${config.colorScheme.colors.base0D}
+        background-color = #${config.colorScheme.colors.base00}
+        selection-color = #${config.colorScheme.colors.base0C}
         min-input-width = 50
         result-spacing = 15
         padding-top = 0

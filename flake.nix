@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,7 +23,6 @@
     
     # Colorscheme
     nix-colors.url = "github:fymen/nix-colors/test";
-    # nix-colors.url = "/home/oscar/gitest/nix/nix-colors";
 
     # Personal secrets
     mysecrets = {

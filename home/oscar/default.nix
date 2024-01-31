@@ -12,9 +12,8 @@ in {
     ../modules
   ];
 
-  # colorschemetest = inputs.nix-colors.colorSchemes.gruvbox-light-soft;
-  colorscheme = inputs.nix-colors.colorSchemes.catppuccin-macchiato;
-  # colorscheme = inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../../system/color-themes/catppuccin-macchiato.yaml);
+  # colorscheme = inputs.nix-colors.colorSchemes.gruvbox-light-soft;
+  colorscheme = inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../../system/color-themes/catppuccin-macchiato.yaml);
   colorschemetest = inputs.nix-colors.lib.schemeFromYAML "alect-light" (builtins.readFile ../../system/color-themes/alect-light.yaml);
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -114,6 +113,7 @@ in {
     direnv = {
       enable = true;
       enableZshIntegration = true;
+      enableBashIntegration = true;
       nix-direnv.enable = true;
     };
 
@@ -167,6 +167,7 @@ in {
       "image/png" = "org.gnome.eog.desktop";
 
       "video/x-matroska" = "mpv.desktop";
+      "x-scheme-handler/tg" = "userapp-Telegram Desktop-FHZGI2.desktop";
     };
   };
 

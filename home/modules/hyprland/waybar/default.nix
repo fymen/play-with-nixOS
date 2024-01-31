@@ -38,7 +38,7 @@
         tooltip = false;
       };
       "hyprland/window" = {
-        max-length = 125;
+        max-length = 80;
         separate-outputs = false;
       };
       "memory" = {
