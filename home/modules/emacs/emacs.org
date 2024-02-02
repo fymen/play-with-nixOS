@@ -163,7 +163,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-one t)
   ;; (load-theme 'doom-zenburn t)
-
+  (set-face-foreground 'vertical-border "#c678dd")
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
@@ -1581,8 +1581,8 @@ Use a prefix arg to get regular RET. "
 (use-package org-roam
   :ensure t
   :init
-  (when (file-directory-p "~/org/roam/")
-    (setq org-roam-directory (file-truename "~/org/roam")))
+  (when (file-directory-p "~/projects/personal/roam/")
+    (setq org-roam-directory (file-truename "~/projects/personal/roam")))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n o" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)

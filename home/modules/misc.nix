@@ -40,8 +40,8 @@ in {
            mkdir $HOME/.secrets
         fi
 
-        if [ ! -d "$HOME/org/roam" ]; then
-           git clone ${cfg.configRoamRepoUrl} $HOME/org/roam
+        if [ ! -d "$HOME/projects/personal/roam" ]; then
+           git clone ${cfg.configRoamRepoUrl} $HOME/projects/personal/roam
         fi
 
         if [ ! -d "$HOME/.password-store" ]; then
