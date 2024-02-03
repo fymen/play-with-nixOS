@@ -206,7 +206,36 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 (use-package all-the-icons-completion
   :hook (marginalia-mode . all-the-icons-completion-mode))
 #+end_src
+** Dash board
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package dashboard
+  :ensure t
+  :init
+  ;; Set the title
+  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+  ;; Set the banner
+  (setq dashboard-startup-banner 'logo)
+  ;; Content is not centered by default. To center, set
+  (setq dashboard-center-content t)
 
+  ;; To disable shortcut "jump" indicators for each section, set
+  (setq dashboard-show-shortcuts nil)
+
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)
+                          (registers . 5)))
+  (setq dashboard-icon-type 'all-the-icons)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+
+  (setq dashboard-set-init-info t)
+
+  (setq dashboard-display-icons-p t) ;; display icons on both GUI and terminal
+  :config
+  (dashboard-setup-startup-hook))
+#+end_src
 ** Anzu mode (query & replace highlight)
 #+begin_src emacs-lisp :tangle yes
 (use-package anzu
@@ -2094,19 +2123,6 @@ Generate QR code in Emacs.
 #+end_src
 
 * test
-#+begin_src emacs-lisp :tangle no :lexical no
-(use-package edwina
-  :defer 5
-  :ensure t
-  :config
-  (setq display-buffer-base-action '(display-buffer-below-selected))
-  ;; (edwina-setup-dwm-keys)
-  (edwina-mode 1)
-  ;; (define-key edwina-mode-map (kbd "M-d") nil)
-  ;; (define-key edwina-mode-map (kbd "M-<return>") nil)
-  )
-#+end_src
-
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package ement
   :defer t
@@ -2118,50 +2134,12 @@ Generate QR code in Emacs.
   :defer t
   :ensure t)
 #+end_src
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package eyebrowse
-  :defer 10
-  ;; :init
-  ;; (setq eyebrowse-keymap-prefix (kbd "C-;"))
-  :config
-  (eyebrowse-mode t))
 
-#+end_src
 #+begin_src emacs-lisp :lexical no
 (setq bookmark-save-flag 1) ;; save bookmarks on every change
 (setq bookmark-default-file (concat user-emacs-directory "/var/bookmark-default.el"))
 #+end_src
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  ;; Set the title
-  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
-  ;; Set the banner
-  (setq dashboard-startup-banner 'logo)
-  ;; Content is not centered by default. To center, set
-  (setq dashboard-center-content t)
 
-  ;; To disable shortcut "jump" indicators for each section, set
-  (setq dashboard-show-shortcuts nil)
-
-  (setq dashboard-items '((recents  . 5)
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)
-                          (registers . 5)))
-  ;; (setq dashboard-icon-type 'all-the-icons)
-  (setq dashboard-set-init-info t)
-
-  (setq dashboard-display-icons-p t) ;; display icons on both GUI and terminal
-  (setq dashboard-icon-type 'nerd-icons) ;; use `nerd-icons' package
-
-  ;; (setq dashboard-set-heading-icons t)
-  ;; (setq dashboard-set-file-icons t)
-  )
-
-#+end_src
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package popper
   :ensure t
@@ -2190,21 +2168,6 @@ Generate QR code in Emacs.
   (popper-mode +1)
   (popper-echo-mode +1))
 #+end_src
-
-#+begin_src emacs-lisp :tangle yes :lexical no
-(defun my-window-half-height ()
-  (max 1 (/ (1- (window-height (selected-window))) 2)))
-
-(defun my-scroll-up-half ()
-  (interactive)
-  (scroll-up (my-window-half-height)))
-
-(defun my-scroll-down-half ()
-  (interactive)
-  (scroll-down (my-window-half-height)))
-#+end_src
-
-
 
 * References
 https://github.com/novoid/dot-emacs/blob/master/config.org

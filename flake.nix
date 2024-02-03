@@ -97,7 +97,7 @@
       # username(can be find at ./home/), hostname(can be find at ./hosts/), desktop system ("wayland" or "xorg")
       "laptop" = mkNixosConfig "oscar" "laptop" "wayland";
       "racknerd" = mkNixosConfig "hildar" "racknerd" "";
-      "vm" = mkNixosConfig "oscar" "vm";
+      "vm" = mkNixosConfig "oscar" "vm" "xorg";
     };
 
     homeConfigurations = {

@@ -26,6 +26,8 @@ clean:
 	nix-collect-garbage -d # User
 	sudo nixos-rebuild switch --flake .
 
+build-vm:
+	 nixos-rebuild build-vm --flake .#vm
 list-generations:
 	nix profile history --profile /nix/var/nix/profiles/system
 
