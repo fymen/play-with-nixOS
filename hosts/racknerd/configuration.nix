@@ -113,45 +113,20 @@
       root = "/var/www/oncehigh.com";
     };
   };
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-  # Tailscale (with oneshot exit-node)
-  systemd.services.tailscale-autoconnect = {
-    description = "Automatic connection to Tailscale";
 
-    # make sure tailscale is running before trying to connect to tailscale
-    after = [ "network-pre.target" "tailscale.service" ];
-    wants = [ "network-pre.target" "tailscale.service" ];
-    wantedBy = [ "multi-user.target" ];
-
-    # set this service as a oneshot job
-    serviceConfig.Type = "oneshot";
-
-    # have the job run this shell script
-    script = with pkgs; ''
-      # wait for tailscaled to settle
-      sleep 2
-
-      # otherwise authenticate with tailscale
-      # ${tailscale}/bin/tailscale up --advertise-exit-node -authkey <key>
-      ${tailscale}/bin/tailscale up --advertise-exit-node
-    '';
-  };
 
   # Open ports in the firewall.
   networking.firewall = {
     # enable the firewall
     enable = true;
-
-    # always allow traffic from your Tailscale network
-    trustedInterfaces = [ "tailscale0" ];
-
-    # allow the Tailscale UDP port through the firewall
-    allowedUDPPorts = [ config.services.tailscale.port ];
-
     # allow you to SSH in over the public internet
     allowedTCPPorts = [ 22 443 ];
   };
 
+  modules.tailscale = {
+    enable = true;
+    server.enable = true;
+  };
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
