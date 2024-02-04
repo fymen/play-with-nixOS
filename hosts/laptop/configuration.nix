@@ -18,6 +18,7 @@
       ../../system/window-systems
       ../../system/fonts.nix
       ../../system/steam.nix
+      ../../system/tailscale.nix
       # ../../common/virtualisation.nix
 
       ./secrets
