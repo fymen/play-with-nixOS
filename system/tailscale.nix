@@ -13,8 +13,33 @@ in
     # enable the tailscale service
     services.tailscale = {
       enable = true;
+      extraUpFlags = [ "--operator=${config.home.username}" ];
       useRoutingFeatures = "both";
     };
+
+    environment.systemPackages = [
+      (pkgs.writeShellScriptBin "tailscale.sh" ''
+      #!/usr/bin/env bash
+      tailscale status > /dev/null
+      if [ $? -eq 0 ] ; then
+         tailscale down
+         echo "tailscale down..."
+      else
+          tailscale up
+          echo "tailscale up..."
+          sleep 1
+          EXIT_NODE=`tailscale status | grep "exit node" | awk '{print $2}'`
+          echo "set exit node as: $EXIT_NODE"
+          tailscale set --exit-node-allow-lan-access --exit-node=$EXIT_NODE
+      fi
+      '')
+      (pkgs.writeShellScriptBin "tailscale_stats.sh" ''
+      #!/usr/bin/env bash
+      tailscale status > /dev/null \
+      && echo '{"text":"Connected","class":"connected","percentage":100}' \
+      || echo '{"text":"Disconnected","class":"disconnected","percentage":0}'
+      '')
+    ];
 
     boot.kernel.sysctl = mkIf cfg.server.enable {
       "net.ipv4.ip_forward" = 1;

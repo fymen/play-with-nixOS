@@ -11,7 +11,7 @@
 
       modules-left = [ "hyprland/workspaces" "tray"];
       modules-center = [ "hyprland/window" ];
-      modules-right = [ "idle_inhibitor" "backlight" "pulseaudio" "battery" "network" "clock" "custom/power"];
+      modules-right = [ "custom/vpn" "idle_inhibitor" "backlight" "pulseaudio" "battery" "network" "clock" "custom/power"];
       "hyprland/workspaces" = {
         format = "{icon}";
         format-icons = {
@@ -104,6 +104,15 @@
         format = "";
         on-click = "wlogout";
     };
+    "custom/vpn" = {
+      format = "{icon}";
+      format-icons = [ "" "" ];
+      tooltip-format = "{icon}";
+      exec = "tailscale_stats.sh";
+      return-type = "json";
+      interval = 5;
+      on-click = "tailscale.sh";
+    };
     "idle_inhibitor" = {
       format = "{icon}";
       format-icons = {
@@ -148,7 +157,7 @@
   style = ''
 	* {
 	  border: none;
-  	border-radius: 2;
+  	border-radius: 2px;
 		font-size: 20px;
 		font-family: JetBrainsMono Nerd Font, Font Awesome, sans-serif;
     font-weight: bold;
@@ -213,13 +222,6 @@
 	}
 	#clock {
     		color: #${config.colorScheme.colors.base0B};
-    		background: #${config.colorScheme.colors.base00};
-    		border-radius: 10px;
-    		margin: 2px;
-    		padding: 2px 20px;
-	}
-	#idle_inhibitor {
-    		color: #${config.colorScheme.colors.base0A};
     		background: #${config.colorScheme.colors.base00};
     		border-radius: 10px;
     		margin: 2px;
@@ -315,6 +317,13 @@
     		margin: 2px;
     		padding: 2px 20px;
   }
+	#custom-vpn {
+    		color: #${config.colorScheme.colors.base05};
+    		background: #${config.colorScheme.colors.base00};
+    		border-radius: 10px;
+    		margin: 2px;
+    		padding: 2px 20px;
+	}
 	#idle_inhibitor {
     		color: #${config.colorScheme.colors.base05};
     		background: #${config.colorScheme.colors.base00};
