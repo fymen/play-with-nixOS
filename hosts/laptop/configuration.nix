@@ -197,7 +197,15 @@
     };
   };
 
-  modules.tailscale.enable = true;
+  modules.tailscale = {
+    enable = true;
+    routingFeature = "client";
+    autoprovision = {
+      enable = true;
+      cmd = "${pkgs.tailscale}/bin/tailscale up";
+      # options = [ "--exit-node-allow-lan-access" "--exit-node=" ];
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

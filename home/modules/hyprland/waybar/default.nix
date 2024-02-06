@@ -105,7 +105,7 @@
         on-click = "wlogout";
     };
     "custom/vpn" = {
-      format = "{icon}";
+      format = "vpn{icon}";
       format-icons = [ "" "" ];
       tooltip-format = "{icon}";
       exec = "tailscale_stats.sh";

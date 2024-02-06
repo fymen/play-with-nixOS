@@ -125,8 +125,14 @@
 
   modules.tailscale = {
     enable = true;
-    server.enable = true;
+    routingFeature = "server";
+    autoprovision = {
+      enable = true;
+      operator = "hildar";
+      options = [ "--advertise-exit-node" ];
+    };
   };
+
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
