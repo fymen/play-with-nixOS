@@ -18,7 +18,7 @@
 
       selection.save_to_clipboard = true;
 
-      key_bindings = [
+      keyboard.bindings = [
         {
           key = "I";
           mods = "Control|Shift";
@@ -32,9 +32,9 @@
       ];
 
       font = {
-        size = 20;
-        family = "FiraCode Nerd Font Mono";
+        size = 12;
         normal = {
+          family = "FiraCode Nerd Font Mono";
           style = "Regular";
         };
         bold = {

@@ -4,7 +4,7 @@ Try to keep it straight and simple.
 
 =make= to build this configuration without switch.
 
-=make debug= is the as =make=, but with more debug info and a colorized summary out put powered by [[https://github.com/maralorn/nix-output-monitor][nix-output-monitor]].
+=make debug= is the same as =make=, but with more debug info and a colorized summary output powered by [[https://github.com/maralorn/nix-output-monitor][nix-output-monitor]].
 
 =make install= to switch it.
 
@@ -13,7 +13,7 @@ Try to keep it straight and simple.
 =make deploy= to deploy remote host.
 
 * Some features
-Please refer to the [[file:Makefile][Makefile]] to find specific useage.
+Some modules that I used in this profile.
 |                      | wayland                | Xorg             |
 |----------------------+------------------------+------------------|
 | Window manager       | hyprland               | i3               |
@@ -26,9 +26,9 @@ Please refer to the [[file:Makefile][Makefile]] to find specific useage.
 | Logout               | waylogout              |                  |
 | Eye protection       | wlsunset               |                  |
 
-I use Emacs as my primarily text Editor. I have used it for many years, and have developed my own personalized style for it. I find it difficult to switch to other text editors such as doom Emacs, Neovim or Vscode because I feel most comfortable with Emacs.
+I use Emacs as my primarily text Editor. I have used it for many years, and have developed my own personalized style for it. I find it difficult to switch to other text editors such as doom Emacs, Neovim or Vscode because I feel most comfortable with my vanilla Emacs.
 
-I manage my Emacs configuration by [[https://github.com/nix-community/emacs-overlay][Emacs overlay]] now, it is not bad for now. The literal configure file is [[file:home/modules/emacs/emacs.org][emacs.org]]. There are also [[https://github.com/fymen/roaming/blob/master/20240122102418-adding_package_outside_elpa_to_nixos.org][some tips]] on moving Emacs configuration to Nix.
+I manage my Emacs configuration by [[https://github.com/nix-community/emacs-overlay][Emacs overlay]] now, it is not bad for now. The literal configure file is [[file:home/modules/emacs/emacs.org][emacs.org]]. There are also [[https://fengmao.netlify.app/build-extra-emacs-packages-by-nix/][some tips]] on moving Emacs configuration to Nix.
 
 Emacs is a handy tool that you can do almost everything in it. So I don't invest too much on other tools, although some of them are really cool.
 
@@ -57,17 +57,10 @@ Other useful tools:
 
 * Emacs on Hyprland
 #+attr_html: :width 800
-[[file:samples/emacs-hyprland.jpg]]
-
-Why [[https://github.com/bbatsov/zenburn-emacs][zenburn]] ?
-
-It may not be as fancy as other color themes such as [[https://github.com/catppuccin/catppuccin][Catppuccin]] or [[https://github.com/doomemacs/doomemacs][Doom Dracula]], but its low contrast color set is suitable for prolonged use.
+[[file:samples/emacs-hyprland.png]]
 
 * Todo
 Support MacOS and standalone home-manager on other distribution.
-
-* NixOS related
-[[https://github.com/fymen/roaming/blob/master/20231228093754-install_nixos_from_ubuntu.org][Install by ISO image from ubuntu]]
 
 * References
 https://github.com/ryan4yin/nix-config

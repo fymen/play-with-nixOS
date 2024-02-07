@@ -176,7 +176,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp :tangle yes
-(setq my-font-size 9)
+(setq my-font-size 8)
 (when (eq system-type 'darwin)
   (set-face-attribute 'default nil)
   (set-face-attribute 'default nil :height 150))
@@ -185,15 +185,15 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   (if window-system
       ;; Chinese Font
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        ;; (set-frame-font (concat "Inconsolata LGC Nerd Font Mono " (number-to-string my-font-size)))
-        (set-frame-font "JetBrainsMono Nerd Font Mono 9")
+        (set-frame-font (concat "Inconsolata LGC Nerd Font Mono " (number-to-string my-font-size)))
+        ;; (set-frame-font "JetBrainsMono Nerd Font Mono 9")
         ;; (set-frame-font "Firacode 15")
         (set-fontset-font (frame-parameter nil 'font)
                           charset (font-spec :family "WenQuanYi Micro Hei Mono"
                                              :size (+ my-font-size 5)))
         )))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata LGC Nerd Font Mono 9"))
+(add-to-list 'default-frame-alist '(font . "Inconsolata LGC Nerd Font Mono 8"))
 #+end_src
 *** All the icons
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -940,8 +940,13 @@ your project root:
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package ws-butler
   :defer 1
-  :config
-  (ws-butler-global-mode))
+  :hook ((prog-mode
+          c-mode
+          c++-mode
+          nix-mode
+          c-ts-mode
+          c++-ts-mode
+          ) . ws-butler-global-mode))
 #+end_src
 ** Fly spell
 #+begin_src emacs-lisp :tangle yes

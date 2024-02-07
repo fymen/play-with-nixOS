@@ -77,7 +77,6 @@ with lib; {
   };
 
   config = mkIf cfg.enable {
-    # environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
     services.tailscale = {
@@ -102,6 +101,7 @@ with lib; {
     };
 
     environment.systemPackages = mkIf (cfg.routingFeature == "client") [
+      cfg.package
       (pkgs.writeShellScriptBin "tailscale.sh" ''
       #!/usr/bin/env bash
       LOCK=${lock}
@@ -114,6 +114,7 @@ with lib; {
       fi
       ${cfg.package}/bin/tailscale set --exit-node-allow-lan-access --exit-node=$EXIT_NODE
       '')
+
       (pkgs.writeShellScriptBin "tailscale_stats.sh" ''
       #!/usr/bin/env bash
       LOCK=${lock}
