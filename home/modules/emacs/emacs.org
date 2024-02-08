@@ -122,16 +122,6 @@
         ;; Avoid being ask for the token
         paradox-github-token 0))
 #+end_src
-** COMMENT Auto compile
-#+begin_src emacs-lisp :tangle no
-(setq load-prefer-newer t)
-(use-package auto-compile
-  :defer t
-  :ensure t
-  :config
-  ;; (auto-compile-on-save-mode 1)
-  (auto-compile-on-load-mode 1))
-#+end_src
 
 * General
 ** Auto save
@@ -176,24 +166,136 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp :tangle yes
-(setq my-font-size 8)
-(when (eq system-type 'darwin)
-  (set-face-attribute 'default nil)
-  (set-face-attribute 'default nil :height 150))
+(use-package emacs
+  :config
+  ;; create some font size defaults
+  ;; may need to customize
+  (defvar my/default-font-size 80)
+  (defvar my/default-variable-font-size 100)
 
-(when (eq system-type 'gnu/linux)
-  (if window-system
-      ;; Chinese Font
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (set-frame-font (concat "Inconsolata LGC Nerd Font Mono " (number-to-string my-font-size)))
-        ;; (set-frame-font "JetBrainsMono Nerd Font Mono 9")
-        ;; (set-frame-font "Firacode 15")
-        (set-fontset-font (frame-parameter nil 'font)
-                          charset (font-spec :family "WenQuanYi Micro Hei Mono"
-                                             :size (+ my-font-size 5)))
-        )))
+  ;; if vertical height is over 2k, set to 192dpi otherwise leave at default
+  (unless (< (display-pixel-height) 2000)
+    (progn
+      (setq my/default-font-size 132)
+      (setq my/default-variable-font-size 132)
+      )
+    )
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata LGC Nerd Font Mono 8"))
+  ;; if in macOS, set size appropriately
+  ;; otherwise assume Linux
+  (if (eq system-type 'darwin)
+      (progn
+        ;; set default font
+        (set-face-attribute 'default 'nil :font "FiraCode NF" :height my/default-font-size)
+        ;; Set the fixed pitch face
+        (set-face-attribute 'fixed-pitch nil :font "FiraCode NF" :height my/default-font-size)
+        )
+    (progn
+      ;; set default font
+      (set-face-attribute 'default 'nil :font "FiraCode Nerd Font" :height my/default-font-size)
+      ;; Set the fixed pitch face
+      (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font" :height my/default-font-size)
+      )
+    )
+
+  ;; Set the variable pitch face which is the same for mac and linux
+  (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height my/default-variable-font-size :weight 'regular)
+  )
+#+end_src
+*** Ligature for Firacode
+#+begin_src emacs-lisp :tangle yes
+(use-package ligature
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable all Cascadia and Fira Code ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode
+                        '(;; == === ==== => =| =>>=>=|=>==>> ==< =/=//=// =~
+                          ;; =:= =!=
+                          ("=" (rx (+ (or ">" "<" "|" "/" "~" ":" "!" "="))))
+                          ;; ;; ;;;
+                          (";" (rx (+ ";")))
+                          ;; && &&&
+                          ("&" (rx (+ "&")))
+                          ;; !! !!! !. !: !!. != !== !~
+                          ("!" (rx (+ (or "=" "!" "\." ":" "~"))))
+                          ;; ?? ??? ?:  ?=  ?.
+                          ("?" (rx (or ":" "=" "\." (+ "?"))))
+                          ;; %% %%%
+                          ("%" (rx (+ "%")))
+                          ;; |> ||> |||> ||||> |] |} || ||| |-> ||-||
+                          ;; |->>-||-<<-| |- |== ||=||
+                          ;; |==>>==<<==<=>==//==/=!==:===>
+                          ("|" (rx (+ (or ">" "<" "|" "/" ":" "!" "}" "\]"
+                                          "-" "=" ))))
+                          ;; \\ \\\ \/
+                          ("\\" (rx (or "/" (+ "\\"))))
+                          ;; ++ +++ ++++ +>
+                          ("+" (rx (or ">" (+ "+"))))
+                          ;; :: ::: :::: :> :< := :// ::=
+                          (":" (rx (or ">" "<" "=" "//" ":=" (+ ":"))))
+                          ;; // /// //// /\ /* /> /===:===!=//===>>==>==/
+                          ("/" (rx (+ (or ">"  "<" "|" "/" "\\" "\*" ":" "!"
+                                          "="))))
+                          ;; .. ... .... .= .- .? ..= ..<
+                          ("\." (rx (or "=" "-" "\?" "\.=" "\.<" (+ "\."))))
+                          ;; -- --- ---- -~ -> ->> -| -|->-->>->--<<-|
+                          ("-" (rx (+ (or ">" "<" "|" "~" "-"))))
+                          ;; *> */ *)  ** *** ****
+                          ("*" (rx (or ">" "/" ")" (+ "*"))))
+                          ;; www wwww
+                          ("w" (rx (+ "w")))
+                          ;; <> <!-- <|> <: <~ <~> <~~ <+ <* <$ </  <+> <*>
+                          ;; <$> </> <|  <||  <||| <|||| <- <-| <-<<-|-> <->>
+                          ;; <<-> <= <=> <<==<<==>=|=>==/==//=!==:=>
+                          ;; << <<< <<<<
+                          ("<" (rx (+ (or "\+" "\*" "\$" "<" ">" ":" "~"  "!"
+                                          "-"  "/" "|" "="))))
+                          ;; >: >- >>- >--|-> >>-|-> >= >== >>== >=|=:=>>
+                          ;; >> >>> >>>>
+                          (">" (rx (+ (or ">" "<" "|" "/" ":" "=" "-"))))
+                          ;; #: #= #! #( #? #[ #{ #_ #_( ## ### #####
+                          ("#" (rx (or ":" "=" "!" "(" "\?" "\[" "{" "_(" "_"
+                                       (+ "#"))))
+                          ;; ~~ ~~~ ~=  ~-  ~@ ~> ~~>
+                          ("~" (rx (or ">" "=" "-" "@" "~>" (+ "~"))))
+                          ;; __ ___ ____ _|_ __|____|_
+                          ("_" (rx (+ (or "_" "|"))))
+                          ;; Fira code: 0xFF 0x12
+                          ("0" (rx (and "x" (+ (in "A-F" "a-f" "0-9")))))
+                          ;; Fira code:
+                          "Fl"  "Tl"  "fi"  "fj"  "fl"  "ft"
+                          ;; The few not covered by the regexps.
+                          "{|"  "[|"  "]#"  "(*"  "}#"  "$>"  "^="))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
+#+end_src
+
+*** Chinese fonts
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package emacs
+  (set-fontset-font
+   t
+   'han
+   (cond
+    ((eq system-type 'windows-nt)
+     (cond
+      ((member "Microsoft YaHei" (font-family-list)) "Microsoft YaHei")
+      ((member "Microsoft JhengHei" (font-family-list)) "Microsoft JhengHei")
+      ((member "SimHei" (font-family-list)) "SimHei")))
+    ((eq system-type 'darwin)
+     (cond
+      ((member "Hei" (font-family-list)) "Hei")
+      ((member "Heiti SC" (font-family-list)) "Heiti SC")
+      ((member "Heiti TC" (font-family-list)) "Heiti TC")))
+    ((eq system-type 'gnu/linux)
+     (cond
+      ((member "WenQuanYi Micro Hei" (font-family-list)) "WenQuanYi Micro Hei")))))
+  )
 #+end_src
 *** All the icons
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -297,7 +399,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; :load-path local-elisp-directory
   :defer 1
   :config
-  (setq curchg-default-cursor-color "IndianRed")
+  (setq curchg-default-cursor-color "tomato4")
   (change-cursor-mode 1)
   (toggle-cursor-type-when-idle 1))
 #+end_src
@@ -748,7 +850,35 @@ your project root:
   ((nil . ((company-clang-arguments . ("-I/home/<user>/project_root/include1/"
                                        "-I/home/<user>/project_root/include2/")))))
 #+END_SRC
+** Popper
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package popper
+  :ensure t
+  :bind (("C-`"   . popper-toggle)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "\\*Warnings\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode))
 
+  (setq popper-reference-buffers
+        (append popper-reference-buffers
+                '("^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+                  "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
+                  "^\\*term.*\\*$"   term-mode   ;term as a popup
+                  "^\\*vterm.*\\*$"  vterm-mode  ;vterm as a popup
+                  )))
+
+  (setq popper-group-function #'popper-group-by-directory)
+
+  (popper-mode +1)
+  (popper-echo-mode +1))
+#+end_src
 ** COMMENT Corfu
 #+begin_src emacs-lisp :tangle no
 ;; Modular text completion framework
@@ -946,7 +1076,7 @@ your project root:
           nix-mode
           c-ts-mode
           c++-ts-mode
-          ) . ws-butler-global-mode))
+          ) . ws-butler-mode))
 #+end_src
 ** Fly spell
 #+begin_src emacs-lisp :tangle yes
@@ -1344,7 +1474,10 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes
 (use-package org
   :defer t
-  :hook (org-mode . visual-line-mode)
+  :hook ((org-mode . visual-line-mode)
+         (org-mode . variable-pitch-mode)
+         (org-mode . org-indent-mode)
+         (org-mode . olivetti-mode))
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
          ("C-c c" . org-capture)
@@ -1368,8 +1501,22 @@ need to be passed verbatim to shell commands."
         org-image-actual-width nil     ; Resize image to window width
         org-indirect-buffer-display 'other-window ; Tab on a task expand it in a new window
         org-outline-path-complete-in-steps nil) ; No steps in path display
-  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
-  (add-hook 'org-mode-hook (lambda () (olivetti-mode t))))
+
+  (custom-theme-set-faces
+   'user
+   '(org-block ((t (:inherit fixed-pitch))))
+   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+   '(org-document-info ((t (:foreground "dark orange"))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+   '(org-link ((t (:foreground "royal blue" :underline t))))
+   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-property-value ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+   '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+  )
 #+end_src
 ** Smart Return
 #+begin_src emacs-lisp :lexical no
@@ -1901,7 +2048,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
   (:map elfeed-show-mode-map
         ("S" . er-google))
   :config
-  (defun my-show-elfeed (buffer)
+  (defun my/show-elfeed (buffer)
     (with-current-buffer buffer
       (setq buffer-read-only nil)
       (goto-char (point-min))
@@ -1913,8 +2060,10 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
     (elfeed-show-refresh))
   (setq elfeed-show-mode-hook
         (lambda ()
-	      (set-face-attribute 'variable-pitch (selected-frame) :font (font-spec :family "Open Sans" :size (+ my-font-size 5)))
-          (setq elfeed-show-entry-switch #'my-show-elfeed))))
+	      ;; (set-face-attribute 'variable-pitch (selected-frame)
+          ;;                     :font "Source Sans Pro"
+          ;;                     :height (+ my/default-variable-font-size 10))
+          (setq elfeed-show-entry-switch #'my/show-elfeed))))
 
 (use-package elfeed-org
   :ensure t
@@ -2092,10 +2241,6 @@ Generate QR code in Emacs.
 
 ** Start server or Restart Emacs
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package restart-emacs
-  :defer 120)
-#+end_src
-#+begin_src emacs-lisp :tangle yes :lexical no
 (server-start)
 #+end_src
 ** Restore GC
@@ -2122,34 +2267,7 @@ Generate QR code in Emacs.
 (setq bookmark-default-file (concat user-emacs-directory "/var/bookmark-default.el"))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package popper
-  :ensure t
-  :bind (("C-`"   . popper-toggle)
-         ("M-`"   . popper-cycle)
-         ("C-M-`" . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "\\*Warnings\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          help-mode
-          compilation-mode))
 
-  (setq popper-reference-buffers
-        (append popper-reference-buffers
-                '("^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
-                  "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
-                  "^\\*term.*\\*$"   term-mode   ;term as a popup
-                  "^\\*vterm.*\\*$"  vterm-mode  ;vterm as a popup
-                  )))
-
-  (setq popper-group-function #'popper-group-by-directory)
-
-  (popper-mode +1)
-  (popper-echo-mode +1))
-#+end_src
 
 * References
 https://github.com/novoid/dot-emacs/blob/master/config.org

@@ -20,7 +20,7 @@ with lib; let
 
   cfg = config.modules.editors.emacs;
 
-  pwd = "${config.home.homeDirectory}/gitest/play-with-nixOS/home/modules/emacs";
+  pwd = "${config.home.homeDirectory}/projects/personal/play-with-nixOS/home/modules/emacs";
 
   chgcursor-el = pkgs.emacsPackages.trivialBuild rec {
     pname = "cursor-chg";
