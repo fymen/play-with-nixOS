@@ -1,20 +1,37 @@
 {
-  inputs,
-  system,
+  flake,
   config,
-  windowSystem,
+  osConfig,
   pkgs,
   ...
 }: let
-  windowManager = if windowSystem == "wayland" then "hyprland" else "i3";
+  winManager = if osConfig.networking.hostName == "laptop" then "hyprland" else "i3";
 in {
   imports = [
-    ../modules
+    (if winManager == "hyprland"
+     then ../modules/hyprland
+     else ../modules/i3)
+
+    ../modules/emacs
+    ../modules/gtk.nix
+    ../modules/tmux.nix
+    ../modules/zsh.nix
+    ../modules/git.nix
+    ../modules/terminals
+    ../modules/dunst.nix
+    ../modules/firefox.nix
+    ../modules/chromium.nix
+    ../modules/mpv.nix
+    ../modules/zathura.nix
+    ../modules/gnupg.nix
+    # ../modules/bitwarden.nix
+    ../modules/password-store.nix
+    ../modules/misc.nix
   ];
 
-  # colorscheme = inputs.nix-colors.colorSchemes.gruvbox-light-soft;
-  colorscheme = inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../../system/color-themes/catppuccin-macchiato.yaml);
-  colorschemetest = inputs.nix-colors.lib.schemeFromYAML "alect-light" (builtins.readFile ../../system/color-themes/alect-light.yaml);
+  # colorscheme = flake.inputs.nix-colors.colorSchemes.gruvbox-light-soft;
+  colorscheme = flake.inputs.nix-colors.lib.schemeFromYAML "catppuccin-macchiato" (builtins.readFile ../../system/color-themes/catppuccin-macchiato.yaml);
+  colorschemetest = flake.inputs.nix-colors.lib.schemeFromYAML "alect-light" (builtins.readFile ../../system/color-themes/alect-light.yaml);
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -44,6 +61,62 @@ in {
     nix-prefetch-scripts
 
     mesa
+
+    du-dust # Modernized "du"
+    bat # Alternative to "cat"
+    btop # Alternative to "top"
+    nvtop-amd # Monitor GPU process
+    starship
+    fd # Alternative to "find"
+    lazygit # Magit alternative
+    glow # Markdown viewer in command line
+
+    xdg-utils
+
+    grc # Colorize command output
+
+    ydotool # Desktop automation tool, move mouse or something
+    autojump # Jump around directories fastly
+
+    neofetch
+
+    font-manager
+    # Terminal
+    tmux
+
+    python311Packages.pygments
+
+    # Image viewer
+    feh
+    gnome.eog
+    # Editor
+
+    # Shells
+    oh-my-zsh
+
+    # Data visualization
+    gnuplot
+    mpv
+    yt-dlp
+    ripgrep
+    silver-searcher
+
+    multimarkdown
+    graphviz
+
+    gimp
+    imagemagick
+
+    gdb
+
+    evince
+    zathura
+
+    libreoffice
+    # Sound volume control
+    pavucontrol
+
+    networkmanager
 
     # nix-alien
     gcc
@@ -103,7 +176,7 @@ in {
       emacs.service.enable = false;
     };
 
-    windowManager."${windowManager}".enable = true;
+    windowManager."${winManager}".enable = true;
 
     misc.enable = true;
   };

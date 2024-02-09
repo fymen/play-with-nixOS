@@ -27,7 +27,7 @@
 ** Basics
 #+begin_src emacs-lisp :tangle yes
 (setq-default tab-width 4                       ; Smaller tabs
-              fill-column 75                    ; Maximum line width
+              fill-column 80                    ; Maximum line width
               ;; auto-fill-function 'do-auto-fill  ; Auto-fill-mode everywhere
               sentence-end-double-space nil           ; Use a single space after dots
               bidi-paragraph-direction 'left-to-right ; Faster
@@ -170,8 +170,8 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   :config
   ;; create some font size defaults
   ;; may need to customize
-  (defvar my/default-font-size 80)
-  (defvar my/default-variable-font-size 100)
+  (defvar my/default-font-size 85)
+  (defvar my/default-variable-font-size (+ 20 my/default-font-size))
 
   ;; if vertical height is over 2k, set to 192dpi otherwise leave at default
   (unless (< (display-pixel-height) 2000)
@@ -671,7 +671,6 @@ point reaches the beginning or end of the buffer, stop there."
 #+end_src
 
 * Extensions
-
 ** Hydra
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package hydra
@@ -717,7 +716,7 @@ point reaches the beginning or end of the buffer, stop there."
 #+end_src
 ** ace-window
 #+begin_src emacs-lisp :tangle yes
-(use-package ace-window
+ (use-package ace-window
   :ensure t
   :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
               aw-ignore-current nil
@@ -861,6 +860,8 @@ your project root:
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "\\*Warnings\\*"
+          "\\*envrc\\*"
+          "\\*envrc-reload\\*"
           "Output\\*$"
           "\\*Async Shell Command\\*"
           help-mode
@@ -2266,8 +2267,5 @@ Generate QR code in Emacs.
 (setq bookmark-save-flag 1) ;; save bookmarks on every change
 (setq bookmark-default-file (concat user-emacs-directory "/var/bookmark-default.el"))
 #+end_src
-
-
-
 * References
 https://github.com/novoid/dot-emacs/blob/master/config.org

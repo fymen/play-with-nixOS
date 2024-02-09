@@ -1,24 +1,18 @@
 {
   pkgs,
-  system,
-  inputs,
-  mysecrets,
+  flake,
   config,
   ...
 }: {
-  imports = [
-    inputs.agenix.nixosModules.default
-  ];
-
   environment.systemPackages = [
     pkgs.age
-    inputs.agenix.packages."${system}".default
+    flake.inputs.agenix.packages."x86_64-linux".default
   ];
 
   age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
   age.secrets."private.org" = {
     symlink = true;
-    file = "${mysecrets}/private.age";
+    file = "${flake.inputs.mysecrets}/private.age";
 
     name = ".private.org";
     path = "/home/oscar";
@@ -28,13 +22,13 @@
   };
 
   age.secrets."misc.org" = {
-    file = "${mysecrets}/misc.age";
+    file = "${flake.inputs.mysecrets}/misc.age";
     mode = "600";
     owner = "oscar";
   };
 
   age.secrets."bw" = {
-    file = "${mysecrets}/bw.age";
+    file = "${flake.inputs.mysecrets}/bw.age";
     name = "bw";
     path = "/home/oscar/.secrets/";
     mode = "600";

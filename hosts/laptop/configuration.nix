@@ -4,8 +4,7 @@
 {
   config,
   pkgs,
-  inputs,
-  system,
+  flake,
   lib,
   ...
 }: {
@@ -19,11 +18,11 @@
       ../../system/fonts.nix
       ../../system/steam.nix
       ../../system/tailscale.nix
-      # ../../common/virtualisation.nix
+      # ../../system/virtualisation.nix
 
       ./secrets
     ]
-    ++ (with inputs.nixos-hardware.nixosModules; [
+    ++ (with flake.inputs.nixos-hardware.nixosModules; [
       common-cpu-amd-pstate
       common-gpu-amd
       common-pc-ssd
@@ -118,26 +117,12 @@
     # linger = true;              # Start user services before login
     extraGroups = ["networkmanager" "wheel"];
     shell = pkgs.zsh;
-    packages = with pkgs; [
-      firefox
-      #  thunderbird
-    ];
   };
-
-  # # Game
-  # programs.gamescope.enable = true;
-  # programs.steam = {
-  #   enable = true;
-  #   gamescopeSession.enable = true;
-  #   remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-  #   dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  # };
-  # hardware.steam-hardware.enable = true;
 
   # Allow unfree packages
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = [ inputs.emacs-overlay.overlay ];
+    overlays = [ flake.inputs.emacs-overlay.overlay ];
   };
 
   programs.nix-ld.enable = true;
@@ -150,7 +135,6 @@
   environment.systemPackages = with pkgs; [
     brightnessctl
     acpi
-    man-pages
 
     # coreutils
     # binutils
@@ -172,21 +156,10 @@
     usbutils # lsusb
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
   programs = {
     zsh.enable = true;
     dconf.enable = true;
   };
-
-  # List services that you want to enable:
-
-  # virtualisation.vmware.host.enable = true;
 
   # Enable the Open SSH daemon.
   services.openssh = {
@@ -197,6 +170,7 @@
     };
   };
 
+  modules.windowSystem.wayland.enable = true;
   modules.tailscale = {
     enable = true;
     routingFeature = "client";

@@ -2,6 +2,8 @@
   ## host qemu
   virtualisation.libvirtd.enable = false;
   programs.virt-manager.enable = false;
+  # virtualisation.vmware.host.enable = true;
+
 
   # Distrobox and podman
   virtualisation = {

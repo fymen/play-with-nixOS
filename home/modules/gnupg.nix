@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  mysecrets,
+  flake,
   ...
 }: {
   services.gpg-agent = {
@@ -33,7 +33,7 @@
     publicKeys = [
       # https://www.gnupg.org/gph/en/manual/x334.html
       {
-        source = "${mysecrets}/gpg-keys.pub";
+        source = "${flake.inputs.mysecrets}/gpg-keys.pub";
         trust = 5;
       } # ultimate trust, my own keys.
     ];
