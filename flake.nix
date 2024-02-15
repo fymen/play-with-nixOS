@@ -3,6 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    nix-darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,7 +30,7 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    
+
     # Colorscheme
     nix-colors.url = "github:fymen/nix-colors/test";
 
@@ -104,7 +110,6 @@
               # Common nixos/nix-darwin configuration shared between Linux and macOS.
               common = { pkgs, ... }: {
                 environment.systemPackages = with pkgs; [
-                  hello
                 ];
               };
               # NixOS specific configuration
