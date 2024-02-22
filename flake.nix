@@ -39,11 +39,15 @@
       url = "git+ssh://git@github.com/fymen/secrets?ref=main";
       flake = false;
     };
+
+    # Devshell
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
   outputs = { self, ...} @ inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-      imports = [ inputs.nixos-flake.flakeModule ];
+      imports = [ inputs.treefmt-nix.flakeModule
+                  inputs.nixos-flake.flakeModule ];
 
       flake =
         let
@@ -141,5 +145,27 @@
               };
             };
           };
+      perSystem = { self', system, pkgs, lib, config, inputs', ... }: {
+        nixos-flake.primary-inputs = [
+          "nixpkgs"
+          "home-manager"
+          "nix-darwin"
+          "nixos-flake"
+          "nix-index-database"
+        ];
+
+        treefmt.config = {
+          projectRootFile = "flake.nix";
+          programs.nixpkgs-fmt.enable = true;
+        };
+
+        packages.default = self'.packages.activate;
+        devShells.default = pkgs.mkShell {
+          packages = [
+            pkgs.nixpkgs-fmt
+          ];
+        };
+        formatter = config.treefmt.build.wrapper;
+      };
     };
 }
