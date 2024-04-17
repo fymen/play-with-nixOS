@@ -19,5 +19,9 @@
     wqy_microhei
     arphic-uming
     arphic-ukai
+
+    lxgw-wenkai
+    source-han-serif
+    source-han-sans
   ];
 }

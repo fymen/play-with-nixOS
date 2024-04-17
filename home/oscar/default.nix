@@ -65,7 +65,7 @@ in {
     du-dust # Modernized "du"
     bat # Alternative to "cat"
     btop # Alternative to "top"
-    nvtop-amd # Monitor GPU process
+    nvtopPackages.amd # Monitor GPU process
     starship
     fd # Alternative to "find"
     lazygit # Magit alternative
@@ -193,7 +193,7 @@ in {
     # Replacement for ls
     eza = {
       enable = true;
-      enableAliases = true;
+      enableZshIntegration = true;
     };
 
     # Fuzzy finder
@@ -244,6 +244,19 @@ in {
     };
   };
 
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      # for flypy chinese input method
+      fcitx5-rime
+      # needed enable rime using configtool after installed
+      fcitx5-configtool
+      fcitx5-chinese-addons
+      # fcitx5-mozc    # japanese input method
+      fcitx5-gtk # gtk im module
+    ];
+  };
+
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
   # Manager then you have to manually source 'hm-session-vars.sh' located at
@@ -262,6 +275,11 @@ in {
   home.sessionVariables = {
     EDITOR = "${pkgs.vim}/bin/vim";
     DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+
   };
 
   # Let Home Manager install and manage itself.
