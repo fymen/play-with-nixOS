@@ -6,7 +6,7 @@
 }: {
   services.gpg-agent = {
     enable = true;
-    pinentryFlavor = "gtk2";
+    pinentryPackage = pkgs.pinentry-gtk2;
   };
 
   home.packages = with pkgs; [

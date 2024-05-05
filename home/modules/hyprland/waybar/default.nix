@@ -34,7 +34,7 @@
         on-scroll-down = "hyprctl dispatch workspace e-1";
       };
       "clock" = {
-        format = "{: %I:%M %p}";
+        format-alt = "{: %I:%M %p}";
         tooltip = false;
       };
       "hyprland/window" = {
@@ -59,8 +59,8 @@
 		    tooltip = false;
 		    format = " {}%";
 		    interval = 1;
-        on-scroll-up = "light -A 5";
-		    on-scroll-down = "light -U 5";
+        on-scroll-up = "brightnessctl  s +5";
+		    on-scroll-down = "brightnessctl  s 5-";
 	    };
       "network" = {
         format-icons = ["󰤯" "󰤟" "󰤢" "󰤥" "󰤨"];

@@ -58,7 +58,6 @@ in {
 
       MOZ_ENABLE_WAYLAND = "1"; # Firefox Wayland
       MOZ_DBUS_REMOTE = "1"; # Firefox wayland
-      GDK_BACKEND = "wayland";
 
       NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
 
