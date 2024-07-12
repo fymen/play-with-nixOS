@@ -2,7 +2,7 @@
   description = "NixOS Flake Configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin";
@@ -35,10 +35,10 @@
     nix-colors.url = "github:fymen/nix-colors/test";
 
     # Personal secrets
-    mysecrets = {
-      url = "git+ssh://git@github.com/fymen/secrets?ref=main";
-      flake = false;
-    };
+#    mysecrets = {
+    #      url = "git+ssh://git@github.com/fymen/secrets?ref=main";
+    #      flake = false;
+    #    };
 
     # Devshell
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -77,6 +77,7 @@
             # Configurations for Linux (NixOS) machines
             nixosConfigurations = {
               "laptop" = mkNixosConfig "oscar" "laptop";
+              "desktop" = mkNixosConfig "oscar" "desktop";
               "racknerd" = mkNixosConfig "hildar" "racknerd";
               "vm" = mkNixosConfig "oscar" "vm";
             };
@@ -136,8 +137,10 @@
               };
               # home-manager config specific to NixOS
               linux = {
-                imports = [inputs.nix-colors.homeManagerModule
-                           inputs.nur.hmModules.nur];
+                imports = [
+                  inputs.nix-colors.homeManagerModule
+                  inputs.nur.hmModules.nur
+                ];
               };
               # home-manager config specifi to Darwin
               darwin = {

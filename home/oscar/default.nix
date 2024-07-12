@@ -23,7 +23,7 @@ in {
     ../modules/chromium.nix
     ../modules/mpv.nix
     ../modules/zathura.nix
-    ../modules/gnupg.nix
+#    ../modules/gnupg.nix
     # ../modules/bitwarden.nix
     ../modules/password-store.nix
     ../modules/misc.nix
@@ -122,7 +122,7 @@ in {
     gcc
     cmake
     libtool
-    clang-tools_15
+#    clang-tools_15
 
     parallel
 
@@ -132,28 +132,24 @@ in {
 
     # Download
     deluge
-
     qrencode
-
     calibre
     zoom-us
     discord
     telegram-desktop
-
     spotify
-
     gnome.nautilus
 
     appimage-run
 
-    tor-browser
+    # tor-browser
 
-    easyeffects
+    # easyeffects
 
     alejandra
     statix
 
-    electrum
+   # electrum
 
     # Diagram Editor
     dia
@@ -170,7 +166,7 @@ in {
   };
 
   modules = {
-    editors = {
+   editors = {
       emacs.enable = true;
       emacs.personal.enable = false;
       emacs.service.enable = false;

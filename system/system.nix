@@ -3,16 +3,9 @@
   lib,
   ...
 }: {
-  # Set your time zone.
-  time.timeZone = "America/Toronto";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_CA.UTF-8";
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   nix = {
+    # settings.substituters = [ https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store ];
+    settings.substituters = [ "https://mirror.nju.edu.cn/nix-channels/store" ];
     settings.experimental-features = ["nix-command" "flakes"];
     settings.auto-optimise-store = true;
 
