@@ -4,14 +4,10 @@
   osConfig,
   pkgs,
   ...
-}: let
-  winManager = if osConfig.networking.hostName == "laptop" then "hyprland" else "i3";
-in {
+}:
+{
   imports = [
-    (if winManager == "hyprland"
-     then ../modules/hyprland
-     else ../modules/i3)
-
+    ../modules/i3
     ../modules/emacs
     ../modules/gtk.nix
     ../modules/tmux.nix
@@ -23,7 +19,7 @@ in {
     ../modules/chromium.nix
     ../modules/mpv.nix
     ../modules/zathura.nix
-#    ../modules/gnupg.nix
+    #    ../modules/gnupg.nix
     # ../modules/bitwarden.nix
     ../modules/password-store.nix
     ../modules/misc.nix
@@ -122,7 +118,7 @@ in {
     gcc
     cmake
     libtool
-#    clang-tools_15
+    #    clang-tools_15
 
     parallel
 
@@ -149,7 +145,7 @@ in {
     alejandra
     statix
 
-   # electrum
+    # electrum
 
     # Diagram Editor
     dia
@@ -166,13 +162,13 @@ in {
   };
 
   modules = {
-   editors = {
+    editors = {
       emacs.enable = true;
       emacs.personal.enable = false;
       emacs.service.enable = false;
     };
 
-    windowManager."${winManager}".enable = true;
+    windowManager."i3".enable = true;
 
     misc.enable = true;
   };

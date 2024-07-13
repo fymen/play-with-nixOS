@@ -13,7 +13,7 @@
       ./hardware-configuration.nix
       ../../system/system.nix
       ../../system/system-packages.nix
-      ../../system/window-systems
+      # ../../system/window-systems
       ../../system/fonts.nix
       ../../system/steam.nix
       # ../../system/tailscale.nix
@@ -69,25 +69,50 @@
     LC_TIME = "zh_CN.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+
   services.v2raya.enable = true;
 
-  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.modesetting.enable = true;
   boot.kernelParams = [ "nvidia-drm.fbdev=1" ];
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager = {
+    autoLogin.enable = false;
+    autoLogin.user = "oscar";
+
+    defaultSession = "none+i3";
+  };
 
   # Configure keymap in X11
   services.xserver = {
     xkb.layout = "us";
     xkb.variant = "";
+
+    enable = true;
+
+    videoDrivers = [ "nvidia" ];
+    displayManager = {
+      gdm = {
+        enable = true;
+      };
+    };
+
+    desktopManager.gnome.enable = true;
+    dpi = 137;
+    upscaleDefaultCursor = true;
+    windowManager = {
+      i3 = {
+        enable = true;
+        extraPackages = with pkgs; [
+          dmenu
+          i3lock
+          i3blocks
+        ];
+      };
+    };
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing.enable = false;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;

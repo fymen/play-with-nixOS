@@ -176,8 +176,8 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; if vertical height is over 2k, set to 192dpi otherwise leave at default
   (unless (< (display-pixel-height) 2000)
     (progn
-      (setq my/default-font-size 132)
-      (setq my/default-variable-font-size 132)
+      (setq my/default-font-size 62)
+      (setq my/default-variable-font-size 62)
       )
     )
 

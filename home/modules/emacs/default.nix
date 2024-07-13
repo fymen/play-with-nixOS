@@ -102,7 +102,7 @@ in {
         alwaysEnsure = true;
         alwaysTangle = true;
 
-        package = pkgs.emacs29-pgtk;
+        package = pkgs.emacs;
 
         # Optionally provide extra packages not in the configuration file.
         extraEmacsPackages = epkgs: [
