@@ -1839,8 +1839,8 @@ Use a prefix arg to get regular RET. "
 
                 \\XeTeXlinebreaklocale ``zh''
                 \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
-                \\newcommand\\fontnamehei{WenQuanYi Zen Hei}
-                \\newcommand\\fontnamesong{AR PL UMing CN}
+                \\newcommand\\fontnamehei{Source Han Sans SC Normal}
+                \\newcommand\\fontnamesong{Source Han Serif SC Light}
                 \\newcommand\\fontnamekai{AR PL KaitiM GB}
                 \\newcommand\\fontnamemono{FreeMono}
                 \\newcommand\\fontnameroman{FreeSans}
@@ -2238,7 +2238,7 @@ Generate QR code in Emacs.
   (savehist-mode))
 #+end_src
 
-** Start server or Restart Emacs
+** COMMENT Start server or Restart Emacs
 #+begin_src emacs-lisp :tangle yes :lexical no
 (server-start)
 #+end_src
@@ -2264,6 +2264,12 @@ Generate QR code in Emacs.
 #+begin_src emacs-lisp :lexical no
 (setq bookmark-save-flag 1) ;; save bookmarks on every change
 (setq bookmark-default-file (concat user-emacs-directory "/var/bookmark-default.el"))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
+(use-package opencc
+  :defer t
+  )
 #+end_src
 * References
 https://github.com/novoid/dot-emacs/blob/master/config.org

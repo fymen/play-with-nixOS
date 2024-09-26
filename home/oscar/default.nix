@@ -152,6 +152,8 @@
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation
+
+    opencc
   ];
 
   services.ssh-agent.enable = true;
