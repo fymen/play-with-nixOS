@@ -24,5 +24,7 @@
     gnumake
 
     lf                          # file manager
+
+    ntfs3g
   ];
 }
