@@ -10,17 +10,17 @@
     profiles.${config.home.username} = {
       isDefault = true;
       extensions = with config.nur.repos.rycee.firefox-addons; [
-        decentraleyes
-        ublock-origin
-        clearurls
-        sponsorblock
+#        decentraleyes
+#        ublock-origin
+#        clearurls
+#        sponsorblock
 
-        h264ify
-        df-youtube
+#        h264ify
+#        df-youtube
 
-        darkreader
-        dictionaries
-        grammarly
+#        darkreader
+#        dictionaries
+#        grammarly
       ];
       settings = {
         "browser.startup.homepage" = "https://search.nixos.org/packages";

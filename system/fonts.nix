@@ -6,9 +6,8 @@
 }:
 {
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode"
-                                    "JetBrainsMono"
-                                    "InconsolataLGC"]; })
+    nerd-fonts.fira-code
+    nerd-fonts.inconsolata-lgc
     open-sans
     source-sans-pro
     font-awesome

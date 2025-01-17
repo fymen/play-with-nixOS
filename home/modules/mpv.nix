@@ -1,6 +1,6 @@
 {
   programs.mpv = {
-    enable = true;
+    # enable = true;
     config = {
       vo = "gpu";
       profile = "gpu-hq";
@@ -11,8 +11,8 @@
       volume-max = 200;
       fs = true;
       screen = 0;
-      # save-position-on-quit = true;
-      osc = false;
+      save-position-on-quit = true;
+      osc = true;
 
       scale = "ewa_lanczossharp";
       cscale = "ewa_lanczossharp";

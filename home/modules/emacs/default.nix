@@ -1,3 +1,4 @@
+
 {
   inputs,
   config,
@@ -150,7 +151,7 @@ in {
 
       popweb-py-pkgs
 
-      chgcursor-el
+#      chgcursor-el
       popweb
 
       (pkgs.writeShellScriptBin "espad" ''

@@ -41,7 +41,7 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "23.11"; # Please read the comment before changing.
+  home.stateVersion = "25.05"; # Please read the comment before changing.
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -84,7 +84,7 @@
 
     # Image viewer
     feh
-    gnome.eog
+    eog
     # Editor
 
     # Shells
@@ -130,11 +130,11 @@
     deluge
     qrencode
     calibre
-    zoom-us
-    discord
+#    zoom-us
+#    discord
     telegram-desktop
-    spotify
-    gnome.nautilus
+#    spotify
+    nautilus
 
     appimage-run
 
@@ -158,7 +158,7 @@
 
   services.ssh-agent.enable = true;
   services.udiskie = {
-    enable = true;
+    enable = false;
     automount = true;
     tray = "always";
   };

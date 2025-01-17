@@ -21,10 +21,14 @@
     xz
     p7zip
 
+    unrar
+
     gnumake
 
     lf                          # file manager
 
     ntfs3g
+
+    v2rayn
   ];
 }
