@@ -30,5 +30,6 @@
     ntfs3g
 
     v2rayn
+    greetd.tuigreet
   ];
 }
