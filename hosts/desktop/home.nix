@@ -35,6 +35,9 @@ in
     ../../config/misc.nix
   ];
 
+
+  stylix.targets.rofi.enable = false;
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "${username}";
@@ -186,6 +189,7 @@ in
     opencc
 
     kitty
+    v2rayn
   ];
 
   services.ssh-agent.enable = true;
@@ -324,7 +328,7 @@ in
       # ];
       image = [
         {
-          path = "/home/${username}/Pictures/Wallpapers/zaney-wallpaper.jpg";
+          path = "/home/${username}/Pictures/Wallpapers/sylvanas_1500x2070.jpeg";
           size = 150;
           border_size = 4;
           border_color = "rgb(0C96F9)";

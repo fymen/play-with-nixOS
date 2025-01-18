@@ -29,7 +29,11 @@
 
     ntfs3g
 
-    v2rayn
     greetd.tuigreet
+    yad
+    swappy
+    swww
+    grim
+    slurp
   ];
 }
