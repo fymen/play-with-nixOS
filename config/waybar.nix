@@ -23,18 +23,20 @@ with lib;
         modules-center = [ "hyprland/window" ];
         modules-left = [
           "custom/startmenu"
-          "hyprland/workspaces"
-          "pulseaudio"
+
           "cpu"
           "memory"
-          "idle_inhibitor"
+          "hyprland/workspaces"
+
         ];
         modules-right = [
-          "custom/hyprbindings"
-          "custom/notification"
-          "custom/exit"
-          "battery"
           "tray"
+          "pulseaudio"
+          # "custom/hyprbindings"
+          "custom/notification"
+          "battery"
+          "idle_inhibitor"
+          "custom/exit"
           "clock"
         ];
 
@@ -236,7 +238,16 @@ with lib;
         tooltip label {
           color: #${config.stylix.base16Scheme.base08};
         }
-        #window, #pulseaudio, #cpu, #memory, #idle_inhibitor {
+        #window {
+          font-weight: bold;
+          margin: 4px 0px;
+          margin-left: 7px;
+          padding: 0px 18px;
+          background: #${config.stylix.base16Scheme.base04};
+          color: #${config.stylix.base16Scheme.base00};
+          border-radius: 12px;
+        }
+        #cpu, #memory {
           font-weight: bold;
           margin: 4px 0px;
           margin-left: 7px;
@@ -254,7 +265,7 @@ with lib;
           border-radius: 0px 0px 40px 0px;
         }
         #custom-hyprbindings, #network, #battery,
-        #custom-notification, #tray, #custom-exit {
+        #custom-notification, #tray, #custom-exit, #idle_inhibitor, #pulseaudio {
           font-weight: bold;
           background: #${config.stylix.base16Scheme.base0F};
           color: #${config.stylix.base16Scheme.base00};

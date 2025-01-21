@@ -1,5 +1,13 @@
-{ pkgs, config, ... }:
-
+{ pkgs,
+  config,
+  host,
+  ...
+}:
+let
+  inherit (import ../hosts/${host}/variables.nix)
+    wallpaper
+  ;
+in
 {
   programs = {
     rofi = {
@@ -65,7 +73,7 @@
                 "dummy"
                 "mode-switcher"
               ];
-              background-image = mkLiteral ''url("~/Pictures/Wallpapers/naraka.jpeg", width)'';
+              background-image = mkLiteral ''url("~/Pictures/Wallpapers/${wallpaper}", width)'';
             };
             "entry" = {
               enabled = true;

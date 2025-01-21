@@ -8,7 +8,13 @@
   lib,
   username,
   ...
-}: {
+}:
+let
+  inherit (import ./variables.nix)
+    wallpaper
+  ;
+in
+{
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -43,7 +49,8 @@
   # Styling Options
   stylix = {
     enable = true;
-    image = ../../config/wallpapers/naraka.jpeg;
+    image = ../../config/wallpapers/${wallpaper};
+
     # base16Scheme = {
     #   base00 = "232136";
     #   base01 = "2a273f";
@@ -62,6 +69,7 @@
     #   base0E = "f6c177";
     #   base0F = "56526e";
     # };
+
     polarity = "dark";
     opacity.terminal = 0.8;
     cursor.package = pkgs.bibata-cursors;
