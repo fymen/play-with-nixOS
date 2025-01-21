@@ -257,7 +257,7 @@ with lib;
           border-radius: 24px 10px 24px 10px;
         }
         #custom-startmenu {
-          color: #${config.stylix.base16Scheme.base0B};
+          color: #${config.stylix.base16Scheme.base00};
           background: #${config.stylix.base16Scheme.base02};
           font-size: 28px;
           margin: 0px;

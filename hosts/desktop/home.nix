@@ -94,7 +94,7 @@ in
     du-dust # Modernized "du"
     bat # Alternative to "cat"
     btop # Alternative to "top"
-    nvtopPackages.amd # Monitor GPU process
+    nvtopPackages.nvidia # Monitor GPU process
     starship
     fd # Alternative to "find"
     lazygit # Magit alternative
