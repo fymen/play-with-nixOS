@@ -4,33 +4,38 @@
 {
   config,
   pkgs,
-  flake,
+  inputs,
   lib,
+  host,
+  username,
   ...
-}: {
+}:
+let
+  inherit (import ./variables.nix)
+    wallpaper
+  ;
+in
+{
   imports =
-    [
-      # Include the results of the hardware scan.
+    [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../system/system.nix
       ../../system/system-packages.nix
-      ../../system/window-systems
+      # ../../system/window-systems
       ../../system/fonts.nix
       ../../system/steam.nix
-      ../../system/tailscale.nix
+      # ../../system/tailscale.nix
       # ../../system/virtualisation.nix
+      ../../modules/amd-drivers.nix
+      ../../modules/intel-drivers.nix
+      ../../modules/nvidia-drivers.nix
+      ../../modules/nvidia-prime-drivers.nix
 
-      ./secrets
-    ]
-    ++ (with flake.inputs.nixos-hardware.nixosModules; [
-      common-cpu-amd-pstate
-      common-gpu-amd
-      common-pc-ssd
-      asus-battery
-    ]);
+      # ./secrets
+    ];
 
   boot.loader = {
-    timeout = 2;
+    timeout = 3;
 
     grub = {
       enable = true;
@@ -42,16 +47,70 @@
   };
   boot.initrd.kernelModules = [];
 
-  networking.hostName = "laptop"; # Define your hostname.
+  networking.hostName = "${host}"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  time.hardwareClockInLocalTime = true;
 
+  # Styling Options
+  stylix = {
+    enable = true;
+    image = ../../config/wallpapers/${wallpaper};
+
+    # base16Scheme = {
+    #   base00 = "232136";
+    #   base01 = "2a273f";
+    #   base02 = "393552";
+    #   base03 = "6e6a86";
+    #   base04 = "908caa";
+    #   base05 = "e0def4";
+    #   base06 = "e0def4";
+    #   base07 = "56526e";
+    #   base08 = "eb6f92";
+    #   base09 = "f6c177";
+    #   base0A = "ea9a97";
+    #   base0B = "3e8fb0";
+    #   base0C = "9ccfd8";
+    #   base0D = "c4a7e7";
+    #   base0E = "f6c177";
+    #   base0F = "56526e";
+    # };
+
+    polarity = "dark";
+    opacity.terminal = 0.8;
+    cursor.package = pkgs.bibata-cursors;
+    cursor.name = "Bibata-Modern-Ice";
+    cursor.size = 24;
+    fonts = {
+      monospace = {
+        package = pkgs.nerd-fonts.jetbrains-mono;
+        name = "JetBrainsMono Nerd Font Mono";
+      };
+      sansSerif = {
+        package = pkgs.montserrat;
+        name = "Montserrat";
+      };
+      serif = {
+        package = pkgs.montserrat;
+        name = "Montserrat";
+      };
+      sizes = {
+        applications = 12;
+        terminal = 15;
+        desktop = 11;
+        popups = 12;
+      };
+    };
+  };
+
+
+
+
+  # Configure network proxy if necessary
+  #networking.proxy.default = "http://127.0.0.1:20171/";
+  #networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   # Enable networking
   networking.networkmanager.enable = true;
-
   security = {
     sudo.wheelNeedsPassword = false;
 
@@ -60,39 +119,98 @@
 
   environment.localBinInPath = true;
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  # Set your time zone.
+  time.timeZone = "Asia/Shanghai";
 
-  hardware = {
-    enableRedistributableFirmware = true;
-    # Load AMD CPU microcode
-    cpu.amd.updateMicrocode = true;
-    # AMD GPU Configuration
-    amdgpu = {
-      amdvlk = true;
-      opencl = true;
-    };
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
 
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        libva-utils
-        libGL
-        rocmPackages.clr.icd
-      ];
-      setLdLibraryPath = true;
-    };
-    # Battery
-    asus.battery.chargeUpto = 85;
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "zh_CN.UTF-8";
+    LC_IDENTIFICATION = "zh_CN.UTF-8";
+    LC_MEASUREMENT = "zh_CN.UTF-8";
+    LC_MONETARY = "zh_CN.UTF-8";
+    LC_NAME = "zh_CN.UTF-8";
+    LC_NUMERIC = "zh_CN.UTF-8";
+    LC_PAPER = "zh_CN.UTF-8";
+    LC_TELEPHONE = "zh_CN.UTF-8";
+    LC_TIME = "zh_CN.UTF-8";
   };
 
-  powerManagement.enable = true;
+
+  services.v2raya.enable = false;
+
+
+  # Enable OpenGL
+  hardware.graphics.enable = true;
+
+  # Extra Module Options
+  drivers.amdgpu.enable = true;
+  drivers.nvidia-prime = {
+    enable = false;
+    intelBusID = "";
+    nvidiaBusID = "";
+  };
+  drivers.intel.enable = false;
+
+  drivers.nvidia.enable = false;
+
+  # Enable the GNOME Desktop Environment.
+  services.displayManager = {
+    autoLogin.enable = false;
+    autoLogin.user = "oscar";
+
+    defaultSession = "none+i3";
+  };
+
+  # Configure keymap in X11
+  services.xserver = {
+    xkb.layout = "us";
+    xkb.variant = "";
+
+    enable = false;
+
+    displayManager = {
+      gdm = {
+        enable = true;
+      };
+    };
+
+    desktopManager.gnome.enable = true;
+    dpi = 137;
+    upscaleDefaultCursor = true;
+    windowManager = {
+      i3 = {
+        enable = true;
+        extraPackages = with pkgs; [
+          dmenu
+          i3lock
+          i3blocks
+        ];
+      };
+    };
+  };
+
+  services.greetd = {
+    enable = true;
+    vt = 3;
+    settings = {
+      default_session = {
+        # Wayland Desktop Manager is installed only for user ryan via home-manager!
+        user = "${username}";
+        # .wayland-session is a script generated by home-manager, which links to the current wayland compositor(sway/hyprland or others).
+        # with such a vendor-no-locking script, we can switch to another wayland compositor without modifying greetd's config here.
+        # command = "$HOME/.wayland-session"; # start a wayland session directly without a login manager
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland"; # start Hyprland with a TUI login manager
+      };
+    };
+  };
+
+  # Enable CUPS to print documents.
+  services.printing.enable = false;
 
   # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -111,18 +229,23 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.oscar = {
+  users.users."${username}" = {
     isNormalUser = true;
-    description = "oscar";
-    # linger = true;              # Start user services before login
-    extraGroups = ["networkmanager" "wheel"];
+    description = "${username}";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+      #  thunderbird
+    ];
     shell = pkgs.zsh;
   };
+
+  # Install firefox.
+  programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = [ flake.inputs.emacs-overlay.overlay ];
+    overlays = [ inputs.emacs-overlay.overlay ];
   };
 
   programs.nix-ld.enable = true;
@@ -170,16 +293,16 @@
     };
   };
 
-  modules.windowSystem.wayland.enable = true;
-  modules.tailscale = {
-    enable = true;
-    routingFeature = "client";
-    autoprovision = {
-      enable = true;
-      cmd = "${pkgs.tailscale}/bin/tailscale up";
-      # options = [ "--exit-node-allow-lan-access" "--exit-node=" ];
-    };
-  };
+  #modules.windowSystem.wayland.enable = true;
+  # modules.tailscale = {
+  #   enable = true;
+  #   routingFeature = "client";
+  #   autoprovision = {
+  #     enable = true;
+  #     cmd = "${pkgs.tailscale}/bin/tailscale up";
+  #     # options = [ "--exit-node-allow-lan-access" "--exit-node=" ];
+  #   };
+  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -187,17 +310,12 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Optimize storage
-  # You can also manually optimize the store via:
-  #    nix-store --optimise
-  # Refer to the following link for more details:
-  # https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-auto-optimise-store
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
+
 }
