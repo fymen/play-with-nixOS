@@ -206,6 +206,7 @@ with lib;
   home.packages = [
     (import ../scripts/rofi-launcher.nix { inherit pkgs; })
     (import ../scripts/screenshootin.nix { inherit pkgs; })
+    (import ../scripts/task-waybar.nix { inherit pkgs; })
     (import ../scripts/list-hypr-bindings.nix {inherit pkgs;
                                                inherit host;
                                                  })

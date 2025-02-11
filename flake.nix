@@ -20,15 +20,11 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-
-    # Colorscheme
-    nix-colors.url = "github:fymen/nix-colors/test";
-
     # Personal secrets
-#    mysecrets = {
-    #      url = "git+ssh://git@github.com/fymen/secrets?ref=main";
-    #      flake = false;
-    #    };
+    mysecrets = {
+      url = "git+ssh://git@github.com/fymen/secrets?ref=main";
+      flake = false;
+    };
 
     # Devshell
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -52,6 +48,7 @@
             modules = [
               ./hosts/${host}/configuration.nix
               inputs.stylix.nixosModules.stylix
+              inputs.agenix.nixosModules.default
               home-manager.nixosModules.home-manager
               {
                 home-manager.extraSpecialArgs = {

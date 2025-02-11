@@ -15,6 +15,7 @@ in
 
     ../../config/hyprland.nix
     ../../config/waybar.nix
+    ../../config/swaync.nix
     ../../config/rofi.nix
     ../../config/wlogout.nix
 
@@ -37,6 +38,7 @@ in
 
 
   stylix.targets.rofi.enable = false;
+  stylix.targets.swaync.enable = false;
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -190,6 +192,8 @@ in
 
     kitty
     v2rayn
+
+    swaynotificationcenter
   ];
 
   services.ssh-agent.enable = true;

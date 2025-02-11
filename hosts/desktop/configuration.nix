@@ -30,7 +30,7 @@ in
       ../../modules/nvidia-drivers.nix
       ../../modules/nvidia-prime-drivers.nix
 
-      # ./secrets
+      ./secrets
     ];
 
   boot.loader = {
@@ -47,7 +47,7 @@ in
   boot.initrd.kernelModules = [];
 
   networking.hostName = "desktop"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
 
   time.hardwareClockInLocalTime = true;
 
