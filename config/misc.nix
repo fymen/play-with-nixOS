@@ -26,6 +26,11 @@ in {
       default = "${forgeUrl.default}/fymen/roaming.git";
     };
 
+    configSecretsRepoUrl = mkOption {
+      type = types.str;
+      default = "${forgeUrl.default}/fymen/secrets.git";
+    };
+
     configPassRepoUrl = mkOption {
       type = types.str;
       default = "${forgeUrl.default}/fymen/pcodes.git";
@@ -52,6 +57,10 @@ in {
 
         if [ ! -d "$HOME/projects/personal/blog" ]; then
            git clone ${cfg.configRoamRepoUrl} $HOME/projects/personal/blog
+        fi
+
+        if [ ! -d "$HOME/projects/personal/secrets" ]; then
+           git clone ${cfg.configSecretsRepoUrl} $HOME/projects/personal/secrets
         fi
 
         if [ ! -d "$HOME/.password-store" ]; then

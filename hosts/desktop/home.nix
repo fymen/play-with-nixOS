@@ -30,7 +30,7 @@ in
     ../../config/chromium.nix
     ../../config/mpv.nix
     # ../../config/zathura.nix
-    #    ../../config/gnupg.nix
+    ../../config/gnupg.nix
     # ../../config/bitwarden.nix
     ../../config/password-store.nix
     ../../config/misc.nix
@@ -194,6 +194,7 @@ in
     v2rayn
 
     swaynotificationcenter
+    wl-clipboard
   ];
 
   services.ssh-agent.enable = true;
