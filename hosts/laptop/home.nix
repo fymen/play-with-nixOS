@@ -15,6 +15,7 @@ in
 
     ../../config/hyprland.nix
     ../../config/waybar.nix
+    ../../config/swaync.nix
     ../../config/rofi.nix
     ../../config/wlogout.nix
 
@@ -29,14 +30,16 @@ in
     ../../config/chromium.nix
     ../../config/mpv.nix
     # ../../config/zathura.nix
-    #    ../../config/gnupg.nix
+    ../../config/gnupg.nix
     # ../../config/bitwarden.nix
     ../../config/password-store.nix
+    ../../config/fcitx.nix
     ../../config/misc.nix
   ];
 
 
   stylix.targets.rofi.enable = false;
+  stylix.targets.swaync.enable = false;
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -55,29 +58,8 @@ in
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   # Place Files Inside Home Directory
-  home.file."Pictures/Wallpapers" = {
-    source = ../../config/wallpapers;
-    recursive = true;
-  };
-  home.file.".config/wlogout/icons" = {
-    source = ../../config/wlogout;
-    recursive = true;
-  };
   # home.file.".face.icon".source = ../../config/face.jpg;
   # home.file.".config/face.jpg".source = ../../config/face.jpg;
-  home.file.".config/swappy/config".text = ''
-    [Default]
-    save_dir=/home/${username}/Pictures/Screenshots
-    save_filename_format=swappy-%Y%m%d-%H%M%S.png
-    show_panel=false
-    line_size=5
-    text_size=20
-    text_font=Ubuntu
-    paint_mode=brush
-    early_exit=true
-    fill_shape=false
-  '';
-
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
@@ -272,19 +254,6 @@ in
     };
   };
 
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      # for flypy chinese input method
-      fcitx5-rime
-      # needed enable rime using configtool after installed
-      fcitx5-configtool
-      fcitx5-chinese-addons
-      # fcitx5-mozc    # japanese input method
-      fcitx5-gtk # gtk im module
-    ];
-  };
-
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. If you don't want to manage your shell through Home
   # Manager then you have to manually source 'hm-session-vars.sh' located at
@@ -303,57 +272,6 @@ in
   home.sessionVariables = {
     EDITOR = "${pkgs.vim}/bin/vim";
     DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
-
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-
-  };
-
-  programs.hyprlock = {
-    enable = true;
-    settings = {
-      general = {
-        disable_loading_bar = true;
-        grace = 10;
-        hide_cursor = true;
-        no_fade_in = false;
-      };
-      # background = [
-      #   {
-      #     path = "/home/${username}/Pictures/Wallpapers/city-view.jpeg";
-      #     blur_passes = 3;
-      #     blur_size = 8;
-      #   }
-      # ];
-      image = [
-        {
-          path = "/home/${username}/Pictures/Wallpapers/sylvanas_1500x2070.jpeg";
-          size = 150;
-          border_size = 4;
-          border_color = "rgb(0C96F9)";
-          rounding = -1; # Negative means circle
-          position = "0, 200";
-          halign = "center";
-          valign = "center";
-        }
-      ];
-      # input-field = [
-      #   {
-      #     size = "200, 50";
-      #     position = "0, -80";
-      #     monitor = "";
-      #     dots_center = true;
-      #     fade_on_empty = false;
-      #     font_color = "rgb(CFE6F4)";
-      #     inner_color = "rgb(657DC2)";
-      #     outer_color = "rgb(0D0E15)";
-      #     outline_thickness = 5;
-      #     placeholder_text = "Password...";
-      #     shadow_passes = 2;
-      #   }
-      # ];
-    };
   };
 
   # Let Home Manager install and manage itself.

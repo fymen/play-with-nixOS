@@ -216,4 +216,69 @@ with lib;
                                                  })
   ];
 
+  home.file."Pictures/Wallpapers" = {
+    source = ./wallpapers;
+    recursive = true;
+  };
+
+  # # Screenshot
+  home.file.".config/swappy/config".text = ''
+    [Default]
+    save_dir=/home/${username}/Pictures/Screenshots
+    save_filename_format=swappy-%Y%m%d-%H%M%S.png
+    show_panel=false
+    line_size=5
+    text_size=20
+    text_font=Ubuntu
+    paint_mode=brush
+    early_exit=true
+    fill_shape=false
+  '';
+
+  programs.hyprlock = {
+    enable = true;
+    settings = {
+      general = {
+        disable_loading_bar = true;
+        grace = 10;
+        hide_cursor = true;
+        no_fade_in = false;
+      };
+      # background = [
+      #   {
+      #     path = "/home/${username}/Pictures/Wallpapers/city-view.jpeg";
+      #     blur_passes = 3;
+      #     blur_size = 8;
+      #   }
+      # ];
+      image = [
+        {
+          path = "/home/${username}/Pictures/Wallpapers/sylvanas_1500x2070.jpeg";
+          size = 150;
+          border_size = 4;
+          border_color = "rgb(0C96F9)";
+          rounding = -1; # Negative means circle
+          position = "0, 200";
+          halign = "center";
+          valign = "center";
+        }
+      ];
+      # input-field = [
+      #   {
+      #     size = "200, 50";
+      #     position = "0, -80";
+      #     monitor = "";
+      #     dots_center = true;
+      #     fade_on_empty = false;
+      #     font_color = "rgb(CFE6F4)";
+      #     inner_color = "rgb(657DC2)";
+      #     outer_color = "rgb(0D0E15)";
+      #     outline_thickness = 5;
+      #     placeholder_text = "Password...";
+      #     shadow_passes = 2;
+      #   }
+      # ];
+    };
+  };
+
 }

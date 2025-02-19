@@ -1,6 +1,8 @@
-{ config, ... }:
+{ pkgs, config, ... }:
 
 {
+  home.packages = [ pkgs.swaynotificationcenter ];
+
   home.file.".config/swaync/config.json".text = ''
     {
       "$schema": "/etc/xdg/swaync/configSchema.json",
