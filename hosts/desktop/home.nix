@@ -195,6 +195,7 @@ in
 
     swaynotificationcenter
     wl-clipboard
+    cliphist
   ];
 
   services.ssh-agent.enable = true;

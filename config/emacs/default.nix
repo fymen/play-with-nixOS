@@ -103,7 +103,7 @@ in {
         alwaysEnsure = true;
         alwaysTangle = true;
 
-        package = pkgs.emacs;
+        package = pkgs.emacs-pgtk;
 
         # Optionally provide extra packages not in the configuration file.
         extraEmacsPackages = epkgs: [
@@ -124,7 +124,7 @@ in {
 
     services.emacs = mkIf cfg.service.enable {
       enable = true;
-      package = pkgs.emacs;
+      package = pkgs.emacs-pgtk;
       startWithUserSession = "graphical";
     };
 

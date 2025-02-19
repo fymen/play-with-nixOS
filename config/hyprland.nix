@@ -47,6 +47,8 @@ with lib;
           exec-once = killall -q swaync;sleep .5 && swaync
           exec-once = nm-applet --indicator
           exec-once = lxqt-policykit-agent
+          exec-once = wl-paste --type text --watch cliphist store # Stores only text data
+          exec-once = wl-paste --type image --watch cliphist store # Stores only image data
           exec-once = sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/${wallpaper}
           monitor=,preferred,auto,1
           ${extraMonitorSettings}
@@ -123,7 +125,9 @@ with lib;
             preserve_split = true
           }
           bind = ${modifier},Return,exec,${terminal}
-          bind = ${modifier}SHIFT,Return,exec,rofi-launcher
+          bind = ${modifier}SHIFT,Return,exec,/run/current-system/sw/bin/zsh -c rofi-launcher
+          bind = ${modifier}SHIFT,P,exec,rofi-pass
+          bind = ${modifier},Y,exec,cliphist list | rofi -dmenu | cliphist decode | wl-copy
           bind = ${modifier}SHIFT,W,exec,web-search
           bind = ${modifier}ALT,W,exec,wallsetter
           bind = ${modifier}SHIFT,N,exec,swaync-client -rs
@@ -142,7 +146,7 @@ with lib;
           bind = ${modifier}SHIFT,I,togglesplit,
           bind = ${modifier},F,fullscreen,
           bind = ${modifier}SHIFT,F,togglefloating,
-          bind = ${modifier}SHIFT,C,exit,
+          bind = ${modifier}SHIFT,ESCAPE,exit,
           bind = ${modifier}SHIFT,left,movewindow,l
           bind = ${modifier}SHIFT,right,movewindow,r
           bind = ${modifier}SHIFT,up,movewindow,u
