@@ -137,7 +137,7 @@ in
   };
 
 
-  services.v2raya.enable = false;
+  services.v2raya.enable = true;
 
 
   # Enable OpenGL
@@ -244,6 +244,7 @@ in
   # Allow unfree packages
   nixpkgs = {
     config.allowUnfree = true;
+    config.cudaSupport = true;
     overlays = [ inputs.emacs-overlay.overlay ];
   };
 

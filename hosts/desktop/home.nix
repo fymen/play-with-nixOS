@@ -40,6 +40,7 @@ in
 
   stylix.targets.rofi.enable = false;
   stylix.targets.swaync.enable = false;
+  stylix.targets.emacs.enable = false;
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -171,11 +172,18 @@ in
     opencc
 
     kitty
-    v2rayn
+    v2raya
 
     wl-clipboard
     cliphist
+
+    freecad-wayland
   ];
+
+  services.ollama = {
+    enable = true;
+    acceleration = "cuda";
+  };
 
   services.ssh-agent.enable = true;
   services.udiskie = {
@@ -225,37 +233,37 @@ in
     };
   };
 
-  xdg.mimeApps = {
-    enable = true;
+  # xdg.mimeApps = {
+  #   enable = true;
 
-    associations.added = {
-      "image/png" = "feh.desktop";
-    };
+  #   associations.added = {
+  #     "image/png" = "feh.desktop";
+  #   };
 
-    defaultApplications = {
-      "application/pdf" = ["org.gnome.Evince.desktop"];
-      "text/html" = "firefox.desktop";
-      "application/xhtml+xml" = "firefox.desktop";
-      "application/vnd.mozilla.xul+xml" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-      "x-scheme-handler/about" = "firefox.desktop";
-      "x-scheme-handler/unknown" = "firefox.desktop";
-      "default-web-browser" = "firefox.desktop";
-      "default-url-scheme-handler" = "firefox.desktop";
-      "scheme-handler/http" = "firefox.desktop";
-      "scheme-handler/https" = "firefox.desktop";
-      "default-url-scheme-handler/http" = "firefox.desktop";
-      "default-url-scheme-handler/https" = "firefox.desktop";
+  #   defaultApplications = {
+  #     "application/pdf" = ["org.gnome.Evince.desktop"];
+  #     "text/html" = "firefox.desktop";
+  #     "application/xhtml+xml" = "firefox.desktop";
+  #     "application/vnd.mozilla.xul+xml" = "firefox.desktop";
+  #     "x-scheme-handler/http" = "firefox.desktop";
+  #     "x-scheme-handler/https" = "firefox.desktop";
+  #     "x-scheme-handler/about" = "firefox.desktop";
+  #     "x-scheme-handler/unknown" = "firefox.desktop";
+  #     "default-web-browser" = "firefox.desktop";
+  #     "default-url-scheme-handler" = "firefox.desktop";
+  #     "scheme-handler/http" = "firefox.desktop";
+  #     "scheme-handler/https" = "firefox.desktop";
+  #     "default-url-scheme-handler/http" = "firefox.desktop";
+  #     "default-url-scheme-handler/https" = "firefox.desktop";
 
-      "x-scheme-handler/magnet" = "deluge.desktop";
+  #     "x-scheme-handler/magnet" = "deluge.desktop";
 
-      "image/png" = "org.gnome.eog.desktop";
+  #     "image/png" = "org.gnome.eog.desktop";
 
-      "video/x-matroska" = "mpv.desktop";
-      "x-scheme-handler/tg" = "userapp-Telegram Desktop-FHZGI2.desktop";
-    };
-  };
+  #     "video/x-matroska" = "mpv.desktop";
+  #     "x-scheme-handler/tg" = "userapp-Telegram Desktop-FHZGI2.desktop";
+  #   };
+  # };
 
 
   # Home Manager can also manage your environment variables through
