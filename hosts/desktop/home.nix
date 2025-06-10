@@ -145,7 +145,7 @@ in
     # Download
     deluge
     qrencode
-    calibre
+    # calibre
     #    zoom-us
     #    discord
     telegram-desktop
@@ -154,7 +154,7 @@ in
 
     appimage-run
 
-    # tor-browser
+    tor-browser
 
     # easyeffects
 
@@ -176,8 +176,6 @@ in
 
     wl-clipboard
     cliphist
-
-    freecad-wayland
   ];
 
   services.ollama = {

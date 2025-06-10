@@ -72,13 +72,13 @@ with lib;
             sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
             accel_profile = flat
           }
-          windowrule = noborder,^(wofi)$
-          windowrule = center,^(wofi)$
-          windowrule = center,^(steam)$
-          windowrule = float, nm-connection-editor|blueman-manager
-          windowrule = float, swayimg|vlc|Viewnior|pavucontrol
-          windowrule = float, nwg-look|qt5ct|mpv
-          windowrule = float, zoom
+          windowrulev2 = noborder,title:^(wofi)$
+          windowrulev2 = center,title:^(wofi)$
+          windowrulev2 = center,title:^(steam)$
+          windowrulev2 = float, title:^(nm-connection-editor|blueman-manager)
+          windowrulev2 = float, title:^(swayimg|vlc|Viewnior|pavucontrol)
+          windowrulev2 = float, title:^(nwg-look|qt5ct|mpv)
+          windowrulev2 = float, title:^(zoom)
           windowrulev2 = stayfocused, title:^()$,class:^(steam)$
           windowrulev2 = minsize 1 1, title:^()$,class:^(steam)$
           windowrulev2 = opacity 0.9 0.7, class:^(Brave)$

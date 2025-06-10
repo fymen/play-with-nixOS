@@ -351,12 +351,17 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   (global-set-key [remap query-replace] 'anzu-query-replace))
 #+end_src
 ** Mode line
-#+begin_src emacs-lisp :tangle yes :lexical no
+#+begin_src emacs-lisp :tangle no :lexical no
 (use-package mini-echo
   :config
   (mini-echo-mode))
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package mini-modeline
+  :config
+  (mini-modeline-mode t))
+#+end_src
 ** Open newline & move text
 #+begin_src emacs-lisp :tangle yes :lexical no
 (defun scroll-up-one-line()
