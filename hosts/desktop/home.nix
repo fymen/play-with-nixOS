@@ -41,6 +41,7 @@ in
   stylix.targets.rofi.enable = false;
   stylix.targets.swaync.enable = false;
   stylix.targets.emacs.enable = false;
+  stylix.targets.fcitx5.enable = false;
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -74,7 +75,7 @@ in
 
     mesa
 
-    du-dust # Modernized "du"
+    dust # Modernized "du"
     bat # Alternative to "cat"
     btop # Alternative to "top"
     nvtopPackages.nvidia # Monitor GPU process
@@ -145,7 +146,7 @@ in
     # Download
     deluge
     qrencode
-    # calibre
+    calibre
     #    zoom-us
     #    discord
     telegram-desktop
@@ -224,8 +225,8 @@ in
     ssh = {
       enable = true;
       extraConfig = ''
-        Host racknerd
-          HostName 23.95.85.103
+        Host vps
+          HostName 47.79.20.252
           Port 22
       '';
     };

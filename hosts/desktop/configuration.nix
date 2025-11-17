@@ -136,6 +136,14 @@ in
     LC_TIME = "zh_CN.UTF-8";
   };
 
+  # i18n.inputMethod = {
+  #   enable = true;
+  #   type = "ibus";
+  #   ibus.engines = with pkgs.ibus-engines; [
+  #     libpinyin
+  #     rime
+  #   ];
+  # };
 
   services.v2raya.enable = true;
 
@@ -169,13 +177,6 @@ in
 
     enable = false;
 
-    displayManager = {
-      gdm = {
-        enable = true;
-      };
-    };
-
-    desktopManager.gnome.enable = true;
     dpi = 137;
     upscaleDefaultCursor = true;
     windowManager = {
@@ -190,9 +191,16 @@ in
     };
   };
 
+  services.displayManager = {
+    gdm = {
+      enable = true;
+    };
+  };
+
+  services.desktopManager.gnome.enable = true;
+
   services.greetd = {
     enable = true;
-    vt = 3;
     settings = {
       default_session = {
         # Wayland Desktop Manager is installed only for user ryan via home-manager!
@@ -244,13 +252,13 @@ in
   # Allow unfree packages
   nixpkgs = {
     config.allowUnfree = true;
-    config.cudaSupport = true;
+    config.cudaSupport = false;
     overlays = [ inputs.emacs-overlay.overlay ];
   };
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
-    clang-tools_15
+    clang-tools
   ];
 
   # List packages installed in system profile. To search, run:

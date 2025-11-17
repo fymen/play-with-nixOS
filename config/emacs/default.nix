@@ -23,7 +23,7 @@ with lib; let
 
   pwd = "${config.home.homeDirectory}/projects/personal/play-with-nixOS/home/modules/emacs";
 
-  chgcursor-el = pkgs.emacsPackages.trivialBuild rec {
+  chgcursor-el = pkgs.emacs.pkgs.trivialBuild rec {
     pname = "cursor-chg";
     version = "1.0";
     src = fetchurl {
@@ -31,7 +31,7 @@ with lib; let
       sha256 = "1zmwh0z4g6khb04lbgga263pqa51mfvs0wfj3y85j7b08f2lqnqn";
     };
   };
-  popweb = pkgs.emacsPackages.trivialBuild rec {
+  popweb = pkgs.emacs.pkgs.trivialBuild rec {
     pname = "popweb";
     version = "1.0";
     src = fetchFromGitHub {

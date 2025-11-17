@@ -193,7 +193,6 @@ in
 
   services.greetd = {
     enable = true;
-    vt = 3;
     settings = {
       default_session = {
         # Wayland Desktop Manager is installed only for user ryan via home-manager!
@@ -250,7 +249,7 @@ in
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
-    clang-tools_15
+    clang-tools
   ];
 
   # List packages installed in system profile. To search, run:

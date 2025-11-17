@@ -70,3 +70,14 @@ https://github.com/hlissner/dotfiles
 https://github.com/shaunsingh/nix-darwin-dotfiles
 
 https://github.com/HirschBerge/Public-dots
+
+*  VPS deploy
+Deploy  ssh public key to server:
+#+begin_src shell
+ssh-copy-id -i  ~/.ssh/id_ed25519.pub root@server
+#+end_src
+
+Login to server and replace host system with Nixos by [[https://github.com/elitak/nixos-infect][nix-infest]]:
+#+begin_src sh
+  curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-25.05 bash -x
+#+end_src

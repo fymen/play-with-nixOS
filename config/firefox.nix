@@ -26,68 +26,68 @@
         "browser.startup.homepage" = "https://search.nixos.org/packages";
         "browser.urlbar.placeholderName" = "Google";
 
-        "browser.send_pings" = false;
-        "browser.urlbar.speculativeConnect.enabled" = false;
-        "dom.event.clipboardevents.enabled" = true;
-        "media.navigator.enabled" = false;
-        "network.cookie.cookieBehavior" = 1;
-        "network.http.referer.XOriginPolicy" = 2;
-        "network.http.referer.XOriginTrimmingPolicy" = 2;
-        "beacon.enabled" = false;
-        "browser.safebrowsing.downloads.remote.enabled" = false;
-        "network.IDN_show_punycode" = true;
-        "extensions.activeThemeID" = "default-theme@mozilla.org";
-        "app.shield.optoutstudies.enabled" = false;
-        "dom.security.https_only_mode_ever_enabled" = true;
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-        "browser.toolbars.bookmarks.visibility" = "never";
-        "geo.enabled" = false;
+        #   "browser.send_pings" = false;
+        #   "browser.urlbar.speculativeConnect.enabled" = false;
+        #   "dom.event.clipboardevents.enabled" = true;
+        #   "media.navigator.enabled" = false;
+        #   "network.cookie.cookieBehavior" = 1;
+        #   "network.http.referer.XOriginPolicy" = 2;
+        #   "network.http.referer.XOriginTrimmingPolicy" = 2;
+        #   "beacon.enabled" = false;
+        #   "browser.safebrowsing.downloads.remote.enabled" = false;
+        #   "network.IDN_show_punycode" = true;
+        #   "extensions.activeThemeID" = "default-theme@mozilla.org";
+        #   "app.shield.optoutstudies.enabled" = false;
+        #   "dom.security.https_only_mode_ever_enabled" = true;
+        #   "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        #   "browser.toolbars.bookmarks.visibility" = "never";
+        #   "geo.enabled" = false;
 
-        # Disable telemetry
-        "browser.newtabpage.activity-stream.feeds.telemetry" = false;
-        "browser.ping-centre.telemetry" = false;
-        "browser.tabs.crashReporting.sendReport" = false;
-        "devtools.onboarding.telemetry.logged" = false;
-        "toolkit.telemetry.enabled" = false;
-        "toolkit.telemetry.unified" = false;
-        "toolkit.telemetry.server" = "";
+        #   # Disable telemetry
+        #   "browser.newtabpage.activity-stream.feeds.telemetry" = false;
+        #   "browser.ping-centre.telemetry" = false;
+        #   "browser.tabs.crashReporting.sendReport" = false;
+        #   "devtools.onboarding.telemetry.logged" = false;
+        #   "toolkit.telemetry.enabled" = false;
+        #   "toolkit.telemetry.unified" = false;
+        #   "toolkit.telemetry.server" = "";
 
-        # Disable Pocket
-        "browser.newtabpage.activity-stream.feeds.discoverystreamfeed" = false;
-        "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
-        "browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
-        "browser.newtabpage.activity-stream.showSponsored" = false;
-        "extensions.pocket.enabled" = false;
+        #   # Disable Pocket
+        #   "browser.newtabpage.activity-stream.feeds.discoverystreamfeed" = false;
+        #   "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
+        #   "browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
+        #   "browser.newtabpage.activity-stream.showSponsored" = false;
+        #   "extensions.pocket.enabled" = false;
 
-        # Disable prefetching
-        "network.dns.disablePrefetch" = true;
-        "network.prefetch-next" = false;
+        #   # Disable prefetching
+        #   "network.dns.disablePrefetch" = true;
+        #   "network.prefetch-next" = false;
 
-        # Disable JS in PDFs
-        "pdfjs.enableScripting" = false;
+        #   # Disable JS in PDFs
+        #   "pdfjs.enableScripting" = true;
 
-        # Harden SSL
-        "security.ssl.require_safe_negotiation" = true;
+        #   # Harden SSL
+        #   "security.ssl.require_safe_negotiation" = true;
 
-        # Extra
-        "identity.fxaccounts.enabled" = false;
-        "browser.search.suggest.enabled" = true;
-        "browser.urlbar.shortcuts.bookmarks" = true;
-        "browser.urlbar.shortcuts.history" = true;
-        "browser.urlbar.shortcuts.tabs" = true;
-        "browser.urlbar.suggest.bookmark" = true;
-        "browser.urlbar.suggest.engines" = true;
-        "browser.urlbar.suggest.history" = true;
-        "browser.urlbar.suggest.openpage" = true;
-        "browser.urlbar.suggest.topsites" = true;
-        "browser.urlbar.showSearchSuggestionsFirst" = false;
-        "browser.uidensity" = 1;
-        "media.autoplay.enabled" = false;
+        #   # Extra
+        #   "identity.fxaccounts.enabled" = false;
+        #   "browser.search.suggest.enabled" = true;
+        #   "browser.urlbar.shortcuts.bookmarks" = true;
+        #   "browser.urlbar.shortcuts.history" = true;
+        #   "browser.urlbar.shortcuts.tabs" = true;
+        #   "browser.urlbar.suggest.bookmark" = true;
+        #   "browser.urlbar.suggest.engines" = true;
+        #   "browser.urlbar.suggest.history" = true;
+        #   "browser.urlbar.suggest.openpage" = true;
+        #   "browser.urlbar.suggest.topsites" = true;
+        #   "browser.urlbar.showSearchSuggestionsFirst" = false;
+        #   "browser.uidensity" = 1;
+        #   "media.autoplay.enabled" = false;
         "toolkit.zoomManager.zoomValues" = ".8,.90,.95,1,1.1,1.2";
 
-        "privacy.firstparty.isolate" = true;
-        "network.http.sendRefererHeader" = 0;
-      };
+        #   "privacy.firstparty.isolate" = true;
+        #   "network.http.sendRefererHeader" = 0;
+      };                      # 
 
       # userChome.css to make it look better
       userChrome = "
