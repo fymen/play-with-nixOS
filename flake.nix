@@ -28,9 +28,15 @@
 
     # Devshell
     treefmt-nix.url = "github:numtide/treefmt-nix";
+
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { nixpkgs, home-manager, ... } @inputs:
+  outputs = { nixpkgs, home-manager, antigravity-nix, ... } @inputs:
     let
       system = "x86_64-linux";
       host = "desktop";
@@ -49,6 +55,11 @@
               ./hosts/${host}/configuration.nix
               inputs.stylix.nixosModules.stylix
               inputs.agenix.nixosModules.default
+              {
+                environment.systemPackages = [
+                  antigravity-nix.packages.x86_64-linux.default
+                ];
+              }
               home-manager.nixosModules.home-manager
               {
                 home-manager.extraSpecialArgs = {
