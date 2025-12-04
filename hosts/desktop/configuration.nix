@@ -106,8 +106,8 @@ in
 
 
   # Configure network proxy if necessary
-  #networking.proxy.default = "http://127.0.0.1:20171/";
-  #networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # networking.proxy.default = "http://127.0.0.1:7897/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   # Enable networking
   networking.networkmanager.enable = true;
   security = {
@@ -290,6 +290,12 @@ in
   programs = {
     zsh.enable = true;
     dconf.enable = true;
+    clash-verge = {
+      enable = false;
+      autoStart = true;
+      tunMode = true;
+      serviceMode = true;
+    };
   };
 
   # Enable the Open SSH daemon.

@@ -156,8 +156,13 @@ in
     appimage-run
 
     tor-browser
+    tsukimi
+    v2rayn
 
+    aider-chat-full
     # easyeffects
+
+    net-tools
 
     alejandra
     statix
