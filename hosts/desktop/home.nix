@@ -159,6 +159,10 @@ in
     tsukimi
     v2rayn
 
+    cloudflare-warp             # https://developers.cloudflare.com/warp-client/get-started/linux/
+    owl
+    opendrop
+
     aider-chat-full
     # easyeffects
 

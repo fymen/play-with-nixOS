@@ -146,7 +146,7 @@ in
   # };
 
   services.v2raya.enable = true;
-
+  services.cloudflare-warp.enable = true;
 
   # Enable OpenGL
   hardware.graphics.enable = true;
