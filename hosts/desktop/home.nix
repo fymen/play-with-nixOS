@@ -155,9 +155,9 @@ in
     #    spotify
     nautilus
 
-    appimage-run
+    # appimage-run
 
-    tor-browser
+    # tor-browser
     tsukimi
     v2rayn
 

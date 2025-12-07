@@ -38,44 +38,79 @@
 
   outputs = { nixpkgs, home-manager, antigravity-nix, ... } @inputs:
     let
-      system = "x86_64-linux";
-      host = "desktop";
-      username = "oscar";
-    in
-      {
-        nixosConfigurations = {
-          "${host}" = nixpkgs.lib.nixosSystem {
-            specialArgs = {
-	            inherit system;
-              inherit inputs;
-              inherit username;
-              inherit host;
-            };
-            modules = [
-              ./hosts/${host}/configuration.nix
-              inputs.stylix.nixosModules.stylix
-              inputs.agenix.nixosModules.default
-              {
-                environment.systemPackages = [
-                  antigravity-nix.packages.x86_64-linux.default
-                ];
-              }
-              home-manager.nixosModules.home-manager
-              {
-                home-manager.extraSpecialArgs = {
-                  inherit username;
-                  inherit inputs;
-                  inherit host;
-                };
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.backupFileExtension = "hm_backup";
-                home-manager.users.${username} = import ./hosts/${host}/home.nix;
-              }
-            ];
-          };
+      # Host configurations
+      hosts = {
+        desktop = {
+          system = "x86_64-linux";
+          username = "oscar";
+          useHomeManager = true;
+          useStylix = true;
+          useAgenix = true;
         };
-
+        laptop = {
+          system = "x86_64-linux";
+          username = "oscar";
+          useHomeManager = true;
+          useStylix = true;
+          useAgenix = true;
+        };
+        racknerd = {
+          system = "x86_64-linux";
+          username = "hildar";
+          useHomeManager = true;
+          useStylix = false;
+          useAgenix = false;
+        };
+        vm = {
+          system = "x86_64-linux";
+          username = "oscar";
+          useHomeManager = false;
+          useStylix = false;
+          useAgenix = false;
+        };
       };
+
+      # Helper function to create NixOS configuration
+      mkHost = hostname: { system, username, useHomeManager, useStylix, useAgenix }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit system inputs username;
+            host = hostname;
+          };
+          modules = [
+            ./hosts/${hostname}/configuration.nix
+          ]
+          ++ nixpkgs.lib.optionals useStylix [
+            inputs.stylix.nixosModules.stylix
+          ]
+          ++ nixpkgs.lib.optionals useAgenix [
+            inputs.agenix.nixosModules.default
+          ]
+          ++ nixpkgs.lib.optionals (useStylix || useAgenix) [
+            {
+              environment.systemPackages = [
+                antigravity-nix.packages.${system}.default
+              ];
+            }
+          ]
+          ++ nixpkgs.lib.optionals useHomeManager [
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.extraSpecialArgs = {
+                inherit username inputs;
+                host = hostname;
+              };
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "hm_backup";
+              home-manager.users.${username} = import ./hosts/${hostname}/home.nix;
+            }
+          ];
+        };
+    in
+    {
+      nixosConfigurations = builtins.mapAttrs mkHost hosts;
+    };
 
 }
