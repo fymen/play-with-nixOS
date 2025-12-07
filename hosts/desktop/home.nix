@@ -42,6 +42,8 @@ in
   stylix.targets.swaync.enable = false;
   stylix.targets.emacs.enable = false;
   stylix.targets.fcitx5.enable = false;
+  stylix.targets.firefox.profileNames = [ "${username}" ];
+  stylix.targets.qt.platform = "qtct";
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -233,11 +235,13 @@ in
 
     ssh = {
       enable = true;
-      extraConfig = ''
-        Host vps
-          HostName 47.79.20.252
-          Port 22
-      '';
+      enableDefaultConfig = false;
+      matchBlocks = {
+        "vps" = {
+          hostname = "47.79.20.252";
+          port = 22;
+        };
+      };
     };
   };
 

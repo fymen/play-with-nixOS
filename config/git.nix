@@ -1,8 +1,8 @@
 {
   programs.git = {
     enable = true;
-    userName = "Oscar Qi";
-    userEmail = "fengmao.qi@gmail.com";
+    settings.user.name = "Oscar Qi";
+    settings.user.email = "fengmao.qi@gmail.com";
 
     ignores = [
       "*~"

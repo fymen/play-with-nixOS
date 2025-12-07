@@ -29,7 +29,7 @@
 
     ntfs3g
 
-    greetd.tuigreet
+    tuigreet
     yad
     swappy
     swww

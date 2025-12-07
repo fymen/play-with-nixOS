@@ -84,6 +84,7 @@
         #   "browser.uidensity" = 1;
         #   "media.autoplay.enabled" = false;
         "toolkit.zoomManager.zoomValues" = ".8,.90,.95,1,1.1,1.2";
+        "layout.css.devPixelsPerPx" = "1.2";  # UI zoom 120%
 
         #   "privacy.firstparty.isolate" = true;
         #   "network.http.sendRefererHeader" = 0;
