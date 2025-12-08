@@ -139,7 +139,7 @@ in
 
 
   services.v2raya.enable = false;
-
+  services.cloudflare-warp.enable = true;
 
   # Enable OpenGL
   hardware.graphics.enable = true;

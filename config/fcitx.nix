@@ -25,7 +25,6 @@
         "Groups/0/Items/1".Name = "wbpy";
       };
       settings.addons = {
-        classicui.globalSection.Theme = "tokyonight";
         pinyin.globalSection.EmojiEnabled = "True";
       };
     };

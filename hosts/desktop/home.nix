@@ -112,6 +112,7 @@ in
     # Data visualization
     gnuplot
     mpv
+    ffmpeg
     yt-dlp
     ripgrep
     silver-searcher

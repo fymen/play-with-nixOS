@@ -73,7 +73,7 @@ in
 
     mesa
 
-    du-dust # Modernized "du"
+    dust # Modernized "du"
     bat # Alternative to "cat"
     btop # Alternative to "top"
     nvtopPackages.nvidia # Monitor GPU process
@@ -152,6 +152,8 @@ in
     nautilus
 
     appimage-run
+
+    cloudflare-warp             # https://developers.cloudflare.com/warp-client/get-started/linux/
 
     # tor-browser
 

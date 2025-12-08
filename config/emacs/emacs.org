@@ -2117,11 +2117,11 @@ Generate QR code in Emacs.
 (use-package aidermacs
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
-  ;; Set API keys via environment variables or agenix secrets
+  ;; Set GEMINI_API_KEY via environment variables or agenix secrets
   :custom
                                         ; See the Configuration section below
   (aidermacs-default-chat-mode 'architect)
-  (aidermacs-default-model "openrouter/amazon/nova-2-lite-v1:free"))
+  (aidermacs-default-model "gemini/gemini-3-pro-preview"))
 #+end_src
 ** org-ai
 #+begin_src emacs-lisp :tangle yes
