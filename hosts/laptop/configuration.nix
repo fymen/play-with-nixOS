@@ -170,13 +170,6 @@ in
 
     enable = false;
 
-    displayManager = {
-      gdm = {
-        enable = true;
-      };
-    };
-
-    desktopManager.gnome.enable = true;
     dpi = 137;
     upscaleDefaultCursor = true;
     windowManager = {
@@ -190,6 +183,9 @@ in
       };
     };
   };
+
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   services.greetd = {
     enable = true;

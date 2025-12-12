@@ -308,11 +308,11 @@
     "mysecrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1705538439,
-        "narHash": "sha256-gkIp/skpfXb5T9b+jMaaf3LKSsXKslv5gIHeKQy00fY=",
+        "lastModified": 1764837181,
+        "narHash": "sha256-TI7+jm3JzVWxKLPeE+AMe7PxQtQHh6HEFKBeegZYMds=",
         "ref": "main",
-        "rev": "2aa024c20d9b177f0771d861a43ae7e568e119db",
-        "revCount": 2,
+        "rev": "8b3883b1504d9cb5e12344ebba66e80ea6368c77",
+        "revCount": 3,
         "type": "git",
         "url": "ssh://git@github.com/fymen/secrets"
       },

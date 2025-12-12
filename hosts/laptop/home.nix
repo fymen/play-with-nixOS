@@ -41,6 +41,8 @@ in
   stylix.targets.rofi.enable = false;
   stylix.targets.swaync.enable = false;
   stylix.targets.emacs.enable = false;
+  stylix.targets.qt.platform = "qtct";
+  stylix.targets.firefox.profileNames = [ "${username}" ];
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -217,11 +219,13 @@ in
 
     ssh = {
       enable = true;
-      extraConfig = ''
-        Host racknerd
-          HostName 23.95.85.103
-          Port 22
-      '';
+      enableDefaultConfig = false;
+      matchBlocks = {
+        "racknerd" = {
+          hostname = "23.95.85.103";
+          port = 22;
+        };
+      };
     };
   };
 
