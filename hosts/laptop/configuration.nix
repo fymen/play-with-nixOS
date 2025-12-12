@@ -107,8 +107,8 @@ in
 
 
   # Configure network proxy if necessary
-  #networking.proxy.default = "http://127.0.0.1:20171/";
-  #networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.proxy.default = "http://127.0.0.1:20171/";
+  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   # Enable networking
   networking.networkmanager.enable = true;
   security = {
@@ -138,7 +138,7 @@ in
   };
 
 
-  services.v2raya.enable = false;
+  services.v2raya.enable = true;
   services.cloudflare-warp.enable = true;
 
   # Enable OpenGL

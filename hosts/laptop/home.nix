@@ -40,6 +40,7 @@ in
 
   stylix.targets.rofi.enable = false;
   stylix.targets.swaync.enable = false;
+  stylix.targets.emacs.enable = false;
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -154,7 +155,7 @@ in
     appimage-run
 
     cloudflare-warp             # https://developers.cloudflare.com/warp-client/get-started/linux/
-
+    tsukimi
     # tor-browser
 
     # easyeffects
