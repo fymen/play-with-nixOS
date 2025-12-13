@@ -1,0 +1,125 @@
+#+TITLE: AI Agent Guidelines for NixOS Configuration
+#+AUTHOR: Oscar Qi
+#+DESCRIPTION: Instructions for AI agents working on this NixOS flake configuration
+
+* Project Overview
+
+This is a NixOS flake-based configuration managing multiple hosts with home-manager integration.
+
+** Repository Structure
+
+| Directory      | Purpose                                              |
+|----------------|------------------------------------------------------|
+| =flake.nix=    | Entry point - defines inputs and host configurations |
+| =hosts/=       | Per-machine configurations (desktop, laptop, etc.)   |
+| =config/=      | Shared home-manager modules (apps, DE configs)       |
+| =modules/=     | Shared NixOS modules                                 |
+| =system/=      | System-level configurations                          |
+| =packages/=    | Custom package definitions                           |
+| =scripts/=     | Helper scripts                                       |
+
+** Hosts
+
+| Host     | Username | Features                          |
+|----------|----------|-----------------------------------|
+| desktop  | oscar    | Full desktop, home-manager, stylix, agenix |
+| laptop   | oscar    | Full desktop, home-manager, stylix, agenix |
+| racknerd | hildar   | Server, home-manager only         |
+| vm       | oscar    | Minimal VM, no home-manager       |
+
+* Development Workflow
+
+** Testing Changes
+
+#+begin_src sh
+make          # nixos-rebuild test (temporary activation)
+make install  # nixos-rebuild switch (permanent)
+make build    # Build without activating
+#+end_src
+
+** Common Tasks
+
+*** Adding a Package (User)
+Edit =hosts/<hostname>/home.nix=, add package to =home.packages=.
+
+*** Adding a Package (System)
+Edit =hosts/<hostname>/configuration.nix= or =system/system-packages.nix=.
+
+*** Adding a New Host
+1. Create =hosts/<newhost>/= directory
+2. Add =configuration.nix=, =hardware-configuration.nix=, =home.nix= (if using home-manager)
+3. Add host entry in =flake.nix= under =hosts= attribute set
+
+*** Adding a Flake Input
+1. Add input in =flake.nix= inputs section
+2. Run =nix flake lock= to update lock file
+3. Reference via =inputs.<name>= in modules
+
+* Conventions
+
+** Code Style
+- Use 2-space indentation in Nix files
+- Follow existing patterns in the codebase
+- Keep configuration modular - shared configs go in =config/=
+
+** Git Commits
+- Use conventional commit format: =feat:=, =fix:=, =refactor:=, etc.
+- Test with =make= before committing
+- Never commit secrets or API keys
+
+** Package Naming
+- Check if package exists: =nix search nixpkgs <name>=
+- Some packages have been renamed (e.g., =du-dust= → =dust=, =greetd.tuigreet= → =tuigreet=)
+
+* Important Files
+
+** Desktop Configuration
+- =hosts/desktop/configuration.nix= - System config (services, boot, networking)
+- =hosts/desktop/home.nix= - User packages and dotfiles
+- =hosts/desktop/variables.nix= - Host-specific variables
+
+** Shared Configs
+- =config/emacs/emacs.org= - Emacs configuration (literate org-mode)
+- =config/hyprland.nix= - Hyprland window manager
+- =config/firefox.nix= - Firefox with settings
+- =config/fcitx.nix= - Chinese input method
+
+** Secrets
+- Managed via agenix
+- Keys in private =mysecrets= repo
+- Never hardcode secrets in config files
+
+* Known Issues & Warnings
+
+** Emacs Package Traces
+These are informational, not errors:
+- cursor-chg, uniquify, fly-spell, popweb, recentf - declared but not in nixpkgs
+
+** Deprecated Options (Fixed)
+- =greetd.tuigreet= → =tuigreet=
+- =programs.git.userName/userEmail= → =settings.user.name/email=
+- =services.gpg-agent.pinentryPackage= → =pinentry.package=
+
+* External Dependencies
+
+** Flake Inputs
+- nixpkgs (unstable)
+- home-manager
+- stylix (theming)
+- agenix (secrets)
+- emacs-overlay
+- nixos-hardware
+- antigravity-nix
+
+** Required Environment Variables
+- =GEMINI_API_KEY= - For aidermacs/aider AI coding assistant
+
+* Tips for AI Agents
+
+1. Always run =make= after changes to verify configuration builds
+2. Check =git status= before committing
+3. Use =nix search nixpkgs <pkg>= to verify package names
+4. The flake uses =nixpkgs-unstable= - packages may have different names than stable
+5. For GPU-related packages, this system has NVIDIA (desktop) and AMD (laptop)
+6. Stylix handles theming - avoid hardcoding colors/themes that conflict
+7. Home-manager configs can access =inputs= via =extraSpecialArgs=
