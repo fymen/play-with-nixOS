@@ -6,6 +6,8 @@
   pkgs,
   ...
 }: {
+  nixpkgs.config.allowUnfree = true;
+
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -58,7 +60,6 @@
   };
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -91,7 +92,7 @@
   };
 
   ## guest
-  virtualisation.qemu.guestAgent.enable = true;
+  services.qemuGuest.enable = true;
 
   virtualisation.vmVariant = {
     # following configuration is added only when building VM with build-vm
@@ -123,15 +124,13 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       libva-utils
       libGL
     ];
-    setLdLibraryPath = true;
   };
 
   # This value determines the NixOS release from which the default
