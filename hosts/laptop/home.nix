@@ -221,7 +221,7 @@ in
       enable = true;
       enableDefaultConfig = false;
       matchBlocks = {
-        "racknerd" = {
+        "vps" = {
           hostname = "23.95.85.103";
           port = 22;
         };

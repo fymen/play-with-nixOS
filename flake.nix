@@ -54,7 +54,7 @@
           useStylix = true;
           useAgenix = true;
         };
-        racknerd = {
+        vps = {
           system = "x86_64-linux";
           username = "hildar";
           useHomeManager = true;

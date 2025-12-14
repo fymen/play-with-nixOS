@@ -35,8 +35,8 @@ list-packages:
 	nix-env -qa
 
 test_deploy:
-	  nixos-rebuild test --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose |& nom
+	  nixos-rebuild test --flake .#vps --target-host root@vps --build-host localhost --verbose |& nom
 deploy:
-	  nixos-rebuild switch --flake .#racknerd --target-host root@racknerd --build-host localhost --verbose
+	  nixos-rebuild switch --flake .#vps --target-host root@vps --build-host localhost --verbose
 
 .PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy build

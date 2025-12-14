@@ -24,7 +24,7 @@ This is a NixOS flake-based configuration managing multiple hosts with home-mana
 |----------|----------|-----------------------------------|
 | desktop  | oscar    | Full desktop, home-manager, stylix, agenix |
 | laptop   | oscar    | Full desktop, home-manager, stylix, agenix |
-| racknerd | hildar   | Server, home-manager only         |
+| vps      | hildar   | Server, home-manager only         |
 | vm       | oscar    | Minimal VM, no home-manager       |
 
 * Development Workflow
