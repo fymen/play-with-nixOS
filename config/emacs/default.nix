@@ -10,14 +10,14 @@ with lib; let
   inherit (pkgs) fetchurl;
   inherit (pkgs) fetchFromGitHub;
 
-  popweb-py-pkgs = pkgs.python311.withPackages (ps: [
-    ps.pyqt6
-    ps.pyqt6-sip
-    ps.pyqt6-webengine
-    ps.epc
-    ps.sexpdata
-    ps.browser-cookie3
-  ]);
+  # popweb-py-pkgs = pkgs.python311.withPackages (ps: [
+  #   ps.pyqt6
+  #   ps.pyqt6-sip
+  #   ps.pyqt6-webengine
+  #   ps.epc
+  #   ps.sexpdata
+  #   ps.browser-cookie3
+  # ]);
 
   cfg = config.modules.editors.emacs;
 
@@ -149,9 +149,9 @@ in {
       slurp
       swappy
 
-      popweb-py-pkgs
+      # popweb-py-pkgs
 
-#      chgcursor-el
+      #      chgcursor-el
       popweb
 
       (pkgs.writeShellScriptBin "espad" ''

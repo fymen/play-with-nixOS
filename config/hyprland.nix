@@ -72,17 +72,17 @@ with lib;
             sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
             accel_profile = flat
           }
-          windowrulev2 = noborder,title:^(wofi)$
-          windowrulev2 = center,title:^(wofi)$
-          windowrulev2 = center,title:^(steam)$
-          windowrulev2 = float, title:^(nm-connection-editor|blueman-manager)
-          windowrulev2 = float, title:^(swayimg|vlc|Viewnior|pavucontrol)
-          windowrulev2 = float, title:^(nwg-look|qt5ct|mpv)
-          windowrulev2 = float, title:^(zoom)
-          windowrulev2 = stayfocused, title:^()$,class:^(steam)$
-          windowrulev2 = minsize 1 1, title:^()$,class:^(steam)$
-          windowrulev2 = opacity 0.9 0.7, class:^(Brave)$
-          windowrulev2 = opacity 0.9 0.7, class:^(thunar)$
+          # windowrulev2 = noborder,title:^(wofi)$
+          # windowrulev2 = center,title:^(wofi)$
+          # windowrulev2 = center,title:^(steam)$
+          # windowrulev2 = float, title:^(nm-connection-editor|blueman-manager)
+          # windowrulev2 = float, title:^(swayimg|vlc|Viewnior|pavucontrol)
+          # windowrulev2 = float, title:^(nwg-look|qt5ct|mpv)
+          # windowrulev2 = float, title:^(zoom)
+          # windowrulev2 = stayfocused, title:^()$,class:^(steam)$
+          # windowrulev2 = minsize 1 1, title:^()$,class:^(steam)$
+          # windowrulev2 = opacity 0.9 0.7, class:^(Brave)$
+          # windowrulev2 = opacity 0.9 0.7, class:^(thunar)$
           gestures {
           }
           misc {
@@ -118,10 +118,6 @@ with lib;
             hyprtrails {
             }
           }
-          dwindle {
-            pseudotile = true
-            preserve_split = true
-          }
           bind = ${modifier},Return,exec,${terminal}
           bind = ${modifier}SHIFT,Return,exec,/run/current-system/sw/bin/zsh -c rofi-launcher
           bind = ${modifier}SHIFT,P,exec,rofi-pass
@@ -141,7 +137,6 @@ with lib;
           bind = ${modifier},M,exec,spotify
           bind = ${modifier},Q,killactive,
           bind = ${modifier},P,pseudo,
-          bind = ${modifier}SHIFT,I,togglesplit,
           bind = ${modifier},F,fullscreen,
           bind = ${modifier}SHIFT,F,togglefloating,
           bind = ${modifier}SHIFT,ESCAPE,exit,

@@ -170,7 +170,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   :config
   ;; create some font size defaults
   ;; may need to customize
-  (defvar my/default-font-size 125)
+  (defvar my/default-font-size 145)
   (defvar my/default-variable-font-size (+ 20 my/default-font-size))
 
   (setq display-pixel-height 2160)
@@ -178,8 +178,8 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; ;; ;; if vertical height is over 2k, set to 192dpi otherwise leave at default
   (unless (> display-pixel-height 2000)
     (progn
-      (setq my/default-font-size 62)
-      (setq my/default-variable-font-size 62)
+      (setq my/default-font-size 82)
+      (setq my/default-variable-font-size 82)
       )
     )
 
@@ -1509,6 +1509,7 @@ need to be passed verbatim to shell commands."
         org-return-follows-link nil    ; Follow links when hitting return
         org-image-actual-width nil     ; Resize image to window width
         org-indirect-buffer-display 'other-window ; Tab on a task expand it in a new window
+        org-footnote-section nil
         org-outline-path-complete-in-steps nil) ; No steps in path display
 
   (custom-theme-set-faces
@@ -1865,6 +1866,19 @@ Use a prefix arg to get regular RET. "
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
+    (add-to-list 'org-latex-classes
+               '("ctexbook"
+                 "\\documentclass[UTF8]{ctexbook}
+                [DEFAULT-PACKAGES]
+                [PACKAGES]"
+
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
   (add-to-list 'org-latex-classes
                '("article-img"
                  "\\documentclass[11pt]{article}
@@ -2129,11 +2143,46 @@ Generate QR code in Emacs.
   :defer t
   :ensure t
   :init
-  (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
-  (org-ai-global-mode) ; installs global keybindings on C-c M-a
+  (add-hook 'org-mode-hook #'org-ai-mode)
+  (org-ai-global-mode)
   :config
-  (setq org-ai-default-chat-model "gpt-3.5-turbo") ; if you are on the gpt-4 beta:
-  (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
+  ;; Use Gemini as default (set GEMINI_API_KEY env var)
+  (setq org-ai-default-chat-model "gemini-3-pro-preview")
+  (setq org-ai-openai-api-token (getenv "GEMINI_API_KEY"))
+  ;; Alternative: use local Ollama
+  ;; (setq org-ai-default-chat-model "deepseek-r1:14b")
+  ;; (setq org-ai-openai-api-base "http://localhost:11434/v1")
+  (org-ai-install-yasnippets))
+#+end_src
+
+** gptel
+#+begin_src emacs-lisp :tangle yes
+(use-package gptel
+  :ensure t
+  :bind (("C-c g" . gptel)
+         ("C-c G" . gptel-send)
+         ("C-c M-g" . gptel-menu))
+  :config
+  ;; Ollama backend (local, free)
+  (gptel-make-ollama "Ollama"
+    :host "localhost:11434"
+    :stream t
+    :models '("deepseek-r1:14b" "llama3.2" "mistral"))
+
+  ;; Gemini backend (cloud)
+  (gptel-make-gemini "Gemini"
+    :key (lambda () (getenv "GEMINI_API_KEY"))
+    :stream t)
+
+  ;; Default to local Ollama
+  (setq gptel-model "deepseek-r1:14b"
+        gptel-backend (gptel-make-ollama "Ollama"
+                        :host "localhost:11434"
+                        :stream t
+                        :models '("deepseek-r1:14b")))
+
+  ;; Keybindings in gptel buffer
+  (setq gptel-default-mode 'org-mode))
 #+end_src
 
 ** Gpt shell

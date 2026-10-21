@@ -11,7 +11,7 @@
       {
         devShells.${system}.default = pkgs.mkShell {
           packages = with pkgs; [
-            sphinx
+            # sphinx
 
             pkg-config
             ncurses

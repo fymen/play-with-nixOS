@@ -18,6 +18,8 @@
     wqy_microhei
     arphic-uming
     arphic-ukai
+    noto-fonts-cjk-sans # 思源黑体
+    noto-fonts-cjk-serif # 思源宋体
 
     lxgw-wenkai
     source-han-serif

@@ -93,13 +93,13 @@ in
     ydotool # Desktop automation tool, move mouse or something
     autojump # Jump around directories fastly
 
-    neofetch
+    hyfetch
 
     font-manager
     # Terminal
     tmux
 
-    python311Packages.pygments
+    # python311Packages.pygments
 
     # Image viewer
     feh
@@ -115,7 +115,6 @@ in
     ffmpeg
     yt-dlp
     ripgrep
-    silver-searcher
 
     multimarkdown
     graphviz
@@ -156,6 +155,8 @@ in
     #    spotify
     nautilus
 
+    poppler-utils
+    
     # appimage-run
 
     # tor-browser
@@ -189,16 +190,21 @@ in
 
     wl-clipboard
     cliphist
+    pinta
+    flameshot
+
+    hugo
+    
   ];
 
   services.ollama = {
-    enable = true;
+    enable = false;
     acceleration = "cuda";
   };
 
   services.ssh-agent.enable = true;
   services.udiskie = {
-    enable = false;
+    enable = true;
     automount = true;
     tray = "always";
   };

@@ -98,7 +98,7 @@ in
     # Terminal
     tmux
 
-    python311Packages.pygments
+    # python311Packages.pygments
 
     # Image viewer
     feh
