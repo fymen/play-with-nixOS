@@ -2126,82 +2126,14 @@ Generate QR code in Emacs.
   )
 #+end_src
 * AGI
-** aider
-#+begin_src emacs-lisp
-(use-package aidermacs
-  :bind (("C-c a" . aidermacs-transient-menu))
-  :config
-  ;; Set GEMINI_API_KEY via environment variables or agenix secrets
-  :custom
-                                        ; See the Configuration section below
-  (aidermacs-default-chat-mode 'architect)
-  (aidermacs-default-model "gemini/gemini-3-pro-preview"))
-#+end_src
-** org-ai
-#+begin_src emacs-lisp :tangle yes
-(use-package org-ai
-  :defer t
-  :ensure t
-  :init
-  (add-hook 'org-mode-hook #'org-ai-mode)
-  (org-ai-global-mode)
-  :config
-  ;; Use Gemini as default (set GEMINI_API_KEY env var)
-  (setq org-ai-default-chat-model "gemini-3-pro-preview")
-  (setq org-ai-openai-api-token (getenv "GEMINI_API_KEY"))
-  ;; Alternative: use local Ollama
-  ;; (setq org-ai-default-chat-model "deepseek-r1:14b")
-  ;; (setq org-ai-openai-api-base "http://localhost:11434/v1")
-  (org-ai-install-yasnippets))
+** ide
+#+begin_src emacs-lisp :lexical no
+(use-package codex-ide
+  :vc (:url "https://github.com/dgillis/emacs-codex-ide" :rev :newest)
+  :bind ("C-c C-;" . codex-ide-menu))
+
 #+end_src
 
-** gptel
-#+begin_src emacs-lisp :tangle yes
-(use-package gptel
-  :ensure t
-  :bind (("C-c g" . gptel)
-         ("C-c G" . gptel-send)
-         ("C-c M-g" . gptel-menu))
-  :config
-  ;; Ollama backend (local, free)
-  (gptel-make-ollama "Ollama"
-    :host "localhost:11434"
-    :stream t
-    :models '("deepseek-r1:14b" "llama3.2" "mistral"))
-
-  ;; Gemini backend (cloud)
-  (gptel-make-gemini "Gemini"
-    :key (lambda () (getenv "GEMINI_API_KEY"))
-    :stream t)
-
-  ;; Default to local Ollama
-  (setq gptel-model "deepseek-r1:14b"
-        gptel-backend (gptel-make-ollama "Ollama"
-                        :host "localhost:11434"
-                        :stream t
-                        :models '("deepseek-r1:14b")))
-
-  ;; Keybindings in gptel buffer
-  (setq gptel-default-mode 'org-mode))
-#+end_src
-
-** Gpt shell
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package chatgpt-shell
-  :defer t
-  :ensure t)
-#+end_src
-** COMMENT ellama
-#+begin_src emacs-lisp :tangle no :lexical no
-(use-package ellama
-  :init
-  (setopt ellama-language "English")
-  ;;(setopt ellama-language "Portuguese")
-  (require 'llm-ollama)
-  (setopt ellama-provider
-          (make-llm-ollama
-           :chat-model "mistral" :embedding-model "mistral")))
-#+end_src
 ** leetcode
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package leetcode

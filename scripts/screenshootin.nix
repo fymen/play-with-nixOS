@@ -1,5 +1,7 @@
 { pkgs }:
 
 pkgs.writeShellScriptBin "screenshootin" ''
-  grim -g "$(slurp)" - | swappy -f -
+  screenshot_dir="$HOME/Pictures/Screenshots"
+  mkdir -p "$screenshot_dir"
+  exec ${pkgs.flameshot}/bin/flameshot gui --path "$screenshot_dir"
 ''

@@ -21,8 +21,6 @@ with lib; let
 
   cfg = config.modules.editors.emacs;
 
-  pwd = "${config.home.homeDirectory}/projects/personal/play-with-nixOS/home/modules/emacs";
-
   chgcursor-el = pkgs.emacs.pkgs.trivialBuild rec {
     pname = "cursor-chg";
     version = "1.0";
@@ -119,8 +117,8 @@ in {
       };
     };
 
-    home.file.".emacs.d/emacs.org".source = config.lib.file.mkOutOfStoreSymlink (pwd + "/emacs.org");
-    home.file.".emacs.d/elfeed.org".source = config.lib.file.mkOutOfStoreSymlink (pwd + "/elfeed.org");
+    home.file.".emacs.d/emacs.org".source = ./emacs.org;
+    home.file.".emacs.d/elfeed.org".source = ./elfeed.org;
 
     services.emacs = mkIf cfg.service.enable {
       enable = true;
@@ -139,6 +137,10 @@ in {
     };
 
     home.packages = with pkgs; [
+      # agent-shell speaks ACP through this adapter, rather than the Codex CLI.
+      codex-acp
+      inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
+
       texliveFull
 
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))

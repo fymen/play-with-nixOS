@@ -113,6 +113,7 @@ in
     gnuplot
     mpv
     ffmpeg
+    whisper-cpp # Provides whisper-cli for local speech transcription
     yt-dlp
     ripgrep
 
@@ -120,7 +121,9 @@ in
     graphviz
 
     gimp
+    (blender.override { cudaSupport = true; })
     imagemagick
+    tesseract
 
     gdb
 
@@ -194,7 +197,7 @@ in
     flameshot
 
     hugo
-    
+    localsend
   ];
 
   services.ollama = {

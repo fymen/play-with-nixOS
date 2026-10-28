@@ -137,15 +137,6 @@ in
     LC_TIME = "zh_CN.UTF-8";
   };
 
-  # i18n.inputMethod = {
-  #   enable = true;
-  #   type = "ibus";
-  #   ibus.engines = with pkgs.ibus-engines; [
-  #     libpinyin
-  #     rime
-  #   ];
-  # };
-
   services.v2raya.enable = true;
   services.cloudflare-warp.enable = true;
 

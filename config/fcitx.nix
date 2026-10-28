@@ -5,9 +5,12 @@
     type = "fcitx5"; 
     fcitx5 = {
       addons = with pkgs; [
-        # for flypy chinese input method
-        fcitx5-rime
-        # needed enable rime using configtool after installed
+        # Rime with the Rime Ice schema and dictionaries
+        (fcitx5-rime.override {
+          rimeDataPkgs = [
+            pkgs.rime-ice
+          ];
+        })
         qt6Packages.fcitx5-configtool
         qt6Packages.fcitx5-chinese-addons
         # fcitx5-mozc    # japanese input method
@@ -19,10 +22,10 @@
         "Groups/0" = {
           Name = "Default";
           "Default Layout" = "us";
-          DefaultIM = "wbpy";
+          DefaultIM = "rime";
         };
         "Groups/0/Items/0".Name = "keyboard-us";
-        "Groups/0/Items/1".Name = "wbpy";
+        "Groups/0/Items/1".Name = "rime";
       };
       settings.addons = {
         pinyin.globalSection.EmojiEnabled = "True";
@@ -30,9 +33,16 @@
     };
   };
 
+  xdg.dataFile."fcitx5/rime/default.custom.yaml".text = ''
+    patch:
+      __include: rime_ice_suggestion:/
+      schema_list:
+        - schema: rime_ice
+  '';
+
   home.sessionVariables = {
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
+    # GTK_IM_MODULE = "fcitx";
+    # QT_IM_MODULE = "fcitx";
+    # XMODIFIERS = "@im=fcitx";
   };
 }

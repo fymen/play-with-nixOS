@@ -4,9 +4,9 @@
   gitEmail = "fengmao.qi@gmail.com";
 
   # Hyprland Settings
-  extraMonitorSettings = "
-monitor=DP-0,3840x2160@60,0x0,1.5
-    ";
+  extraMonitorSettings = ''
+    hl.monitor({ output = "DP-0", mode = "3840x2160@60", position = "0x0", scale = 1.5 })
+  '';
 
   # Waybar Settings
   clock24h = true;

@@ -18,6 +18,23 @@ This is a NixOS flake-based configuration managing multiple hosts with home-mana
 | =packages/=    | Custom package definitions                           |
 | =scripts/=     | Helper scripts                                       |
 
+** Repository Skills
+
+仓库专用 skills 保存在 =skills/=，按任务读取对应入口：
+
+- [[file:skills/nixos-config/SKILL.md][nixos-config]]：多主机 NixOS、Home Manager、软件包、服务、flake 输入与构建排障。
+- [[file:skills/emacs-config/SKILL.md][emacs-config]]：Org 文学化 Emacs 配置、use-package 与 Nix 打包集成。
+- [[file:skills/hyprland-desktop/SKILL.md][hyprland-desktop]]：Hyprland、Waybar、桌面快捷键与辅助脚本。
+
+这些文件是仓库内的技能源文件；=skills/= 不是默认自动发现目录。
+当前环境的 =.agents/= 与 =.codex/= 只读，因此未在其中安装。
+支持项目技能发现的环境可将所需技能安装至 =.agents/skills/=；
+尚未安装时，可在任务中明确指定上述 =SKILL.md= 路径读取使用。
+
+验证 Nix 配置前先读当前 =Makefile=：=make= 会临时激活系统，
+=make build= 会先更新 =mysecrets= 输入锁。只需构建时，使用对应
+skill 中带 =--no-update-lock-file= 的直接构建命令。
+
 ** Hosts
 
 | Host     | Username | Features                          |
