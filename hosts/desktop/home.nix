@@ -35,6 +35,7 @@ in
     ../../config/password-store.nix
     ../../config/fcitx.nix
     ../../config/misc.nix
+    ../../config/openclaw.nix
   ];
 
 

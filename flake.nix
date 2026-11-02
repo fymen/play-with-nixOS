@@ -8,6 +8,8 @@
     stylix.url = "github:danth/stylix";
 
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
+    # Official OpenClaw Nix distribution, pinned to the validated 2026.10.7 release.
+    nix-openclaw.url = "github:openclaw/nix-openclaw/4b261b08c173467dc41db7b43d8265529c435055";
     
     agenix = {
       url = "github:ryantm/agenix";

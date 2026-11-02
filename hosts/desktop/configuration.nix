@@ -49,6 +49,10 @@ in
 
   networking.hostName = "desktop"; # Define your hostname.
 
+  # Keep large build workspaces on the spacious /home partition.
+  nix.settings.build-dir = "/home/nix-build";
+  systemd.tmpfiles.rules = [ "d /home/nix-build 0700 root root -" ];
+
 
   time.hardwareClockInLocalTime = true;
 
@@ -111,6 +115,11 @@ in
   networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   # Enable networking
   networking.networkmanager.enable = true;
+  # Prefer working DNS servers over the router's unreliable DHCP DNS.
+  networking.networkmanager.insertNameservers = [
+    "1.1.1.1"
+    "223.5.5.5"
+  ];
   security = {
     sudo.wheelNeedsPassword = false;
 
