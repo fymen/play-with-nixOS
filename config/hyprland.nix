@@ -19,6 +19,11 @@ in
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+    systemd.variables = [
+      "DISPLAY" "WAYLAND_DISPLAY" "HYPRLAND_INSTANCE_SIGNATURE"
+      "XDG_CURRENT_DESKTOP" "XDG_SESSION_TYPE" "XDG_SESSION_DESKTOP"
+      "QT_QPA_PLATFORMTHEME"
+    ];
     configType = "lua";
     extraConfig = ''
       hl.env("NIXOS_OZONE_WL", "1")
@@ -31,12 +36,9 @@ in
       hl.env("QT_QPA_PLATFORM", "wayland;xcb")
       hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
       hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
-      hl.env("SDL_VIDEODRIVER", "x11")
       hl.env("MOZ_ENABLE_WAYLAND", "1")
 
       hl.on("hyprland.start", function()
-        hl.exec_cmd("dbus-update-activation-environment --systemd --all")
-        hl.exec_cmd("systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
         hl.exec_cmd("killall -q swww;sleep .5 && swww init")
         hl.exec_cmd("killall -q waybar;sleep .5 && waybar")
         hl.exec_cmd("killall -q swaync;sleep .5 && swaync")

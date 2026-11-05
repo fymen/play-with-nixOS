@@ -248,7 +248,7 @@ in
     ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks = {
+      settings = {
         "vps" = {
           hostname = "47.79.20.252";
           port = 22;

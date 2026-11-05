@@ -21,6 +21,7 @@ in
       ./hardware-configuration.nix
       ../../system/system.nix
       ../../system/system-packages.nix
+      ../../system/desktop-packages.nix
       # ../../system/window-systems
       ../../system/fonts.nix
       ../../system/steam.nix

@@ -20,9 +20,11 @@ not an automatic update on every startup.
 The wrapper selects the `plus` profile, enables the local HTTP proxy at
 `127.0.0.1:10808`, and keeps loopback traffic outside the proxy. It permits the
 existing interactive JSON configuration and persisted official runtime plugins;
-the application package itself remains managed by Nix. Home Manager merges the
-gateway port (18789), loopback binding, token authentication mode, and
-`openai/gpt-6.1-sol` model into that profile without replacing other settings.
+the application package itself remains managed by Nix. Home Manager initializes
+missing gateway and model settings (port 18789, loopback, token authentication,
+and `openai/gpt-6.1-sol`) without overwriting later interactive choices. Actual
+changes receive timestamped backups; unchanged configurations are not rewritten.
+The service reads its port from the profile instead of forcing a command-line port.
 
 OAuth credentials, the gateway token, runtime plugins, and SQLite databases live
 under `~/.openclaw-plus`; none belong in Git or the Nix store. Existing tokens

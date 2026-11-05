@@ -29,11 +29,5 @@
 
     ntfs3g
 
-    tuigreet
-    yad
-    swappy
-    swww
-    grim
-    slurp
   ];
 }

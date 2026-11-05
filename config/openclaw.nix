@@ -36,15 +36,20 @@ in
       fi
       temp=$(${pkgs.coreutils}/bin/mktemp "${stateDir}/.config.XXXXXX")
       if ${pkgs.jq}/bin/jq '
-        .gateway.mode = "local" |
-        .gateway.port = 18789 |
-        .gateway.bind = "loopback" |
-        .gateway.auth.mode = "token" |
-        .agents.defaults.model.primary = "openai/gpt-6.1-sol" |
-        .agents.defaults.modelPolicy.allow = ["openai/gpt-6.1-sol"]
+        .gateway.mode //= "local" |
+        .gateway.port //= 18789 |
+        .gateway.bind //= "loopback" |
+        .gateway.auth.mode //= "token" |
+        .agents.defaults.model.primary //= "openai/gpt-6.1-sol" |
+        .agents.defaults.modelPolicy.allow //= ["openai/gpt-6.1-sol"]
       ' "$target" > "$temp"; then
-        ${pkgs.coreutils}/bin/cp -p "$target" "$target.before-nix.bak"
-        ${pkgs.coreutils}/bin/mv "$temp" "$target"
+        if ! ${pkgs.diffutils}/bin/diff -q <(${pkgs.jq}/bin/jq -S . "$target") <(${pkgs.jq}/bin/jq -S . "$temp") >/dev/null; then
+          stamp=$(${pkgs.coreutils}/bin/date +%Y%m%d-%H%M%S-%N)
+          ${pkgs.coreutils}/bin/cp -p "$target" "$target.before-nix.$stamp.bak"
+          ${pkgs.coreutils}/bin/mv "$temp" "$target"
+        else
+          ${pkgs.coreutils}/bin/rm -f "$temp"
+        fi
       else
         ${pkgs.coreutils}/bin/rm -f "$temp"
         exit 1
@@ -64,7 +69,7 @@ in
       Wants = [ "network-online.target" ];
     };
     Service = {
-      ExecStart = "${openclaw}/bin/openclaw gateway run --port 18789";
+      ExecStart = "${openclaw}/bin/openclaw gateway run";
       WorkingDirectory = config.home.homeDirectory;
       Environment = lib.mapAttrsToList (name: value: "${name}=${value}") environment;
       Restart = "on-failure";

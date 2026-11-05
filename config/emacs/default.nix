@@ -141,7 +141,11 @@ in {
       codex-acp
       inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
-      texliveFull
+      (texlive.combine {
+        inherit (texlive) scheme-small collection-xetex collection-latexextra
+          collection-langchinese collection-fontsrecommended latexmk;
+      })
+      python3Packages.pygments
 
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))
       emacs-all-the-icons-fonts

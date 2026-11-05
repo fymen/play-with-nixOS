@@ -12,6 +12,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../system/system-packages.nix
+    ../../system/desktop-packages.nix
     ../../system/system.nix
   ];
 

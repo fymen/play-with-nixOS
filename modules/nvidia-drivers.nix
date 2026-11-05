@@ -31,7 +31,8 @@ in
       # supported GPUs is at:
       # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
       # Only available from driver 515.43.04+
-      # Currently alpha-quality/buggy, so false is currently the recommended setting.
+      # Keep the proprietary module selected for this working setup; evaluate
+      # any switch to the open module separately from configuration cleanup.
       open = false;
       # Enable the Nvidia settings menu,
       # accessible via `nvidia-settings`.
