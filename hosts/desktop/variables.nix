@@ -13,7 +13,7 @@
   # Waybar Settings
   clock24h = true;
 
-  wallpaper = "naraka.jpeg";
+  wallpaper = "enrique.jpg";
 
   # Program Options
   browser = "firefox"; # Set Default Browser (google-chrome-stable for google-chrome)
