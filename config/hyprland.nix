@@ -59,6 +59,14 @@ in
       hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
       ${extraMonitorSettings}
 
+      -- Screenshot overlays must cover the monitor without entering the layout.
+      hl.window_rule({
+        -- Qt's capture overlay has an empty app_id on native Wayland.
+        match = { title = "^flameshot$" },
+        float = true,
+        fullscreen = true,
+      })
+
       hl.config({
         general = {
           gaps_in = 6,

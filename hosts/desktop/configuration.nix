@@ -24,7 +24,6 @@ in
       ../../system/desktop-packages.nix
       # ../../system/window-systems
       ../../system/fonts.nix
-      ../../system/steam.nix
       # ../../system/tailscale.nix
       # ../../system/virtualisation.nix
       ../../modules/amd-drivers.nix
@@ -50,7 +49,28 @@ in
   boot.initrd.kernelModules = [];
 
   networking.hostName = "desktop"; # Define your hostname.
-  programs.vocalinux.enable = true;
+  # Flameshot 13 treats grim's physical-pixel image as logical pixels on Wayland.
+  # Supply logical pixels to its private grim adapter at fractional scaling.
+  nixpkgs.overlays = [
+    inputs.emacs-overlay.overlay
+    (final: prev: {
+      flameshot = prev.flameshot.override {
+        grim = prev.writeShellScriptBin "grim" ''
+          exec ${prev.grim}/bin/grim -s 1 "$@"
+        '';
+      };
+    })
+  ];
+  programs.vocalinux = {
+    enable = true;
+    # The upstream package omits the optional Wayland overlay dependency.
+    # Use its own nixpkgs so GTK and GI typelibs remain ABI-compatible.
+    package = inputs.vocalinux.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or []) ++ [
+        inputs.vocalinux.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.gtk-layer-shell
+      ];
+    });
+  };
 
   # Keep large build workspaces on the spacious /home partition.
   nix.settings.build-dir = "/home/nix-build";
@@ -227,7 +247,6 @@ in
   nixpkgs = {
     config.allowUnfree = true;
     config.cudaSupport = false;
-    overlays = [ inputs.emacs-overlay.overlay ];
   };
 
   programs.nix-ld.enable = true;

@@ -48,6 +48,12 @@ in
   stylix.targets.firefox.profileNames = [ "${username}" ];
   stylix.targets.qt.platform = "qtct";
 
+  # Supply a complete icon theme for GTK trays and application launchers.
+  gtk.iconTheme = {
+    name = "Papirus-Dark";
+    package = pkgs.papirus-icon-theme;
+  };
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "${username}";
@@ -158,7 +164,6 @@ in
     gdb
 
     evince
-    zathura
 
     libreoffice
     # Sound volume control
@@ -179,7 +184,6 @@ in
     rnnoise-plugin
 
     # Download
-    deluge
     qrencode
     calibre
     #    zoom-us
@@ -198,9 +202,6 @@ in
 
     cloudflare-warp             # https://developers.cloudflare.com/warp-client/get-started/linux/
     owl
-    opendrop
-
-    aider-chat-full
     # easyeffects
 
     net-tools
