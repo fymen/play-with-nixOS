@@ -18,6 +18,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.vocalinux.nixosModules.vocalinux
       ../../system/system.nix
       ../../system/system-packages.nix
       # ../../system/window-systems
@@ -48,6 +49,7 @@ in
   boot.initrd.kernelModules = [];
 
   networking.hostName = "desktop"; # Define your hostname.
+  programs.vocalinux.enable = true;
 
   # Keep large build workspaces on the spacious /home partition.
   nix.settings.build-dir = "/home/nix-build";
@@ -246,7 +248,7 @@ in
   users.users."${username}" = {
     isNormalUser = true;
     description = "${username}";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "input" "uinput" ];
     packages = with pkgs; [
       #  thunderbird
     ];

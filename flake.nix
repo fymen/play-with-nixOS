@@ -17,6 +17,7 @@
     };
 
     nur.url = "github:nix-community/NUR";
+    vocalinux.url = "github:VocaHQ/vocalinux";
 
     emacs-overlay = {
       url  = "github:nix-community/emacs-overlay";

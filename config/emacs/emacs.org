@@ -41,6 +41,19 @@
               frame-title-format "%f %4 %b %Z %* %10 %I"
               x-select-enable-clipboard t
               x-select-enable-primary t)
+;; Vocalinux's clipboard injection can send C-S-v on Wayland.
+(defun my/wayland-clipboard-paste ()
+  "Insert Wayland clipboard text without relying on GTK selection ownership."
+  (interactive)
+  (if (and (getenv "WAYLAND_DISPLAY") (executable-find "wl-paste"))
+      (let ((text (with-temp-buffer
+                    (unless (zerop (call-process "wl-paste" nil t nil "--no-newline"))
+                      (user-error "The Wayland clipboard has no readable text"))
+                    (buffer-string))))
+        (kill-new text)
+        (yank))
+    (clipboard-yank)))
+(global-set-key (kbd "C-S-v") #'my/wayland-clipboard-paste)
 (setq auto-revert-interval 1            ; Refresh buffers fast
       default-input-method "TeX"        ; Use TeX when toggling input method
       echo-keystrokes 0.1               ; Show keystrokes asap

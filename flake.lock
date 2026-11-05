@@ -599,6 +599,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_9": {
+      "locked": {
+        "lastModified": 1791456040,
+        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -682,7 +698,8 @@
         "nixpkgs": "nixpkgs_5",
         "nur": "nur",
         "stylix": "stylix",
-        "treefmt-nix": "treefmt-nix"
+        "treefmt-nix": "treefmt-nix",
+        "vocalinux": "vocalinux"
       }
     },
     "stylix": {
@@ -870,6 +887,24 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "vocalinux": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_9"
+      },
+      "locked": {
+        "lastModified": 1793675847,
+        "narHash": "sha256-7VBKXamHNRgNFgue728aNIjWRX2o9kxVpAvoCuR6Bqk=",
+        "owner": "VocaHQ",
+        "repo": "vocalinux",
+        "rev": "0a4d637f5f45596e9389afe926354acc7cd2848e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "VocaHQ",
+        "repo": "vocalinux",
         "type": "github"
       }
     }
