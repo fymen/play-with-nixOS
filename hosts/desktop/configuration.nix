@@ -56,6 +56,8 @@ in
   nix.settings.build-dir = "/home/nix-build";
   systemd.tmpfiles.rules = [
     "d /home/nix-build 0700 root root -"
+    # NVIDIA saves VRAM here during suspend; keep it off the root partition.
+    "d /home/nvidia-vram 0700 root root -"
     # --remember takes no username argument; seed the greeter's cache.
     "f /var/cache/tuigreet/lastuser 0600 greeter greeter - ${username}"
   ];
@@ -88,7 +90,7 @@ in
     # };
 
     polarity = "dark";
-    opacity.terminal = 0.8;
+    opacity.terminal = 0.92;
     cursor.package = pkgs.bibata-cursors;
     cursor.name = "Bibata-Modern-Ice";
     cursor.size = 24;
@@ -175,6 +177,11 @@ in
   drivers.intel.enable = false;
 
   drivers.nvidia.enable = true;
+  hardware.nvidia = {
+    # Preserve GPU allocations across S3 sleep and restore them before clients.
+    powerManagement.enable = true;
+    moduleParams.nvidia.NVreg_TemporaryFilePath = "/home/nvidia-vram";
+  };
 
   # Hyprland is managed by Home Manager; greetd only runs the login UI.
   services.greetd = {

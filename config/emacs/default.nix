@@ -21,12 +21,12 @@ with lib; let
 
   cfg = config.modules.editors.emacs;
 
-  chgcursor-el = pkgs.emacs.pkgs.trivialBuild rec {
+  chgcursor-el = pkgs.emacs-pgtk.pkgs.trivialBuild rec {
     pname = "cursor-chg";
     version = "1.0";
     src = fetchurl {
-      url = "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/cursor-chg.el";
-      sha256 = "1zmwh0z4g6khb04lbgga263pqa51mfvs0wfj3y85j7b08f2lqnqn";
+      url = "https://raw.githubusercontent.com/emacsmirror/cursor-chg/71a22ee8f81dd309e1c0d357679b755cf1ad47f7/cursor-chg.el";
+      hash = "sha256-oWQmT7uOSB+0fRrv2TLcqUgpb29PAQ2tnLIGmmGj9hw=";
     };
   };
   popweb = pkgs.emacs.pkgs.trivialBuild rec {
@@ -107,6 +107,11 @@ in {
         extraEmacsPackages = epkgs: [
           #  epkgs.cask
         ];
+
+        # The cursor extension is maintained outside the package archive.
+        override = final: prev: {
+          cursor-chg = chgcursor-el;
+        };
 
         # Optionally override derivations.
         #      override = final: prev: {

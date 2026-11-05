@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   username,
   host,
   ...
@@ -15,6 +16,12 @@ let
   ;
 in
 {
+  # The desktop launcher uses Kitty; let Stylix apply its fonts and colors too.
+  programs.kitty = lib.mkIf (host == "desktop") {
+    enable = true;
+    settings.window_padding_width = 8;
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -104,6 +111,17 @@ in
       hl.animation({ leaf = "border", enabled = true, speed = 1, bezier = "liner" })
       hl.animation({ leaf = "fade", enabled = true, speed = 10, bezier = "default" })
       hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "wind" })
+
+      ${lib.optionalString (host == "desktop") ''
+        -- Short, restrained transitions suit the desktop's 165 Hz display.
+        hl.curve("desktopEase", { type = "bezier", points = { {0.16, 1}, {0.3, 1} } })
+        hl.animation({ leaf = "windows", enabled = true, speed = 3, bezier = "desktopEase", style = "popin 97%" })
+        hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "desktopEase", style = "popin 97%" })
+        hl.animation({ leaf = "windowsOut", enabled = true, speed = 2, bezier = "desktopEase", style = "popin 97%" })
+        hl.animation({ leaf = "windowsMove", enabled = true, speed = 3, bezier = "desktopEase", style = "slide" })
+        hl.animation({ leaf = "fade", enabled = true, speed = 2, bezier = "desktopEase" })
+        hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "desktopEase", style = "slide" })
+      ''}
 
       hl.bind("SUPER + Return", hl.dsp.exec_cmd("${terminal}"))
       hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd("/run/current-system/sw/bin/zsh -c rofi-launcher"))

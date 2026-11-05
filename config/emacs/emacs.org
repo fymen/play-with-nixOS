@@ -111,8 +111,13 @@
 * Package management
 ** Package
 #+begin_src emacs-lisp :tangle yes
-(require 'use-package)
-(setq use-package-always-ensure t)
+(eval-and-compile
+  (require 'use-package)
+  (require 'use-package-ensure)
+  ;; Nix supplies ordinary packages, including declarations with :ensure t.
+  ;; Keep :vc declarations available for explicitly managed Git packages.
+  (setq use-package-always-ensure nil
+        use-package-ensure-function #'ignore))
 (setq use-package-verbose t)
 
 (setq package-archives
@@ -181,41 +186,31 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+begin_src emacs-lisp :tangle yes
 (use-package emacs
   :config
-  ;; create some font size defaults
-  ;; may need to customize
-  (defvar my/default-font-size 145)
-  (defvar my/default-variable-font-size (+ 20 my/default-font-size))
+  ;; Face heights are in tenths of a point. PGTK handles the monitor scale.
+  ;; The desktop uses native 4K with 150% scaling: 12pt code, 13pt prose.
+  (defvar my/default-font-size
+    (if (string= (car (split-string (system-name) "\\.")) "desktop") 120 145))
+  (defvar my/default-variable-font-size
+    (if (string= (car (split-string (system-name) "\\.")) "desktop")
+        130 (+ 20 my/default-font-size)))
 
-  (setq display-pixel-height 2160)
-
-  ;; ;; ;; if vertical height is over 2k, set to 192dpi otherwise leave at default
-  (unless (> display-pixel-height 2000)
-    (progn
-      (setq my/default-font-size 82)
-      (setq my/default-variable-font-size 82)
-      )
-    )
-
-  ;; if in macOS, set size appropriately
-  ;; otherwise assume Linux
-  (if (eq system-type 'darwin)
-      (progn
-        ;; set default font
-        (set-face-attribute 'default 'nil :font "FiraCode NF" :height my/default-font-size)
-        ;; Set the fixed pitch face
-        (set-face-attribute 'fixed-pitch nil :font "FiraCode NF" :height my/default-font-size)
-        )
-    (progn
-      ;; set default font
-      (set-face-attribute 'default 'nil :font "FiraCode Nerd Font" :height my/default-font-size)
-      ;; Set the fixed pitch face
-      (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font" :height my/default-font-size)
-      )
-    )
-
-  ;; Set the variable pitch face which is the same for mac and linux
-  (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height my/default-variable-font-size :weight 'regular)
-  )
+  (defun my/apply-fonts (&optional frame)
+    "Apply font sizes to a graphical FRAME, including new client frames."
+    (with-selected-frame (or frame (selected-frame))
+      (when (display-graphic-p)
+        (let ((family (if (eq system-type 'darwin)
+                          "FiraCode NF" "FiraCode Nerd Font")))
+          (set-face-attribute 'default (selected-frame)
+                              :family family :height my/default-font-size)
+          (set-face-attribute 'fixed-pitch (selected-frame)
+                              :family family :height my/default-font-size)
+          (set-face-attribute 'variable-pitch (selected-frame)
+                              :family "Source Sans Pro"
+                              :height my/default-variable-font-size
+                              :weight 'regular)))))
+  (add-hook 'after-make-frame-functions #'my/apply-fonts)
+  (dolist (frame (frame-list))
+    (my/apply-fonts frame)))
 #+end_src
 *** Ligature for Firacode
 #+begin_src emacs-lisp :tangle yes
@@ -294,24 +289,17 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package emacs
   :config
-  (set-fontset-font
-   t
-   'han
-   (cond
-    ((eq system-type 'windows-nt)
-     (cond
-      ((member "Microsoft YaHei" (font-family-list)) "Microsoft YaHei")
-      ((member "Microsoft JhengHei" (font-family-list)) "Microsoft JhengHei")
-      ((member "SimHei" (font-family-list)) "SimHei")))
-    ((eq system-type 'darwin)
-     (cond
-      ((member "Hei" (font-family-list)) "Hei")
-      ((member "Heiti SC" (font-family-list)) "Heiti SC")
-      ((member "Heiti TC" (font-family-list)) "Heiti TC")))
-    ((eq system-type 'gnu/linux)
-     (cond
-      ((member "WenQuanYi Micro Hei" (font-family-list)) "WenQuanYi Micro Hei")))))
-  )
+  (defun my/apply-cjk-font (&optional frame)
+    "Use Noto Sans CJK SC for Chinese text in graphical FRAME."
+    (with-selected-frame (or frame (selected-frame))
+      (when (and (display-graphic-p)
+                 (find-font (font-spec :family "Noto Sans CJK SC")))
+        (dolist (charset '(han kana cjk-misc bopomofo))
+          (set-fontset-font t charset (font-spec :family "Noto Sans CJK SC")
+                            (selected-frame))))))
+  (add-hook 'after-make-frame-functions #'my/apply-cjk-font)
+  (dolist (frame (frame-list))
+    (my/apply-cjk-font frame)))
 #+end_src
 *** All the icons
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -1102,31 +1090,29 @@ your project root:
 #+end_src
 ** Fly spell
 #+begin_src emacs-lisp :tangle yes
-(defun cycle-languages ()
-  "Changes the ispell dictionary to the first element in
-ISPELL-LANGUAGES, and returns an interactive function that cycles
-the languages in ISPELL-LANGUAGES when invoked."
-  (let ((ispell-languages (list "american" "norsk")))
-    (lambda ()
-      (interactive)
-      ;; Rotates the languages cycle and changes the ispell dictionary.
-      (let ((rotated (nconc (cdr ispell-languages) (list (car ispell-languages)))))
-        (ispell-change-dictionary (car (setq ispell-languages rotated)))))))
+(defvar my/ispell-dictionaries '("american" "espanol")
+  "Dictionaries supplied by the Nix aspell package.")
+(defun my/cycle-ispell-dictionary ()
+  "Switch to the next installed dictionary without a dynamic closure."
+  (interactive)
+  (let* ((current (or ispell-local-dictionary ispell-dictionary))
+         (next (or (cadr (member current my/ispell-dictionaries))
+                   (car my/ispell-dictionaries))))
+    (ispell-change-dictionary next)))
 
-(use-package fly-spell
+(use-package flyspell
+  :ensure nil
   :defer t
   :bind
   (:map flyspell-mode-map
-        ("C-." . embark-act))
+        ("C-." . embark-act)
+        ("C-c f" . my/cycle-ispell-dictionary))
   :if (executable-find "aspell")
   :hook ((text-mode . flyspell-mode)
-         (prog-mode . flyspell-prog-mode)
-         (flyspell-mode . (lambda ()
-                            (local-set-key
-                             (kbd "C-c f")
-                             (cycle-languages)))))
-  :config
-  (ispell-change-dictionary "american" t))
+         (prog-mode . flyspell-prog-mode))
+  :init
+  (setq ispell-program-name "aspell"
+        ispell-dictionary "american"))
 #+end_src
 ** Magit
 #+begin_src emacs-lisp :tangle yes
@@ -1254,12 +1240,12 @@ the languages in ISPELL-LANGUAGES when invoked."
   ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
   ;; For some commands and buffer sources it is useful to configure the
   ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  ;; Xref integration lives in a separate library in current Consult.
+  (require 'consult-xref)
   (consult-customize
    consult-theme :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
 
@@ -1430,9 +1416,8 @@ need to be passed verbatim to shell commands."
 
 ** Smartparens
 #+begin_src emacs-lisp :tangle yes
-(use-package smartparens-mode
-  :ensure smartparens  ;; install the package
-  :hook (emacs-lisp-mode prog-mode text-mode markdown-mode) ;; add `smartparens-mode` to these hooks
+(use-package smartparens
+  :hook ((prog-mode text-mode) . smartparens-mode)
   :config
   ;; load default config
   (require 'smartparens-config))
@@ -1915,7 +1900,7 @@ Use a prefix arg to get regular RET. "
 #+end_src
 ** auctex
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package emacs
+(use-package tex
   :ensure auctex
   :defer t
   :custom
@@ -1923,21 +1908,20 @@ Use a prefix arg to get regular RET. "
   (TeX-parse-self t)
   (TeX-master nil)
   ;; to use pdfview with auctex
-  (TeX-view-program-selection '((output-pdf "pdf-tools"))
-                              TeX-source-correlate-start-server t)
+  (TeX-view-program-selection '((output-pdf "pdf-tools")))
+  (TeX-source-correlate-start-server t)
   (TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
-  (TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
   :hook
   (LaTeX-mode . (lambda ()
                   (turn-on-reftex)
                   (setq reftex-plug-into-AUCTeX t)
-                  (reftex-isearch-minor-mode)
+                  (reftex-isearch-minor-mode 1)
                   (setq TeX-PDF-mode t)
                   (setq TeX-source-correlate-method 'synctex)
                   (setq TeX-source-correlate-start-server t)))
   :config
-  (when (version< emacs-version "26")
-    (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer))
 #+end_src
 * Shells
 ** Eshell
@@ -2256,8 +2240,9 @@ Generate QR code in Emacs.
 #+end_src
 ** Restore GC
 #+begin_src emacs-lisp :tangle yes :lexical no
-;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
+;; Balance collection frequency and pause duration during interactive work.
+(setq gc-cons-threshold (* 32 1024 1024)
+      read-process-output-max (* 1024 1024))
 #+end_src
 
 * test

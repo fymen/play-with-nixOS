@@ -5,7 +5,9 @@
 
   # Hyprland Settings
   extraMonitorSettings = ''
-    hl.monitor({ output = "DP-0", mode = "3840x2160@60", position = "0x0", scale = 1.5 })
+    -- Match the display rather than a connector that can change after reconnecting.
+    -- Native 4K at 150% gives a 2560x1440 logical workspace.
+    hl.monitor({ output = "desc:Samsung Electric Company Odyssey G7 HNBX501702", mode = "3840x2160@165", position = "0x0", scale = 1.5 })
   '';
 
   # Waybar Settings

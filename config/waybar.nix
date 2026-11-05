@@ -283,6 +283,16 @@ with lib;
           border-radius: 0px 0px 0px 40px;
           }
       ''
+      (optionalString (host == "desktop") ''
+        /* Logical pixels: keep the bar balanced on a 150% scaled 4K display. */
+        * { font-size: 14px; }
+        #custom-startmenu { font-size: 22px; padding: 0px 20px 0px 12px; }
+        #cpu, #memory, #window,
+        #custom-notification, #tray, #custom-exit, #idle_inhibitor, #pulseaudio {
+          padding: 0px 12px;
+        }
+        #clock { padding: 0px 12px 0px 20px; }
+      '')
     ];
   };
 }

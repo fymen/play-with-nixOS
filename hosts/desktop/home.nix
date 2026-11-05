@@ -1,5 +1,6 @@
 {
   config,
+  osConfig,
   pkgs,
   username,
   host,
@@ -51,6 +52,33 @@ in
   # manage.
   home.username = "${username}";
   home.homeDirectory = "/home/${username}";
+
+  # Hyprland does not launch XDG autostart entries itself. Manage dictation
+  # with the graphical session, using the same package as the NixOS module.
+  systemd.user.services.vocalinux = {
+    Unit = {
+      Description = "Vocalinux voice dictation";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${osConfig.programs.vocalinux.package}/bin/vocalinux --start-minimized";
+      Restart = "on-failure";
+      RestartSec = 3;
+    };
+    Install.WantedBy = [ "hyprland-session.target" ];
+  };
+
+  # Avoid a second launch through an XDG autostart runner.
+  xdg.configFile."autostart/vocalinux.desktop" = {
+    force = true;
+    text = ''
+      [Desktop Entry]
+      Type=Application
+      Name=Vocalinux
+      Hidden=true
+    '';
+  };
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release

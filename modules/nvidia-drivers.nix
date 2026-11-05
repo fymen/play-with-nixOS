@@ -20,8 +20,8 @@ in
     hardware.nvidia = {
       # Modesetting is required.
       modesetting.enable = true;
-      # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-      powerManagement.enable = false;
+      # Hosts can enable the driver's full video-memory save/restore support.
+      powerManagement.enable = mkDefault false;
       # Fine-grained power management. Turns off GPU when not in use.
       # Experimental and only works on modern Nvidia GPUs (Turing or newer).
       powerManagement.finegrained = false;

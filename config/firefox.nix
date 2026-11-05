@@ -1,6 +1,8 @@
 {
   pkgs,
   config,
+  lib,
+  host,
   ...
 }: {
   programs.firefox = {
@@ -89,7 +91,23 @@
 
         #   "privacy.firstparty.isolate" = true;
         #   "network.http.sendRefererHeader" = 0;
-      };                      # 
+      } // lib.optionalAttrs (host == "desktop") {
+        # Follow Wayland's 150% display scale instead of forcing a 1.2 pixel ratio.
+        "layout.css.devPixelsPerPx" = "-1.0";
+        # CSS pixels; override Stylix's terminal-sized monospace default here.
+        "font.size.variable.x-western" = lib.mkForce 16;
+        "font.size.monospace.x-western" = lib.mkForce 14;
+        "font.minimum-size.x-western" = 12;
+        "font.size.variable.zh-CN" = 16;
+        "font.size.monospace.zh-CN" = 14;
+        "font.minimum-size.zh-CN" = 12;
+        "font.size.variable.zh-TW" = 16;
+        "font.size.monospace.zh-TW" = 14;
+        "font.minimum-size.zh-TW" = 12;
+        "font.size.variable.zh-HK" = 16;
+        "font.size.monospace.zh-HK" = 14;
+        "font.minimum-size.zh-HK" = 12;
+      };
 
       # userChome.css to make it look better
       userChrome = "
