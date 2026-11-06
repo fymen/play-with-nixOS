@@ -286,6 +286,10 @@ with lib;
       (optionalString (host == "desktop") ''
         /* Logical pixels: keep the bar balanced on a 150% scaled 4K display. */
         * { font-size: 14px; }
+        #tray {
+          background: #${config.lib.stylix.colors.base01};
+          color: #${config.lib.stylix.colors.base05};
+        }
         #custom-startmenu { font-size: 22px; padding: 0px 20px 0px 12px; }
         #cpu, #memory, #window,
         #custom-notification, #tray, #custom-exit, #idle_inhibitor, #pulseaudio {

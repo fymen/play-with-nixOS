@@ -46,14 +46,11 @@ in
       hl.env("MOZ_ENABLE_WAYLAND", "1")
 
       hl.on("hyprland.start", function()
-        hl.exec_cmd("killall -q swww;sleep .5 && swww init")
         hl.exec_cmd("killall -q waybar;sleep .5 && waybar")
-        hl.exec_cmd("killall -q swaync;sleep .5 && swaync")
-        hl.exec_cmd("nm-applet --indicator")
-        hl.exec_cmd("lxqt-policykit-agent")
+        hl.exec_cmd("${pkgs.networkmanagerapplet}/bin/nm-applet --indicator")
+        hl.exec_cmd("${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent")
         hl.exec_cmd("wl-paste --type text --watch cliphist store")
         hl.exec_cmd("wl-paste --type image --watch cliphist store")
-        hl.exec_cmd("sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/${wallpaper}")
       end)
 
       hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })

@@ -49,6 +49,26 @@ in
   boot.initrd.kernelModules = [];
 
   networking.hostName = "desktop"; # Define your hostname.
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cuda;
+    user = "ollama";
+    home = "/home/ollama";
+    models = "/home/ollama/models";
+    host = "127.0.0.1";
+    port = 11434;
+    loadModels = [ "qwen3.5:9b" ];
+    environmentVariables = {
+      OLLAMA_CONTEXT_LENGTH = "4096";
+      OLLAMA_NUM_PARALLEL = "1";
+      OLLAMA_MAX_LOADED_MODELS = "1";
+      HTTPS_PROXY = "http://127.0.0.1:10808";
+      NO_PROXY = "localhost,127.0.0.1,::1";
+    };
+  };
+  # Allow only the service's declared writable paths under /home.
+  systemd.services.ollama.serviceConfig.ProtectHome = lib.mkForce "read-only";
+  systemd.services.ollama.unitConfig.RequiresMountsFor = [ "/home/ollama" ];
   # Flameshot 13 treats grim's physical-pixel image as logical pixels on Wayland.
   # Supply logical pixels to its private grim adapter at fractional scaling.
   nixpkgs.overlays = [
@@ -75,6 +95,8 @@ in
   # Keep large build workspaces on the spacious /home partition.
   nix.settings.build-dir = "/home/nix-build";
   systemd.tmpfiles.rules = [
+    "d /home/ollama 0750 ollama ollama -"
+    "d /home/ollama/models 0750 ollama ollama -"
     "d /home/nix-build 0700 root root -"
     # NVIDIA saves VRAM here during suspend; keep it off the root partition.
     "d /home/nvidia-vram 0700 root root -"
@@ -163,6 +185,9 @@ in
   services.cloudflare-warp.enable = true;
 
   # Docker
+  # Desktop services can start while NetworkManager connects in the background.
+  systemd.services.NetworkManager-wait-online.enable = false;
+  services.udisks2.enable = true;
   virtualisation.docker = {
     enable = true;
   };
@@ -205,6 +230,12 @@ in
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
     config.common.default = [ "hyprland" "gtk" ];
+    config.hyprland = {
+      default = [ "hyprland" "gtk" ];
+      "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Inhibit" = [ "gtk" ];
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
   };
 
   # Enable CUPS to print documents.

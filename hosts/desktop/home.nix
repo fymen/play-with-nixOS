@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   osConfig,
   pkgs,
   username,
@@ -47,6 +48,10 @@ in
   stylix.targets.fcitx5.enable = false;
   stylix.targets.firefox.profileNames = [ "${username}" ];
   stylix.targets.qt.platform = "qtct";
+  # NixOS owns the portal services and backend registration on this host.
+  xdg.portal.enable = lib.mkForce false;
+  home.sessionVariables.NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
+  systemd.user.sessionVariables.NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
 
   # Supply a complete icon theme for GTK trays and application launchers.
   gtk.iconTheme = {
@@ -230,11 +235,6 @@ in
     hugo
     localsend
   ];
-
-  services.ollama = {
-    enable = false;
-    acceleration = "cuda";
-  };
 
   services.ssh-agent.enable = true;
   services.udiskie = {
