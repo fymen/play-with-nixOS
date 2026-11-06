@@ -2110,6 +2110,29 @@ Generate QR code in Emacs.
   )
 #+end_src
 * AGI
+** Local models with llama.cpp
+Use =C-c g= to open a local chat, =C-c G= for the request menu, and
+=C-c RET= to send a message in the chat buffer.  The menu selects MiniCPM
+or Qwen; llama.cpp loads one model at a time.
+#+begin_src emacs-lisp :tangle yes
+(use-package gptel
+  :ensure t
+  :commands (gptel gptel-send gptel-menu)
+  :bind (("C-c g" . gptel)
+         ("C-c G" . gptel-menu))
+  :config
+  (setq gptel-backend
+        (gptel-make-openai "Local llama.cpp"
+          :host "127.0.0.1:8080"
+          :protocol "http"
+          :endpoint "/v1/chat/completions"
+          :key "minicpm-local"
+          :curl-args '("--noproxy" "127.0.0.1,localhost")
+          :stream t
+          :models '(minicpm-v-4.7-35b-a3b qwen3.6-27b))
+        gptel-model 'minicpm-v-4.7-35b-a3b
+        gptel-max-tokens 4096))
+#+end_src
 ** ide
 #+begin_src emacs-lisp :lexical no
 (use-package codex-ide

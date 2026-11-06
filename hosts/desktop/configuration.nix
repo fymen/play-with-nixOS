@@ -49,31 +49,30 @@ in
   boot.initrd.kernelModules = [];
 
   networking.hostName = "desktop"; # Define your hostname.
-  services.ollama = {
-    enable = true;
-    package = pkgs.ollama-cuda;
-    user = "ollama";
-    home = "/home/ollama";
-    models = "/home/ollama/models";
-    host = "127.0.0.1";
-    port = 11434;
-    loadModels = [ "qwen3.5:9b" ];
-    environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "4096";
-      OLLAMA_NUM_PARALLEL = "1";
-      OLLAMA_MAX_LOADED_MODELS = "1";
-      HTTPS_PROXY = "http://127.0.0.1:10808";
-      NO_PROXY = "localhost,127.0.0.1,::1";
-    };
-  };
-  # Allow only the service's declared writable paths under /home.
-  systemd.services.ollama.serviceConfig.ProtectHome = lib.mkForce "read-only";
-  systemd.services.ollama.unitConfig.RequiresMountsFor = [ "/home/ollama" ];
   # Flameshot 13 treats grim's physical-pixel image as logical pixels on Wayland.
   # Supply logical pixels to its private grim adapter at fractional scaling.
   nixpkgs.overlays = [
     inputs.emacs-overlay.overlay
     (final: prev: {
+      # MiniCPM-V 4.7 support landed after the llama.cpp revision in this
+      # nixpkgs pin. Build the pinned package at the upstream supported commit.
+      llama-cpp-minicpm = (prev.llama-cpp.override { cudaSupport = true; }).overrideAttrs (old: {
+        version = "11551";
+        src = prev.fetchFromGitHub {
+          owner = "ggml-org";
+          repo = "llama.cpp";
+          rev = "69f201a2051ea9b9e9b50c3cc56afd9e2ae64414";
+          hash = "sha256-r83/Ij5kWZUVh9i7OVWiiP5pS6aD2YyKLJ0i6hMxdyY=";
+        };
+        nativeBuildInputs = builtins.filter (input: (input.name or "") != "npm-config-hook") old.nativeBuildInputs;
+        npmDeps = null;
+        preConfigure = "";
+        cmakeFlags = old.cmakeFlags ++ [
+          "-DLLAMA_BUILD_WEBUI=OFF"
+          "-DLLAMA_BUILD_UI=OFF"
+          "-DLLAMA_BUILD_COMMIT:STRING=69f201a"
+        ];
+      });
       flameshot = prev.flameshot.override {
         grim = prev.writeShellScriptBin "grim" ''
           exec ${prev.grim}/bin/grim -s 1 "$@"
@@ -81,6 +80,43 @@ in
       };
     })
   ];
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-minicpm;
+    settings = {
+      host = "127.0.0.1";
+      port = 8080;
+      models-max = 1;
+      models-preset = pkgs.writeText "local-models.ini" ''
+        version = 1
+        [minicpm-v-4.7-35b-a3b]
+        model = /home/minicpm-models/MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf
+        mmproj = /home/minicpm-models/mmproj-model-f16.gguf
+        reasoning = off
+        [qwen3.6-27b]
+        model = /home/minicpm-models/Qwen3.6-27B-Q4_K_M.gguf
+        mmproj = /home/minicpm-models/mmproj-Qwen3.6-27B-Q8_0.gguf
+      '';
+      api-key = "minicpm-local";
+      ctx-size = 32768;
+      parallel = 1;
+      fit = "on";
+      jinja = true;
+      no-webui = true;
+    };
+  };
+  systemd.services.llama-cpp = {
+    serviceConfig = {
+      ProtectHome = lib.mkForce "read-only";
+      DevicePolicy = "closed";
+      DeviceAllow = [
+        "char-nvidiactl"
+        "char-nvidia-caps"
+        "char-nvidia-frontend"
+        "char-nvidia-uvm"
+      ];
+    };
+  };
   programs.vocalinux = {
     enable = true;
     # The upstream package omits the optional Wayland overlay dependency.
@@ -95,8 +131,7 @@ in
   # Keep large build workspaces on the spacious /home partition.
   nix.settings.build-dir = "/home/nix-build";
   systemd.tmpfiles.rules = [
-    "d /home/ollama 0750 ollama ollama -"
-    "d /home/ollama/models 0750 ollama ollama -"
+    "d /home/minicpm-models 0755 ${username} users -"
     "d /home/nix-build 0700 root root -"
     # NVIDIA saves VRAM here during suspend; keep it off the root partition.
     "d /home/nvidia-vram 0700 root root -"
