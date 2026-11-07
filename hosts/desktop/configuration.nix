@@ -105,7 +105,7 @@ in
       no-webui = true;
     };
   };
-  systemd.services.llama-cpp = {
+  systemd.services.llama-cpp = lib.mkIf config.services.llama-cpp.enable {
     serviceConfig = {
       ProtectHome = lib.mkForce "read-only";
       DevicePolicy = "closed";

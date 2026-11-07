@@ -234,6 +234,8 @@ in
 
     hugo
     localsend
+
+    inkscape
   ];
 
   services.ssh-agent.enable = true;

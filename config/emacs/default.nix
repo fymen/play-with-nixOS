@@ -105,7 +105,11 @@ in {
 
         # Optionally provide extra packages not in the configuration file.
         extraEmacsPackages = epkgs: [
-          #  epkgs.cask
+          (epkgs.treesit-grammars.with-grammars (grammars: with grammars; [
+            tree-sitter-c tree-sitter-cpp tree-sitter-python tree-sitter-bash
+            tree-sitter-json tree-sitter-nix tree-sitter-javascript
+            tree-sitter-typescript tree-sitter-tsx tree-sitter-css tree-sitter-html
+          ]))
         ];
 
         # The cursor extension is maintained outside the package archive.
@@ -127,7 +131,7 @@ in {
 
     services.emacs = mkIf cfg.service.enable {
       enable = true;
-      package = pkgs.emacs-pgtk;
+      package = config.programs.emacs.package;
       startWithUserSession = "graphical";
     };
 
@@ -151,6 +155,7 @@ in {
           collection-langchinese collection-fontsrecommended latexmk;
       })
       python3Packages.pygments
+      plantuml
 
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))
       emacs-all-the-icons-fonts

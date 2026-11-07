@@ -133,12 +133,7 @@
 #+begin_src emacs-lisp :tangle yes
 (use-package async
   :ensure t)
-(use-package paradox
-  :defer 30
-  :config
-  (setq paradox-execute-asynchronously t
-        ;; Avoid being ask for the token
-        paradox-github-token 0))
+;; Ordinary packages are updated through the Nix flake, not package.el.
 #+end_src
 
 * General
@@ -148,8 +143,11 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 (use-package super-save
   :ensure t
   :config
-  ;; Disable Emacs default auto save
-  (setq auto-save-default nil)
+  ;; Keep recovery snapshots independently of saves to the original file.
+  (let ((recovery-dir (expand-file-name "auto-save/" user-emacs-directory)))
+    (make-directory recovery-dir t)
+    (setq auto-save-default t
+          auto-save-file-name-transforms `((".*" ,recovery-dir t))))
 
   (setq super-save-auto-save-when-idle t)
   (setq super-save-remote-files nil)
@@ -157,7 +155,7 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   ;; Save silently
   (setq super-save-silent t)
   ;; Save all opened buffers
-  (setq super-save-all-buffers t)
+  (setq super-save-all-buffers nil)
   (super-save-mode +1))
 #+end_src
 
@@ -765,7 +763,7 @@ Never to lose your cursor again.
 ** Key frequency
 #+begin_src emacs-lisp :tangle yes
 (use-package keyfreq
-  :defer 5
+  :hook (after-init . keyfreq-mode)
   :init
   :config
   (setq keyfreq-excluded-commands
@@ -813,8 +811,8 @@ Never to lose your cursor again.
   (use-package company-flx)
   (global-company-mode 1)
   (setq company-backends (delete 'company-semantic company-backends))
-  (add-to-list 'company-backends 'company-c-headers)
-  (add-to-list 'company-backends 'company-clang)
+  ;; LSP supplies project-aware C/C++ candidates through company-capf.
+  (setq company-backends (delete 'company-clang company-backends))
   (add-to-list 'company-backends 'company-files)
   (with-eval-after-load 'company
     (company-flx-mode +1))
@@ -837,8 +835,11 @@ Never to lose your cursor again.
 
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package company-c-headers
+  :after company
+  :commands company-c-headers
   :config
-  (add-to-list 'company-backends 'company-c-headers))
+  ;; Available for manual use without duplicating clangd completions.
+  nil)
 #+end_src
 To retrive candidates for your projects, you will have to tell Clang
 where your include paths are, create a file named =.dir-local.el= at
@@ -1038,14 +1039,7 @@ your project root:
 ** Aggressive indent
    #+begin_src emacs-lisp :tangle yes
    (use-package aggressive-indent
-     :defer 1
-     :config
-     (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-     (add-hook 'c-mode-hook #'aggressive-indent-mode)
-     (add-hook 'nix-mode-hook #'aggressive-indent-mode)
-     (add-hook 'c++-mode-hook #'aggressive-indent-mode)
-     (add-hook 'c++-ts-mode-hook #'aggressive-indent-mode)
-     (add-hook 'css-mode-hook #'aggressive-indent-mode))
+     :hook (emacs-lisp-mode . aggressive-indent-mode))
    #+end_src
 ** Indent guide
    #+begin_src emacs-lisp :tangle yes :lexical no
@@ -1115,7 +1109,7 @@ your project root:
 ** Marginalia
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package marginalia
-  :defer 2
+  :hook (after-init . marginalia-mode)
   :ensure t
   :custom
   (marginalia-align 'left)
@@ -1364,7 +1358,7 @@ need to be passed verbatim to shell commands."
 ** Yasnippet
 #+begin_src emacs-lisp :tangle yes
 (use-package yasnippet
-  :defer 2
+  :hook ((prog-mode text-mode) . yas-minor-mode)
   :diminish t
   :init
   ;; (setq helm-yas-space-match-any-greedy t)
@@ -1373,7 +1367,6 @@ need to be passed verbatim to shell commands."
                                yas-completing-prompt))
   :config
   ;; (use-package helm-c-yasnippet)
-  (yas-global-mode 1)
   (add-hook 'term-mode-hook (lambda()
                               (yas-minor-mode -1))))
 
@@ -1415,10 +1408,9 @@ need to be passed verbatim to shell commands."
 ** Tree sit auto
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package treesit-auto
-  :defer 7
+  :hook (after-init . global-treesit-auto-mode)
   :config
-  (setq treesit-auto-install 'prompt)
-  (global-treesit-auto-mode))
+  (setq treesit-auto-install nil))
 #+end_src
 
 ** lsp-mode
@@ -1460,9 +1452,7 @@ need to be passed verbatim to shell commands."
 #+begin_src emacs-lisp :tangle yes
 ;; EditorConfig Emacs Plugin
 (use-package editorconfig
-  :defer 1
-  :config
-  (editorconfig-mode 1))
+  :hook (after-init . editorconfig-mode))
 #+end_src
 
 * Org mode
@@ -1595,8 +1585,6 @@ Use a prefix arg to get regular RET. "
               org-fontify-whole-block-delimiter-line t) ; Fontify whole block
 (use-package gnuplot
   :defer t)
-(use-package plantuml-mode
-  :defer t)
 ;; active Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -1610,9 +1598,8 @@ Use a prefix arg to get regular RET. "
    (latex . t)
    (emacs-lisp . t)
    ))
-;; Install plantuml.jar by: sudo apt install plantuml
-(setq org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
-(setq puml-plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
+(setq org-plantuml-exec-mode 'plantuml
+      org-plantuml-executable-path "plantuml")
 #+end_src
 ** Plantuml
 #+begin_src emacs-lisp :tangle yes
@@ -1623,9 +1610,8 @@ Use a prefix arg to get regular RET. "
   :init
   (add-to-list 'org-babel-load-languages '(plantuml . t))
   :config
-  (setq plantuml-default-exec-mode 'jar
-        plantuml-jar-path "~/.local/bin/plantuml.jar"
-        org-plantuml-jar-path "~/.local/bin/plantuml.jar"))
+  (setq plantuml-default-exec-mode 'executable
+        plantuml-executable-path "plantuml"))
 #+end_src
 ** Graphviz(dot)
 #+begin_src emacs-lisp :tangle yes
@@ -2001,7 +1987,7 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 #+begin_src emacs-lisp :tangle yes
 ;; Display available keybindings in popup
 (use-package which-key
-  :defer 30
+  :hook (after-init . which-key-mode)
   :config
   (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
   (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
@@ -2106,7 +2092,7 @@ Generate QR code in Emacs.
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package qrencode
   :ensure t
-  :defer 110
+  :commands (qrencode qrencode-region qrencode-url-at-point)
   )
 #+end_src
 * AGI
@@ -2129,7 +2115,10 @@ or Qwen; llama.cpp loads one model at a time.
           :key "minicpm-local"
           :curl-args '("--noproxy" "127.0.0.1,localhost")
           :stream t
-          :models '(minicpm-v-4.7-35b-a3b qwen3.6-27b))
+          :models '((minicpm-v-4.7-35b-a3b
+                     :capabilities (media) :mime-types ("image/jpeg" "image/png" "image/webp"))
+                    (qwen3.6-27b
+                     :capabilities (media) :mime-types ("image/jpeg" "image/png" "image/webp"))))
         gptel-model 'minicpm-v-4.7-35b-a3b
         gptel-max-tokens 4096))
 #+end_src
@@ -2201,18 +2190,16 @@ or Qwen; llama.cpp loads one model at a time.
 ;;   :config
 ;;   (direnv-mode))
 (use-package envrc
-  :defer 4
-  :config
-  (envrc-global-mode))
+  :hook (after-init . envrc-global-mode))
 #+end_src
 
 ** Save status
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package recentf
-  :defer 30
-  :config
+  :hook (after-init . recentf-mode)
+  :init
   (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-  (recentf-mode 1))
+  )
 
 (use-package emacs
   :defer 10
@@ -2220,7 +2207,6 @@ or Qwen; llama.cpp loads one model at a time.
   (setq savehist-additional-variables
         '(tablist-named-filter
           projectile-project-command-history
-          kill-ring
           command-history
           set-variable-value-history
           custom-variable-history
