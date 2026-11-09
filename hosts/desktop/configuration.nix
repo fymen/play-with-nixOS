@@ -92,15 +92,20 @@ in
         [minicpm-v-4.7-35b-a3b]
         model = /home/minicpm-models/MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf
         mmproj = /home/minicpm-models/mmproj-model-f16.gguf
+        # n-gpu-layers = 20
         reasoning = off
         [qwen3.6-27b]
         model = /home/minicpm-models/Qwen3.6-27B-Q4_K_M.gguf
         mmproj = /home/minicpm-models/mmproj-Qwen3.6-27B-Q8_0.gguf
       '';
       api-key = "minicpm-local";
-      ctx-size = 32768;
+      ctx-size = 65536;
       parallel = 1;
+      flash-attn = "on";
+      cache-type-k = "q8_0";
+      cache-type-v = "q8_0";
       fit = "on";
+      fit-target = 1536;
       jinja = true;
       no-webui = true;
     };

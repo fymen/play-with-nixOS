@@ -142,6 +142,18 @@ in
 
     # python311Packages.pygments
 
+    # Python development tools and commonly used libraries.
+    (python3.withPackages (ps: [
+      ps.pip
+      ps.virtualenv
+      ps.ipython
+      ps.requests
+      ps.numpy
+      ps.pandas
+      ps.pillow
+      ps.pytest
+    ]))
+
     # Image viewer
     feh
     eog

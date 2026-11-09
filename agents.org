@@ -31,6 +31,11 @@ This is a NixOS flake-based configuration managing multiple hosts with home-mana
 支持项目技能发现的环境可将所需技能安装至 =.agents/skills/=；
 尚未安装时，可在任务中明确指定上述 =SKILL.md= 路径读取使用。
 
+** Agent Instructions
+
+本文件 =agents.org= 是仓库项目约定的完整说明。若新增 =AGENTS.md=，应将其作为
+简短入口并链接到本文件，避免维护重复且可能不一致的指令副本。
+
 验证 Nix 配置前先读当前 =Makefile=：=make= 会临时激活系统，
 =make build= 会先更新 =mysecrets= 输入锁。只需构建时，使用对应
 skill 中带 =--no-update-lock-file= 的直接构建命令。
@@ -58,6 +63,12 @@ make build    # Build without activating
 
 *** Adding a Package (User)
 Edit =hosts/<hostname>/home.nix=, add package to =home.packages=.
+
+Python 开发环境由对应主机的 Home Manager 配置管理。桌面机使用
+=python3.withPackages= 在 =hosts/desktop/home.nix= 中声明 Python 解释器及常用库；
+新增或移除 Python 包时修改该包集，不要通过 pip 修改 Nix 管理的系统环境。
+项目专属依赖应优先使用项目自己的 =pyproject.toml=、锁文件或开发 shell，避免
+把项目依赖无差别加入桌面机的全局用户环境。
 
 *** Adding a Package (System)
 Edit =hosts/<hostname>/configuration.nix= or =system/system-packages.nix=.
@@ -94,6 +105,7 @@ Edit =hosts/<hostname>/configuration.nix= or =system/system-packages.nix=.
 - =hosts/desktop/configuration.nix= - System config (services, boot, networking)
 - =hosts/desktop/home.nix= - User packages and dotfiles
 - =hosts/desktop/variables.nix= - Host-specific variables
+- Python interpreter and user-level Python packages are declared in =hosts/desktop/home.nix=
 
 ** Shared Configs
 - =config/emacs/emacs.org= - Emacs configuration (literate org-mode)

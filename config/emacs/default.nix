@@ -154,7 +154,7 @@ in {
         inherit (texlive) scheme-small collection-xetex collection-latexextra
           collection-langchinese collection-fontsrecommended latexmk;
       })
-      python3Packages.pygments
+
       plantuml
 
       (aspellWithDicts (dicts: with dicts; [en en-computers en-science es]))
