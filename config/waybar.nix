@@ -26,7 +26,8 @@ with lib;
 
           "cpu"
           "memory"
-          "hyprland/workspaces"
+          "ext/workspaces"
+          # "hyprland/workspaces"
 
         ];
         modules-right = [
@@ -40,6 +41,11 @@ with lib;
           "clock"
         ];
 
+        "ext/workspaces" = {
+          on-click = "activate";
+          all-outputs = false;
+        };
+
         "hyprland/workspaces" = {
           format = "{name}";
           format-icons = {
@@ -47,6 +53,7 @@ with lib;
             active = " ";
             urgent = " ";
           };
+          "on-click" = "activate";
           on-scroll-up = "hyprctl dispatch workspace e+1";
           on-scroll-down = "hyprctl dispatch workspace e-1";
         };
