@@ -35,7 +35,7 @@ Stylix 在系统层启用，但部分应用在主机 `home.nix` 中通过 `styli
 nix build --no-update-lock-file --no-link .#nixosConfigurations.desktop.config.system.build.toplevel
 ```
 
-`make` 会临时激活系统，`make build` 会更新私有输入锁；普通桌面修改不应顺带更新依赖。
+`make` 只显示帮助；`make build HOST=<host>` 只构建、不激活、不更新锁文件。只有明确授权时才运行 `make test`、`make install` 或部署目标；普通桌面修改不应顺带更新依赖。
 
 运行中的桌面不一定加载了新配置。仅在任务授权的范围内重载或重启相关组件；本任务若只是编辑配置，交付文件与验证结果即可。不要直接改写 Home Manager 管理的生成文件来代替持久修改。
 

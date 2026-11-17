@@ -44,6 +44,18 @@ in
   stylix.targets.qt.platform = "qtct";
   stylix.targets.firefox.profileNames = [ "${username}" ];
 
+  # Home Manager owns the Hyprland portals; GTK supplies file chooser dialogs.
+  xdg.portal = {
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = [ "hyprland" "gtk" ];
+    config.hyprland = {
+      default = [ "hyprland" "gtk" ];
+      "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Inhibit" = [ "gtk" ];
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
+  };
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "${username}";
@@ -92,7 +104,7 @@ in
     ydotool # Desktop automation tool, move mouse or something
     autojump # Jump around directories fastly
 
-    neofetch
+    hyfetch
 
     font-manager
     # Terminal
@@ -113,7 +125,6 @@ in
     mpv
     yt-dlp
     ripgrep
-    silver-searcher
 
     multimarkdown
     graphviz

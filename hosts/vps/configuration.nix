@@ -124,18 +124,13 @@
   networking.firewall = {
     # enable the firewall
     enable = true;
-    # allow you to SSH in over the public internet
-    allowedTCPPorts = [ 22 443 ];
+    # SSH, ACME HTTP-01 validation / HTTPS redirects, and HTTPS.
+    allowedTCPPorts = [ 22 80 443 ];
   };
 
-  modules.tailscale = {
-    enable = true;
-    routingFeature = "server";
-    autoprovision = {
-      enable = true;
-      operator = "hildar";
-      options = [ "--advertise-exit-node" ];
-    };
+  services.tailscale = {
+    useRoutingFeatures = "server";
+    extraSetFlags = [ "--operator=hildar" "--advertise-exit-node" ];
   };
 
   # networking.firewall.allowedUDPPorts = [ ... ];

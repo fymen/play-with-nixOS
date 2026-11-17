@@ -2,15 +2,24 @@ Personal NixOS configuration.
 
 Try to keep it straight and simple.
 
-=make= to build this configuration without switch.
+=make= shows help without changing the system. =HOST= defaults to the local hostname;
+use e.g. =make build HOST=desktop= to select a host explicitly.
 
-=make debug= is the same as =make=, but with more debug info and a colorized summary output powered by [[https://github.com/maralorn/nix-output-monitor][nix-output-monitor]].
+=make eval= evaluates the selected host. =make build= builds without activation,
+lock updates, or a =result= symlink. =make debug= builds with tracing and a summary
+powered by [[https://github.com/maralorn/nix-output-monitor][nix-output-monitor]]; it does not activate the result.
 
-=make install= to switch it.
+=make test= temporarily activates the selected host; =make install= switches permanently.
 
-=make clean= to dump garbage.
+=make update= updates all inputs only. =make update-secrets= updates only =mysecrets=.
+Neither command builds or activates the system.
 
-=make deploy= to deploy remote host.
+=make clean= removes old system/user generations and runs garbage collection.
+=make cleanup= removes system history older than seven days and runs store GC.
+Both remove rollback history; neither activates the system.
+
+=make deploy= switches the VPS remotely; =make test_deploy= temporarily activates it.
+The deployment target defaults to =DEPLOY_HOST=root@vps= and =BUILD_HOST=localhost=.
 
 * Some features
 Some modules that I used in this profile.

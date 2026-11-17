@@ -47,8 +47,10 @@
 
   # Configure keymap in X11
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -61,7 +63,7 @@
   };
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -84,7 +86,10 @@
     isNormalUser = true;
     description = "oscar";
     extraGroups = ["networkmanager" "wheel"];
-    password = "test";
+    # Reuse the administrator key already authorized on the VPS.
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBjK6DOt7/zGUdDUpKTf1oB37+nZp8fiIBYcGAeDxS5y oscar@laptop"
+    ];
     shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
@@ -106,7 +111,11 @@
 
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
 
   networking.firewall.allowedTCPPorts = [22];

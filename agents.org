@@ -36,9 +36,9 @@ This is a NixOS flake-based configuration managing multiple hosts with home-mana
 本文件 =agents.org= 是仓库项目约定的完整说明。若新增 =AGENTS.md=，应将其作为
 简短入口并链接到本文件，避免维护重复且可能不一致的指令副本。
 
-验证 Nix 配置前先读当前 =Makefile=：=make= 会临时激活系统，
-=make build= 会先更新 =mysecrets= 输入锁。只需构建时，使用对应
-skill 中带 =--no-update-lock-file= 的直接构建命令。
+验证 Nix 配置前先读当前 =Makefile=：=make= 只显示帮助，
+=make eval HOST=<host>= 求值，=make build HOST=<host>= 只构建，均不更新锁文件。
+只有 =make test=、=make install= 和部署目标会激活系统；更新和清理目标不再激活。
 
 ** Hosts
 
@@ -54,9 +54,12 @@ skill 中带 =--no-update-lock-file= 的直接构建命令。
 ** Testing Changes
 
 #+begin_src sh
-make          # nixos-rebuild test (temporary activation)
-make install  # nixos-rebuild switch (permanent)
-make build    # Build without activating
+make                      # Show help only
+make eval HOST=desktop    # Evaluate without lock updates
+make build HOST=desktop   # Build without activation or lock updates
+make test HOST=desktop    # Temporary activation (explicit authorization required)
+make install HOST=desktop # Permanent switch (explicit authorization required)
+make update               # Update inputs only; no activation
 #+end_src
 
 ** Common Tasks
@@ -92,7 +95,7 @@ Edit =hosts/<hostname>/configuration.nix= or =system/system-packages.nix=.
 
 ** Git Commits
 - Use conventional commit format: =feat:=, =fix:=, =refactor:=, etc.
-- Test with =make= before committing
+- Evaluate and build affected hosts with =make eval HOST=<host>= and =make build HOST=<host>= before committing
 - Never commit secrets or API keys
 
 ** Package Naming
@@ -137,15 +140,17 @@ These are informational, not errors:
 - stylix (theming)
 - agenix (secrets)
 - emacs-overlay
-- nixos-hardware
-- antigravity-nix
+- codex-cli-nix
+- nix-openclaw
+- vocalinux
+- mysecrets (private encrypted secrets and public keys)
 
 ** Required Environment Variables
 - =GEMINI_API_KEY= - For aidermacs/aider AI coding assistant
 
 * Tips for AI Agents
 
-1. Always run =make= after changes to verify configuration builds
+1. Validate affected hosts with =make eval HOST=<host>= and, when appropriate, =make build HOST=<host>=; plain =make= only shows help
 2. Check =git status= before committing
 3. Use =nix search nixpkgs <pkg>= to verify package names
 4. The flake uses =nixpkgs-unstable= - packages may have different names than stable

@@ -1,3 +1,18 @@
+# Local assistant history and state
 .aider*
+/.agent-shell/
+
+# Local data and development environments
 data/
-result
+/.direnv/
+
+# Nix build result links
+/result
+/result-*
+
+# Editor backups, lock files, and swap files
+*~
+.#*
+\#*\#
+*.swp
+*.swo

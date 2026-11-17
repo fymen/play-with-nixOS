@@ -5,6 +5,9 @@
   host,
   ...
 }: {
+  # Firefox Color requires the NUR input disabled in flake.nix.
+  stylix.targets.firefox.colorTheme.enable = false;
+
   programs.firefox = {
     enable = true;
     configPath = ".mozilla/firefox";

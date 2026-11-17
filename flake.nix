@@ -5,7 +5,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    stylix.url = "github:danth/stylix";
+    stylix = {
+      url = "github:danth/stylix";
+      # Firefox Color is disabled in config/firefox.nix; avoid its NUR input.
+      inputs.nur.follows = "";
+    };
 
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
     # Official OpenClaw Nix distribution, pinned to the validated 2026.10.7 release.
@@ -16,23 +20,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur.url = "github:nix-community/NUR";
     vocalinux.url = "github:VocaHQ/vocalinux";
 
     emacs-overlay = {
       url  = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     # Personal secrets
     mysecrets = {
       url = "git+ssh://git@github.com/fymen/secrets?ref=main";
       flake = false;
     };
-
-    # Devshell
-    treefmt-nix.url = "github:numtide/treefmt-nix";
 
   };
 

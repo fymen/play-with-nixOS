@@ -53,6 +53,37 @@ in
   home.sessionVariables.NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
   systemd.user.sessionVariables.NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
 
+  # Match the local llama.cpp router's model alias and actual context size.
+  # Keep Pi's settings/auth files writable and preserve the default cloud model.
+  home.file.".pi/agent/models.json".text = builtins.toJSON {
+    "$schema" = "https://pi.dev/schemas/models.schema.json";
+    providers.local-llama = {
+      name = "Local llama.cpp";
+      baseUrl = "http://127.0.0.1:8080/v1";
+      api = "openai-completions";
+      # Local-only service credential, shared with services.llama-cpp.
+      apiKey = "minicpm-local";
+      authHeader = true;
+      models = [
+        {
+          id = "minicpm-v-4.7-35b-a3b";
+          name = "MiniCPM-V 4.7 35B-A3B (local)";
+          reasoning = false;
+          input = [ "text" "image" ];
+          contextWindow = 65536;
+          maxTokens = 8192;
+          cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; };
+          compat = {
+            supportsStore = false;
+            supportsDeveloperRole = false;
+            supportsReasoningEffort = false;
+            maxTokensField = "max_tokens";
+          };
+        }
+      ];
+    };
+  };
+
   # Supply a complete icon theme for GTK trays and application launchers.
   gtk.iconTheme = {
     name = "Papirus-Dark";

@@ -33,12 +33,14 @@ description: 维护 play-with-nixOS 仓库的多主机 NixOS 与 Home Manager �
 
 先读 `Makefile`。当前目标的实际副作用是：
 
-- `make`、`make debug`：执行 `sudo nixos-rebuild test`，会临时激活系统。
-- `make install`：执行 `switch`，会激活并更新启动默认项。
-- `make build`：先更新 `mysecrets` 锁，再构建；不适合需要保持锁文件的普通验证。
-- `make update`：更新全部输入并 `switch`。
-- `make deploy`、`make test_deploy`：分别对 VPS 执行远程 `switch`、`test`。
-- `make clean`、`make cleanup`：清理历史或 store，并再次激活系统。
+- `make`、`make all`：只显示帮助，无系统变更。
+- `make eval HOST=<host>`：只求值；`make build HOST=<host>`：只构建，不激活、不更新锁文件。
+- `make debug HOST=<host>`：构建并输出 trace/nom 摘要，不激活；管道失败会正确返回错误。
+- `make test HOST=<host>`：临时激活；`make install HOST=<host>`：永久切换。
+- `make update`：只更新全部输入；`make update-secrets`：只更新 `mysecrets`，均不激活。
+- `make deploy`、`make test_deploy`：分别对 VPS 执行远程 `switch`、`test`；支持 `DEPLOY_HOST`、`BUILD_HOST`。
+- `make clean`、`make cleanup`：清理历史或 store，不激活，会减少可回滚代数。
+- 未指定 `HOST` 时使用本机 hostname；普通验证和激活目标均禁止自动更新锁文件。
 
 普通配置修改先使用不激活、不更新锁文件的命令。以下以 `desktop` 为例，替换成目标主机：
 

@@ -11,7 +11,7 @@
     open-sans
     source-sans-pro
     font-awesome
-    etBook
+    et-book
 
     # Chinese fonts
     wqy_zenhei

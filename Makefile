@@ -1,33 +1,71 @@
-all:
-	sudo nixos-rebuild test --flake .
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+.DEFAULT_GOAL := help
 
-install:
-	sudo nixos-rebuild switch --flake .
+HOST ?= $(shell hostname)
+DEPLOY_HOST ?= root@vps
+BUILD_HOST ?= localhost
 
-debug:
-	sudo nixos-rebuild test --flake . --show-trace --fast --option eval-cache false |& nom
+help:
+	@printf '%s\n' \
+	  'Usage: make <target> [HOST=desktop|laptop|vps|vm]' \
+	  '  help / all       Show this help (default; no system changes)' \
+	  '  eval             Evaluate HOST without building or changing the lock' \
+	  '  build            Build HOST without activation or lock updates' \
+	  '  debug            Build with tracing and nix-output-monitor' \
+	  '  test             Temporarily activate HOST (sudo)' \
+	  '  install          Switch to HOST permanently (sudo)' \
+	  '  update           Update all inputs; do not build or activate' \
+	  '  update-secrets   Update only the mysecrets input' \
+	  '  archive          Archive the locked flake inputs' \
+	  '  build-vm         Build the vm host VM without activation' \
+	  '  list-generations Show system generation history' \
+	  '  list-packages    Query available packages with nix-env' \
+	  '  cleanup          Delete system history older than 7d and run GC' \
+	  '  clean            Delete old system/user generations and run GC' \
+	  '  test_deploy      Temporarily activate vps on DEPLOY_HOST' \
+	  '  deploy           Switch vps on DEPLOY_HOST permanently' \
+	  'HOST defaults to the local hostname; deployment always uses .#vps.' \
+	  'clean / cleanup remove rollback history; neither activates a system.' \
+	  'Deployment variables: DEPLOY_HOST=root@vps BUILD_HOST=localhost'
+
+all: help
+
+eval:
+	nix eval --no-update-lock-file '.#nixosConfigurations.$(HOST).config.system.build.toplevel.drvPath'
 
 build:
-	nix flake lock --update-input mysecrets
-	nixos-rebuild build --flake . --fast --show-trace |& nom
+	nix build --no-update-lock-file --no-link '.#nixosConfigurations.$(HOST).config.system.build.toplevel'
+
+debug:
+	nix build --no-update-lock-file --no-link --show-trace --option eval-cache false '.#nixosConfigurations.$(HOST).config.system.build.toplevel' |& nom
+
+test:
+	sudo nixos-rebuild test --flake '.#$(HOST)' --no-update-lock-file
+
+install:
+	sudo nixos-rebuild switch --flake '.#$(HOST)' --no-update-lock-file
+
 update:
 	nix flake update
-	sudo nixos-rebuild switch --flake .
+
+update-secrets:
+	nix flake update mysecrets
+
 archive:
-	nix flake archive
+	nix flake archive --no-update-lock-file
 
 cleanup:
-	sudo nix profile wipe-history --older-than 7d --profile  /nix/var/nix/profiles/system
-	sudo nix store gc --debug
-	sudo nixos-rebuild switch --flake .
+	sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system
+	sudo nix store gc
 
 clean:
-	sudo nix-collect-garbage -d # System
-	nix-collect-garbage -d # User
-	sudo nixos-rebuild switch --flake .
+	sudo nix-collect-garbage -d # System: removes old generations
+	nix-collect-garbage -d # User: removes old generations
 
 build-vm:
-	 nixos-rebuild build-vm --flake .#vm
+	nixos-rebuild build-vm --flake .#vm --no-update-lock-file
+
 list-generations:
 	nix profile history --profile /nix/var/nix/profiles/system
 
@@ -35,8 +73,9 @@ list-packages:
 	nix-env -qa
 
 test_deploy:
-	  nixos-rebuild test --flake .#vps --target-host root@vps --build-host localhost --verbose |& nom
-deploy:
-	  nixos-rebuild switch --flake .#vps --target-host root@vps --build-host localhost --verbose
+	nixos-rebuild test --flake .#vps --no-update-lock-file --target-host '$(DEPLOY_HOST)' --build-host '$(BUILD_HOST)' --verbose |& nom
 
-.PHONY: all debug install update cleanup clean list-generations list-packages deploy test_deploy build
+deploy:
+	nixos-rebuild switch --flake .#vps --no-update-lock-file --target-host '$(DEPLOY_HOST)' --build-host '$(BUILD_HOST)' --verbose
+
+.PHONY: help all eval build debug test install update update-secrets archive cleanup clean build-vm list-generations list-packages test_deploy deploy

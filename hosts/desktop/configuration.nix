@@ -22,9 +22,10 @@ in
       ../../system/system.nix
       ../../system/system-packages.nix
       ../../system/desktop-packages.nix
+      ../../system/desktop-base.nix
       # ../../system/window-systems
       ../../system/fonts.nix
-      # ../../system/tailscale.nix
+      ../../system/tailscale.nix
       # ../../system/virtualisation.nix
       ../../modules/amd-drivers.nix
       ../../modules/intel-drivers.nix
@@ -188,8 +189,6 @@ in
   # Configure network proxy if necessary
   networking.proxy.default = "http://127.0.0.1:10808/";
   networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-  # Enable networking
-  networking.networkmanager.enable = true;
   # Prefer working DNS servers over the router's unreliable DHCP DNS.
   networking.networkmanager.insertNameservers = [
     "1.1.1.1"
@@ -199,26 +198,6 @@ in
     sudo.wheelNeedsPassword = false;
 
     pam.services.swaylock = {};
-  };
-
-  environment.localBinInPath = true;
-
-  # Set your time zone.
-  time.timeZone = "Asia/Shanghai";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "zh_CN.UTF-8";
-    LC_IDENTIFICATION = "zh_CN.UTF-8";
-    LC_MEASUREMENT = "zh_CN.UTF-8";
-    LC_MONETARY = "zh_CN.UTF-8";
-    LC_NAME = "zh_CN.UTF-8";
-    LC_NUMERIC = "zh_CN.UTF-8";
-    LC_PAPER = "zh_CN.UTF-8";
-    LC_TELEPHONE = "zh_CN.UTF-8";
-    LC_TIME = "zh_CN.UTF-8";
   };
 
   services.v2raya.enable = true;
@@ -232,9 +211,6 @@ in
     enable = true;
   };
   hardware.nvidia-container-toolkit.enable = true;
-
-  # Enable OpenGL
-  hardware.graphics.enable = true;
 
   # Extra Module Options
   drivers.amdgpu.enable = false;
@@ -280,22 +256,6 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = false;
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -353,8 +313,6 @@ in
   ];
 
   programs = {
-    zsh.enable = true;
-    dconf.enable = true;
     clash-verge = {
       enable = false;
       autoStart = true;
@@ -363,25 +321,12 @@ in
     };
   };
 
-  # Enable the Open SSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
-    };
+  # Join the tailnet interactively with `tailscale up --accept-dns=false`.
+  # Keep local DNS/proxy behavior; selecting an exit node remains opt-in.
+  services.tailscale = {
+    useRoutingFeatures = "client";
+    extraSetFlags = [ "--operator=${username}" "--accept-dns=false" ];
   };
-
-  #modules.windowSystem.wayland.enable = true;
-  # modules.tailscale = {
-  #   enable = true;
-  #   routingFeature = "client";
-  #   autoprovision = {
-  #     enable = true;
-  #     cmd = "${pkgs.tailscale}/bin/tailscale up";
-  #     # options = [ "--exit-node-allow-lan-access" "--exit-node=" ];
-  #   };
-  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

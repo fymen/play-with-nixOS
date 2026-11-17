@@ -27,10 +27,11 @@ nix eval --no-update-lock-file .#nixosConfigurations.desktop.config.system.build
 nix build --no-update-lock-file --no-link .#nixosConfigurations.desktop.config.system.build.toplevel
 ```
 
-Replace `desktop` with the affected host. `make` temporarily activates the system;
-`make install` permanently switches it. `make build` first updates the private
-`mysecrets` input; prefer the direct build above for ordinary validation.
-`make update` updates all inputs and activates the result.
+Replace `desktop` with the affected host. `make` only shows help.
+`make eval HOST=desktop` and `make build HOST=desktop` validate without activation
+or lock updates. `make test` temporarily activates; `make install` permanently
+switches (both accept `HOST`). `make update` only updates inputs;
+`make update-secrets` updates only `mysecrets`. Cleanup targets do not activate.
 
 ## Coding Style & Naming Conventions
 

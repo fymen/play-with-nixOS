@@ -39,6 +39,6 @@ description: 修改或排查本仓库 config/emacs/emacs.org 中的 Org 文学�
 
 4. 行为问题用最小相关表达式验证；语法通过、Nix 构建成功和运行时行为正确分别报告。缺少包的 trace 要结合最终错误和实际加载结果判断。
 
-`make` 会临时激活系统，`make build` 会先更新私有 secrets 输入；不要把它们当作单纯的 Lisp 语法检查。
+`make` 只显示帮助；`make build HOST=<host>` 构建系统但不激活、不更新锁文件。系统构建不能替代 Lisp 语法检查；只有明确授权时才运行 `make test`、`make install` 或部署目标。
 
 运行于 Emacs 会话中时，只有需要缓冲区未保存内容、point/region 或实时状态才使用可用的 Emacs MCP 工具。保存或编辑前确认磁盘与缓冲区状态，不覆盖未保存内容。只按任务已授权的范围求值配置，避免全量重载扰动会话。
