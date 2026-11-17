@@ -166,6 +166,7 @@ in
     gnuplot
     mpv
     ffmpeg
+    nodejs_24 # Node.js and npm for Remotion/TypeScript projects
     whisper-cpp # Provides whisper-cli for local speech transcription
     yt-dlp
     ripgrep

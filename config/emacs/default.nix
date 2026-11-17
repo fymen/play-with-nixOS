@@ -105,6 +105,7 @@ in {
 
         # Optionally provide extra packages not in the configuration file.
         extraEmacsPackages = epkgs: [
+          (pkgs.callPackage ../../packages/pilish-grammars.nix {})
           (epkgs.treesit-grammars.with-grammars (grammars: with grammars; [
             tree-sitter-c tree-sitter-cpp tree-sitter-python tree-sitter-bash
             tree-sitter-json tree-sitter-nix tree-sitter-javascript
@@ -115,6 +116,7 @@ in {
         # The cursor extension is maintained outside the package archive.
         override = final: prev: {
           cursor-chg = chgcursor-el;
+          pilish = final.callPackage ../../packages/pilish.nix {};
         };
 
         # Optionally override derivations.
@@ -148,6 +150,7 @@ in {
     home.packages = with pkgs; [
       # agent-shell speaks ACP through this adapter, rather than the Codex CLI.
       codex-acp
+      (pkgs.callPackage ../../packages/pi-coding-agent.nix {})
       inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       (texlive.combine {

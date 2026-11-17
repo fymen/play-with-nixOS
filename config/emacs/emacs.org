@@ -1487,6 +1487,8 @@ need to be passed verbatim to shell commands."
         org-image-actual-width nil     ; Resize image to window width
         org-indirect-buffer-display 'other-window ; Tab on a task expand it in a new window
         org-footnote-section nil
+        org-footnote-define-inline nil
+        org-footnote-auto-adjust t
         org-outline-path-complete-in-steps nil) ; No steps in path display
 
   (custom-theme-set-faces
@@ -2096,6 +2098,17 @@ Generate QR code in Emacs.
   )
 #+end_src
 * AGI
+** Pi coding agent with Pilish
+Use =C-c a p= or =M-x pilish= from a project directory.  Compose a prompt
+in the input buffer and send it with =C-c C-c=.  Pi and Pilish are managed
+by Nix; authenticate once by running =pi= in a terminal and using =/login=.
+Restart Emacs after activating the new package environment so it finds =pi=.
+#+begin_src emacs-lisp :tangle yes
+(use-package pilish
+  :ensure t
+  :commands (pilish)
+  :bind (("C-c a p" . pilish)))
+#+end_src
 ** Local models with llama.cpp
 Use =C-c g= to open a local chat, =C-c G= for the request menu, and
 =C-c RET= to send a message in the chat buffer.  The menu selects MiniCPM
@@ -2130,7 +2143,8 @@ or Qwen; llama.cpp loads one model at a time.
   (unless (use-region-p)
     (user-error "请先选中需要修改的文字"))
   (let* ((text (buffer-substring-no-properties beg end))
-         (output (generate-new-buffer "*AI改稿*"))
+         (buffer-name "*AI改稿*")
+         (output (get-buffer-create buffer-name))
          (prompt
           (concat
            "你是一位资深作家，请审阅下面的原文，按以下结构输出：\n"
@@ -2143,11 +2157,27 @@ or Qwen; llama.cpp loads one model at a time.
            "【原文开始】\n" text "\n【原文结束】")))
     (with-current-buffer output
       (org-mode)
-      (insert "* 修改建议与改稿\n\n"))
-    (display-buffer
-     output
-     '((display-buffer-pop-up-window)
-       (side . right)))
+      (goto-char (point-max))
+      (unless (search-backward "* 修改建议与改稿\n\n" nil t)
+        (insert "* 修改建议与改稿\n\n")))
+    ;; 处理窗口显示逻辑
+    (let* ((right-win (get-buffer-window output t))
+           (main-win (selected-window)))
+      (cond
+       ;; 如果右边窗口已存在且显示该buffer，则直接复用
+       (right-win
+        (set-window-buffer right-win output))
+       ;; 如果右边窗口不存在，但存在其他窗口（非主窗口），尝试在最右侧打开
+       ((not right-win)
+        (unless (window-at (1+ (window-width)) (selected-frame))
+          (split-window-right))
+        (let ((new-right-win (get-window-at (1+ (window-width)) (selected-frame))))
+          (when new-right-win
+            (set-window-buffer new-right-win output))))
+       ;; 如果只有一个主窗口，则split右边并显示
+       (t
+        (split-window-right)
+        (set-window-buffer (get-window-at (1+ (window-width)) (selected-frame)) output))))
     (gptel-request prompt
       :buffer output
       :position (with-current-buffer output (point-max))
