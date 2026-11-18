@@ -124,7 +124,7 @@ in
     };
   };
   programs.vocalinux = {
-    enable = true;
+    enable = false;
     # The upstream package omits the optional Wayland overlay dependency.
     # Use its own nixpkgs so GTK and GI typelibs remain ABI-compatible.
     package = inputs.vocalinux.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {

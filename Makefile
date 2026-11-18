@@ -21,8 +21,8 @@ help:
 	  '  build-vm         Build the vm host VM without activation' \
 	  '  list-generations Show system generation history' \
 	  '  list-packages    Query available packages with nix-env' \
-	  '  cleanup          Delete system history older than 7d and run GC' \
-	  '  clean            Delete old system/user generations and run GC' \
+	  '  clean          Delete system history older than 7d and run GC' \
+	  '  cleanup            Delete old system/user generations and run GC' \
 	  '  test_deploy      Temporarily activate vps on DEPLOY_HOST' \
 	  '  deploy           Switch vps on DEPLOY_HOST permanently' \
 	  'HOST defaults to the local hostname; deployment always uses .#vps.' \
@@ -55,11 +55,11 @@ update-secrets:
 archive:
 	nix flake archive --no-update-lock-file
 
-cleanup:
+clean:
 	sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system
 	sudo nix store gc
 
-clean:
+cleanup:
 	sudo nix-collect-garbage -d # System: removes old generations
 	nix-collect-garbage -d # User: removes old generations
 
