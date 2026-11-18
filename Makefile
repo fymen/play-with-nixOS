@@ -35,7 +35,7 @@ eval:
 	nix eval --no-update-lock-file '.#nixosConfigurations.$(HOST).config.system.build.toplevel.drvPath'
 
 build:
-	nix build --no-update-lock-file --no-link '.#nixosConfigurations.$(HOST).config.system.build.toplevel'
+	nix build  --no-link '.#nixosConfigurations.$(HOST).config.system.build.toplevel'
 
 debug:
 	nix build --no-update-lock-file --no-link --show-trace --option eval-cache false '.#nixosConfigurations.$(HOST).config.system.build.toplevel' |& nom

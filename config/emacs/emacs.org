@@ -2193,6 +2193,22 @@ or Qwen; llama.cpp loads one model at a time.
 
 #+end_src
 
+** agent-shell（omp）
+通过 ACP 直接启动 =omp acp=，沿用 omp 已有的登录状态与模型配置。
+系统安装本配置后，在项目目录的 buffer 中按 =C-c a o= 或执行
+=M-x agent-shell=；=C-u M-x agent-shell= 新建独立会话。
+需要 Emacs 的 =exec-path= 中可找到支持 ACP 的 =omp=。
+desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运行
+=make install HOST=desktop= 激活，再重启 Emacs。
+
+#+begin_src emacs-lisp :tangle yes :lexical no
+(use-package agent-shell
+  :commands (agent-shell agent-shell-omp-start)
+  :bind ("C-c a o" . agent-shell)
+  :custom
+  (agent-shell-preferred-agent-config 'omp))
+#+end_src
+
 ** leetcode
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package leetcode

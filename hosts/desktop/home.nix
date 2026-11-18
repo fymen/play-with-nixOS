@@ -192,6 +192,7 @@ in
     feh
     eog
     # Editor
+    cc-switch # Manage AI coding agent configurations
 
     # Shells
     oh-my-zsh
