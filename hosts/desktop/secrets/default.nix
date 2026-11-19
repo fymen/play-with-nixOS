@@ -10,6 +10,13 @@
   ];
 
   age.identityPaths = ["/etc/ssh/id_ed25519"];
+
+  age.secrets.hermes-weixin-env = {
+    file = "${inputs.mysecrets}/hermes-weixin-env.age";
+    mode = "0600";
+    owner = "oscar";
+    group = "users";
+  };
   age.secrets."private.org" = {
     symlink = false;
     file = "${inputs.mysecrets}/private.age";

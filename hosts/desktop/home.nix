@@ -13,6 +13,7 @@ let
 in
 {
   imports = [
+    ../../config/hermes.nix
     inputs.omp.homeManagerModules.default
     # ../../config/i3
     # ../../config/gtk.nix

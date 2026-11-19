@@ -11,6 +11,8 @@
       inputs.nur.follows = "";
     };
 
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+    
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
     omp = {
       # Fetch pinned source without the rate-limited GitHub API.
