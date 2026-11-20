@@ -1,0 +1,7 @@
+[Unit]
+Description=每日新闻报告抓取服务
+
+[Service]
+Type=oneshot
+ExecStart=/home/oscar/hworkspace/daily-report/fetch-news.sh
+WorkingDirectory=/home/oscar

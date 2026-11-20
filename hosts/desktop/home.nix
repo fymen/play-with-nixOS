@@ -14,6 +14,7 @@ in
 {
   imports = [
     ../../config/hermes.nix
+    ../../config/daily-report.nix
     inputs.omp.homeManagerModules.default
     # ../../config/i3
     # ../../config/gtk.nix
@@ -194,9 +195,6 @@ in
     eog
     # Editor
     cc-switch # Manage AI coding agent configurations
-
-    # Shells
-    oh-my-zsh
 
     # Data visualization
     gnuplot

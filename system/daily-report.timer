@@ -1,0 +1,20 @@
+# /home/oscar/codes/play-with-nixOS/system/daily-report.timer
+[Unit]
+Description=每日新闻报告抓取定时器
+
+[Timer]
+OnCalendar=*-*-* 09:00:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
+
+# /home/oscar/codes/play-with-nixOS/system/daily-report.service
+[Unit]
+Description=每日新闻报告抓取服务
+
+[Service]
+Type=oneshot
+ExecStart=/home/oscar/hworkspace/daily-report/fetch-news.sh
+WorkingDirectory=/home/oscar

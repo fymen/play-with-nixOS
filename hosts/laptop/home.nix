@@ -117,9 +117,6 @@ in
     eog
     # Editor
 
-    # Shells
-    oh-my-zsh
-
     # Data visualization
     gnuplot
     mpv

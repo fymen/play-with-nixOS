@@ -313,15 +313,6 @@ in
 
   ];
 
-  programs = {
-    clash-verge = {
-      enable = false;
-      autoStart = true;
-      tunMode = true;
-      serviceMode = true;
-    };
-  };
-
   # Join the tailnet interactively with `tailscale up --accept-dns=false`.
   # Keep local DNS/proxy behavior; selecting an exit node remains opt-in.
   services.tailscale = {
