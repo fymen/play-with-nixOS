@@ -27,8 +27,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    vocalinux.url = "github:VocaHQ/vocalinux";
-
     emacs-overlay = {
       url  = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";

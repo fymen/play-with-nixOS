@@ -700,22 +700,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
-      "locked": {
-        "lastModified": 1791456040,
-        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "omp": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -829,8 +813,7 @@
         "nix-openclaw": "nix-openclaw",
         "nixpkgs": "nixpkgs_5",
         "omp": "omp",
-        "stylix": "stylix",
-        "vocalinux": "vocalinux"
+        "stylix": "stylix"
       }
     },
     "rust-overlay": {
@@ -1105,24 +1088,6 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
-        "type": "github"
-      }
-    },
-    "vocalinux": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_7"
-      },
-      "locked": {
-        "lastModified": 1793675847,
-        "narHash": "sha256-7VBKXamHNRgNFgue728aNIjWRX2o9kxVpAvoCuR6Bqk=",
-        "owner": "VocaHQ",
-        "repo": "vocalinux",
-        "rev": "0a4d637f5f45596e9389afe926354acc7cd2848e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "VocaHQ",
-        "repo": "vocalinux",
         "type": "github"
       }
     }

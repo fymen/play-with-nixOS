@@ -1,6 +1,14 @@
-{ config, inputs, osConfig, pkgs, ... }:
+{ config, inputs, lib, osConfig, pkgs, ... }:
 let
   localLlama = osConfig.services.llama-cpp.settings;
+  # Audio/CTranslate2 wheels use dlopen. Keep these paths local to Hermes.
+  audioLibraries = "${lib.makeLibraryPath [ pkgs.portaudio pkgs.cudaPackages_12.libcublas pkgs.cudaPackages_12.cudnn ]}:/run/opengl-driver/lib";
+  hermesWithAudio = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      wrapProgram "$out/bin/hermes" \
+        --prefix LD_LIBRARY_PATH : "${audioLibraries}"
+    '';
+  });
 in
 {
   imports = [ inputs.hermes-agent.homeManagerModules.default ];
@@ -16,6 +24,7 @@ in
 
   services.hermes-agent = {
     enable = true;
+    package = hermesWithAudio;
     gateway.enable = true;
     backend.mode = "dashboard";
     backend.port = 9119;
@@ -50,6 +59,30 @@ in
         cwd = "${config.home.homeDirectory}/hworkspace";
 
         timeout = 120;
+      };
+
+      # INT8 GPU weights and a short idle timeout leave headroom for MiniCPM.
+      stt = {
+        enabled = false;
+        provider = "local";
+        language = "zh";
+        local = {
+          model = "turbo";
+          language = "zh";
+          device = "cuda";
+          compute_type = "int8_float16";
+          vad = true;
+          condition_on_previous_text = false;
+          unload_after_idle_seconds = 60;
+        };
+      };
+
+      voice = {
+        record_key = "ctrl+b";
+        max_recording_seconds = 60;
+        silence_duration = 2.0;
+        auto_tts = false;
+        stop_phrases = [ "停止语音" "结束语音" "stop" ];
       };
 
       compression = {

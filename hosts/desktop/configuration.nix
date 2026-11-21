@@ -18,7 +18,6 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      inputs.vocalinux.nixosModules.vocalinux
       ../../system/system.nix
       ../../system/system-packages.nix
       ../../system/desktop-packages.nix
@@ -93,7 +92,7 @@ in
         [minicpm-v-4.7-35b-a3b]
         model = /home/minicpm-models/MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf
         mmproj = /home/minicpm-models/mmproj-model-f16.gguf
-        # n-gpu-layers = 20
+        n-gpu-layers = auto
         reasoning = off
         [qwen3.6-27b]
         model = /home/minicpm-models/Qwen3.6-27B-Q4_K_M.gguf
@@ -103,8 +102,8 @@ in
       ctx-size = 65536;
       parallel = 1;
       flash-attn = "on";
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
+      cache-type-k = "q4_0";
+      cache-type-v = "q4_0";
       fit = "on";
       fit-target = 1536;
       jinja = true;
@@ -123,17 +122,6 @@ in
       ];
     };
   };
-  programs.vocalinux = {
-    enable = false;
-    # The upstream package omits the optional Wayland overlay dependency.
-    # Use its own nixpkgs so GTK and GI typelibs remain ABI-compatible.
-    package = inputs.vocalinux.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-      buildInputs = (old.buildInputs or []) ++ [
-        inputs.vocalinux.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.gtk-layer-shell
-      ];
-    });
-  };
-
   # Keep large build workspaces on the spacious /home partition.
   nix.settings.build-dir = "/home/nix-build";
   systemd.tmpfiles.rules = [

@@ -41,7 +41,7 @@
               frame-title-format "%f %4 %b %Z %* %10 %I"
               x-select-enable-clipboard t
               x-select-enable-primary t)
-;; Vocalinux's clipboard injection can send C-S-v on Wayland.
+;; Provide explicit C-S-v clipboard paste on Wayland.
 (defun my/wayland-clipboard-paste ()
   "Insert Wayland clipboard text without relying on GTK selection ownership."
   (interactive)

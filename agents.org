@@ -142,7 +142,6 @@ These are informational, not errors:
 - emacs-overlay
 - codex-cli-nix
 - nix-openclaw
-- vocalinux
 - mysecrets (private encrypted secrets and public keys)
 
 ** Required Environment Variables
