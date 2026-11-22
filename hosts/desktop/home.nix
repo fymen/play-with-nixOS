@@ -262,7 +262,6 @@ in
     opencc
 
     kitty
-    v2raya
 
     wl-clipboard
     cliphist

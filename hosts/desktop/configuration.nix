@@ -188,7 +188,7 @@ in
     pam.services.swaylock = {};
   };
 
-  services.v2raya.enable = true;
+  services.v2raya.enable = false;
   services.cloudflare-warp.enable = true;
 
   # Docker
