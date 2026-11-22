@@ -10,6 +10,8 @@
 }:
 let
   inherit (import ./variables.nix) gitUsername gitEmail;
+  zlibCli = pkgs.callPackage ../../packages/zlib-cli.nix { };
+  computerUseLinux = pkgs.callPackage ../../packages/computer-use-linux.nix { };
 in
 {
   imports = [
@@ -46,6 +48,13 @@ in
     ../../config/openclaw.nix
   ];
 
+  dconf.enable = true;
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      toolkit-accessibility = true;
+    };
+  };
 
   programs.omp.enable = true;
 
@@ -117,9 +126,15 @@ in
   # home.file.".face.icon".source = ../../config/face.jpg;
   # home.file.".config/face.jpg".source = ../../config/face.jpg;
 
+  # Keep a declarative CLI entry available for narrowly scoped local deployment.
+  home.file.".local/bin/zlib".source = lib.getExe zlibCli;
+  home.file.".local/bin/computer-use-linux".source = lib.getExe computerUseLinux;
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    computerUseLinux
+    zlibCli
     nix-output-monitor
     nix-tree
     nil

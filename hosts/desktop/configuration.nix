@@ -228,6 +228,8 @@ in
     };
   };
   services.gnome.gnome-keyring.enable = true;
+  services.gnome.at-spi2-core.enable = true;
+
   security.pam.services.greetd.enableGnomeKeyring = true;
   security.polkit.enable = true;
   xdg.portal = {

@@ -493,14 +493,34 @@
         "type": "github"
       }
     },
+    "hypruse": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794773129,
+        "narHash": "sha256-UbtfbOuNFXWU1Ov5aS7r1skhPEVrmW46F2tvfMdO1+s=",
+        "owner": "IlyasKhallouki",
+        "repo": "hypruse",
+        "rev": "1ca642dbe2662c0daf12e5c162c0aaa7d5e37c33",
+        "type": "github"
+      },
+      "original": {
+        "owner": "IlyasKhallouki",
+        "repo": "hypruse",
+        "type": "github"
+      }
+    },
     "mysecrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1795082954,
-        "narHash": "sha256-fyyBr8PFd1nH6IbgVixJcZFkLOjUXvE4a5ckT6AaX4o=",
+        "lastModified": 1795316140,
+        "narHash": "sha256-w1r4+2WtJdIuqDRwlMFsnB89t2A6W7DARYxTapzMIE0=",
         "ref": "main",
-        "rev": "c6ad7e0f41135f482da89c5e10002aac21841acb",
-        "revCount": 3,
+        "rev": "056b6302a90b35a7aeb85028afa14ebc4b4b8c65",
+        "revCount": 4,
         "type": "git",
         "url": "ssh://git@github.com/fymen/secrets"
       },
@@ -809,6 +829,7 @@
         "emacs-overlay": "emacs-overlay",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager_3",
+        "hypruse": "hypruse",
         "mysecrets": "mysecrets",
         "nix-openclaw": "nix-openclaw",
         "nixpkgs": "nixpkgs_5",

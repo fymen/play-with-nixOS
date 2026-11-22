@@ -17,6 +17,13 @@
     owner = "oscar";
     group = "users";
   };
+  age.secrets.deepseek-api-key = {
+    file = "${inputs.mysecrets}/deepseek-api-key.age";
+    mode = "0600";
+    owner = "oscar";
+    group = "users";
+  };
+
   age.secrets."private.org" = {
     symlink = false;
     file = "${inputs.mysecrets}/private.age";

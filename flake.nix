@@ -21,7 +21,13 @@
     };
     # Official OpenClaw Nix distribution, pinned to the validated 2026.10.7 release.
     nix-openclaw.url = "github:openclaw/nix-openclaw/4b261b08c173467dc41db7b43d8265529c435055";
-    
+
+
+    hypruse = {
+      url = "github:IlyasKhallouki/hypruse";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
