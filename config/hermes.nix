@@ -17,6 +17,9 @@ let
           --prefix LD_LIBRARY_PATH : "${audioLibraries}"
       '';
     });
+
+  # Hermes Desktop 的独立包（Electron app），用于生成 .desktop 入口。
+  hermesDesktop = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop;
 in
 {
   imports = [
@@ -206,6 +209,23 @@ in
           group_policy = "disabled";
         };
       };
+    };
+  };
+
+  # rofi(drun) 里启动原生 Wayland 版 Hermes Desktop。
+  # 模块生成的 com.nousresearch.hermes.desktop 不带 --ozone-platform=wayland，
+  # 会落到 XWayland；此同名入口写进 ~/.local/share/applications/，优先级更高。
+  xdg.desktopEntries."com.nousresearch.hermes" = {
+    name = "Hermes";
+    genericName = "Hermes Desktop";
+    comment = "Launch Hermes Desktop";
+    exec = "${hermesDesktop}/bin/hermes-desktop --ozone-platform=wayland";
+    icon = "${hermesDesktop}/share/icons/hicolor/1024x1024/apps/hermes.png";
+    terminal = false;
+    categories = [ "Utility" ];
+    settings = {
+      StartupNotify = "true";
+      StartupWMClass = "com.nousresearch.hermes";
     };
   };
 }
