@@ -1,0 +1,4 @@
+{ ... }:
+{
+  imports = [ ../vps/home.nix ];
+}

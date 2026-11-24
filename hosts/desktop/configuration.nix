@@ -192,7 +192,7 @@ in
 
   # Configure network proxy if necessary
   networking.proxy.default = "http://127.0.0.1:10808/";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain,130.162.136.252";
+  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain,130.162.149.210";
   # Prefer working DNS servers over the router's unreliable DHCP DNS.
   networking.networkmanager.insertNameservers = [
     "1.1.1.1"

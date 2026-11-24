@@ -3,12 +3,14 @@ SHELL := bash
 .DEFAULT_GOAL := help
 
 HOST ?= $(shell hostname)
-DEPLOY_HOST ?= root@vps
-BUILD_HOST ?= localhost
+DEPLOY_HOST ?= $(if $(filter oracle-vps,$(HOST)),root@130.162.149.210,root@$(HOST))
+BUILD_HOST ?=
+# nixos-rebuild treats --build-host localhost as SSH, not a local build.
+BUILD_HOST_FLAGS = $(if $(filter-out localhost,$(strip $(BUILD_HOST))),--build-host '$(BUILD_HOST)')
 
 help:
 	@printf '%s\n' \
-	  'Usage: make <target> [HOST=desktop|laptop|vps|vm]' \
+	  'Usage: make <target> [HOST=desktop|laptop|vps|oracle-vps|vm]' \
 	  '  help / all       Show this help (default; no system changes)' \
 	  '  eval             Evaluate HOST without building or changing the lock' \
 	  '  build            Build HOST without activation or lock updates' \
@@ -23,11 +25,14 @@ help:
 	  '  list-packages    Query available packages with nix-env' \
 	  '  clean          Delete system history older than 7d and run GC' \
 	  '  cleanup            Delete old system/user generations and run GC' \
-	  '  test_deploy      Temporarily activate vps on DEPLOY_HOST' \
-	  '  deploy           Switch vps on DEPLOY_HOST permanently' \
-	  'HOST defaults to the local hostname; deployment always uses .#vps.' \
+	  '  test_deploy      Temporarily activate HOST on DEPLOY_HOST' \
+	  '  deploy           Switch HOST on DEPLOY_HOST permanently' \
+	  'HOST defaults to vps for deployment, otherwise the local hostname.' \
 	  'clean / cleanup remove rollback history; neither activates a system.' \
-	  'Deployment variables: DEPLOY_HOST=root@vps BUILD_HOST=localhost'
+	  'Deployment: make test_deploy HOST=oracle-vps (or make deploy HOST=oracle-vps)' \
+	  'DEPLOY_HOST defaults to root@HOST (oracle-vps: root@130.162.149.210).' \
+	  'BUILD_HOST empty or localhost builds locally; set user@builder for remote builds.' \
+	  'Override deployment variables: DEPLOY_HOST=user@address BUILD_HOST=user@builder'
 
 all: help
 
@@ -72,10 +77,13 @@ list-generations:
 list-packages:
 	nix-env -qa
 
+# Command-line HOST takes precedence over this deployment default.
+test_deploy deploy: HOST = vps
+
 test_deploy:
-	nixos-rebuild test --flake .#vps --no-update-lock-file --target-host '$(DEPLOY_HOST)' --build-host '$(BUILD_HOST)' --verbose |& nom
+	nixos-rebuild test --flake '.#$(HOST)' --no-update-lock-file --target-host '$(DEPLOY_HOST)' $(BUILD_HOST_FLAGS) --verbose |& nom
 
 deploy:
-	nixos-rebuild switch --flake .#vps --no-update-lock-file --target-host '$(DEPLOY_HOST)' --build-host '$(BUILD_HOST)' --verbose
+	nixos-rebuild switch --flake '.#$(HOST)' --no-update-lock-file --target-host '$(DEPLOY_HOST)' $(BUILD_HOST_FLAGS) --verbose
 
 .PHONY: help all eval build debug test install update update-secrets archive cleanup clean build-vm list-generations list-packages test_deploy deploy

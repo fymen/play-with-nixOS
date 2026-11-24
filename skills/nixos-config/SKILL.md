@@ -38,7 +38,7 @@ description: 维护 play-with-nixOS 仓库的多主机 NixOS 与 Home Manager �
 - `make debug HOST=<host>`：构建并输出 trace/nom 摘要，不激活；管道失败会正确返回错误。
 - `make test HOST=<host>`：临时激活；`make install HOST=<host>`：永久切换。
 - `make update`：只更新全部输入；`make update-secrets`：只更新 `mysecrets`，均不激活。
-- `make deploy`、`make test_deploy`：分别对 VPS 执行远程 `switch`、`test`；支持 `DEPLOY_HOST`、`BUILD_HOST`。
+- `make deploy`、`make test_deploy`：分别对 `HOST` 执行远程 `switch`、`test`，部署默认 `HOST=vps`；支持 `DEPLOY_HOST`、`BUILD_HOST`。`HOST=oracle-vps` 默认连接 `root@130.162.149.210`。
 - `make clean`、`make cleanup`：清理历史或 store，不激活，会减少可回滚代数。
 - 未指定 `HOST` 时使用本机 hostname；普通验证和激活目标均禁止自动更新锁文件。
 

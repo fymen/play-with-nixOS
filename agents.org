@@ -47,6 +47,7 @@ This is a NixOS flake-based configuration managing multiple hosts with home-mana
 | desktop  | oscar    | Full desktop, home-manager, stylix, agenix |
 | laptop   | oscar    | Full desktop, home-manager, stylix, agenix |
 | vps      | hildar   | Server, home-manager only         |
+| oracle-vps | oscar  | Oracle E2.1.Micro x86-64 server, home-manager |
 | vm       | oscar    | Minimal VM, no home-manager       |
 
 * Development Workflow

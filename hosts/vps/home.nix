@@ -33,6 +33,7 @@
     btop
     bat
     dust
+    net-tools
   ];
 
   programs = {

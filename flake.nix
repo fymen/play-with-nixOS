@@ -71,6 +71,13 @@
           useStylix = false;
           useAgenix = false;
         };
+        oracle-vps = {
+          system = "x86_64-linux";
+          username = "oscar";
+          useHomeManager = true;
+          useStylix = false;
+          useAgenix = true;
+        };
         vm = {
           system = "x86_64-linux";
           username = "oscar";
