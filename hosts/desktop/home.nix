@@ -78,7 +78,7 @@ in
       baseUrl = "http://127.0.0.1:8080/v1";
       api = "openai-completions";
       # Local-only service credential, shared with services.llama-cpp.
-      apiKey = "minicpm-local";
+      apiKey = "local";
       authHeader = true;
       models = [
         {
@@ -96,8 +96,58 @@ in
             maxTokensField = "max_tokens";
           };
         }
+
+        {
+          id = "inkling";
+          name = "inkling(local)";
+          reasoning = false;
+          input = [ "text" "image" ];
+          contextWindow = 65536;
+          maxTokens = 8192;
+          cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; };
+          compat = {
+            supportsStore = false;
+            supportsDeveloperRole = false;
+            supportsReasoningEffort = false;
+            maxTokensField = "max_tokens";
+          };
+        }
+
       ];
+
     };
+
+    settings = {
+      defaultProvider = "llamacpp";
+      defaultModel = "inkling";
+    };
+  };
+
+
+  # Inkling-2-Mini on port 8081 (Unsloth prebuilt llama.cpp, b12631).
+  # Key facts from upstream check (2026-11-23):
+  #   - Latest llama.cpp release: b12651 (release 2026-11-23). Local unsloth bundle
+  #     is older (b12631, source 59f66204) but works with the root-layout GGUFs
+  #     kept under /home/minicpm-models (no Mainline_Support variant available).
+  #   - Mainline llama.cpp (>= b12611, #32704-merged) reads only the Mainline_Support
+  #     GGUF layout, so do NOT swap this service to the NixOS llama-cpp-minicpm build
+  #     without switching model files. The repo pinned at 69f201a ("11551") predates
+  #     Inkling-2-Mini looped-layer support and cannot serve it.
+  # Restart: systemctl --user restart inkling  (replaces ~/.local/bin/inkling-restart).
+  systemd.user.services.inkling = {
+    Unit = {
+      Description = "Inkling-2-Mini (local llama.cpp)";
+      After = [ "default.target" ];
+      Wants = [ "default.target" ];
+    };
+    Service = {
+      ExecStart = "%h/.local/bin/inkling-run";
+      Restart = "on-failure";
+      RestartSec = "3";
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+    Install = { WantedBy = [ "default.target" ]; };
   };
 
   # Supply a complete icon theme for GTK trays and application launchers.
@@ -181,7 +231,6 @@ in
     ]))
 
     # Image viewer
-    feh
     eog
     # Editor
     cc-switch # Manage AI coding agent configurations
@@ -221,10 +270,6 @@ in
 
     parallel
 
-    # youtube-music
-    ani-cli # Watch animation from cli
-    rnnoise-plugin
-
     # Download
     qrencode
     calibre
@@ -235,7 +280,7 @@ in
     nautilus
 
     poppler-utils
-    
+
     # appimage-run
 
     # tor-browser
@@ -253,8 +298,6 @@ in
 
     # electrum
 
-    # Diagram Editor
-    dia
     # obs-studio                  # Recorder and streaming
 
     #    vmware-workstation

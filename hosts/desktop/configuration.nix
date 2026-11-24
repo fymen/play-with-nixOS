@@ -191,6 +191,7 @@ in
   services.v2raya.enable = false;
   services.cloudflare-warp.enable = true;
 
+
   # Docker
   # Desktop services can start while NetworkManager connects in the background.
   systemd.services.NetworkManager-wait-online.enable = false;
@@ -227,11 +228,17 @@ in
       };
     };
   };
+
   services.gnome.gnome-keyring.enable = true;
+  security.pam.services = {
+    greetd.enableGnomeKeyring = true;
+    login.enableGnomeKeyring = true;
+
+    polkit.enable = true;
+  };
+
   services.gnome.at-spi2-core.enable = true;
 
-  security.pam.services.greetd.enableGnomeKeyring = true;
-  security.polkit.enable = true;
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
