@@ -12,6 +12,7 @@ let
   inherit (import ./variables.nix) gitUsername gitEmail;
   zlibCli = pkgs.callPackage ../../packages/zlib-cli.nix { };
   computerUseLinux = pkgs.callPackage ../../packages/computer-use-linux.nix { };
+
 in
 {
   imports = [
@@ -69,7 +70,7 @@ in
   home.sessionVariables.NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
   systemd.user.sessionVariables.NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
 
-  # Match the local llama.cpp router's model alias and actual context size.
+  # Both local models use the same llama.cpp router.
   # Keep Pi's settings/auth files writable and preserve the default cloud model.
   home.file.".pi/agent/models.json".text = builtins.toJSON {
     "$schema" = "https://pi.dev/schemas/models.schema.json";
@@ -78,7 +79,7 @@ in
       baseUrl = "http://127.0.0.1:8080/v1";
       api = "openai-completions";
       # Local-only service credential, shared with services.llama-cpp.
-      apiKey = "local";
+      apiKey = "minicpm-local";
       authHeader = true;
       models = [
         {
@@ -96,7 +97,6 @@ in
             maxTokensField = "max_tokens";
           };
         }
-
         {
           id = "inkling";
           name = "inkling(local)";
@@ -117,38 +117,8 @@ in
 
     };
 
-    settings = {
-      defaultProvider = "llamacpp";
-      defaultModel = "inkling";
-    };
   };
 
-
-  # Inkling-2-Mini on port 8081 (Unsloth prebuilt llama.cpp, b12631).
-  # Key facts from upstream check (2026-11-23):
-  #   - Latest llama.cpp release: b12651 (release 2026-11-23). Local unsloth bundle
-  #     is older (b12631, source 59f66204) but works with the root-layout GGUFs
-  #     kept under /home/minicpm-models (no Mainline_Support variant available).
-  #   - Mainline llama.cpp (>= b12611, #32704-merged) reads only the Mainline_Support
-  #     GGUF layout, so do NOT swap this service to the NixOS llama-cpp-minicpm build
-  #     without switching model files. The repo pinned at 69f201a ("11551") predates
-  #     Inkling-2-Mini looped-layer support and cannot serve it.
-  # Restart: systemctl --user restart inkling  (replaces ~/.local/bin/inkling-restart).
-  systemd.user.services.inkling = {
-    Unit = {
-      Description = "Inkling-2-Mini (local llama.cpp)";
-      After = [ "default.target" ];
-      Wants = [ "default.target" ];
-    };
-    Service = {
-      ExecStart = "%h/.local/bin/inkling-run";
-      Restart = "on-failure";
-      RestartSec = "3";
-      StandardOutput = "journal";
-      StandardError = "journal";
-    };
-    Install = { WantedBy = [ "default.target" ]; };
-  };
 
   # Supply a complete icon theme for GTK trays and application launchers.
   gtk.iconTheme = {

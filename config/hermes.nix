@@ -96,13 +96,13 @@ in
         # streaming = true;
       };
 
-      # 本地第二个 llama.cpp 实例：Inkling-2-Mini 跑在 8081。现在由 home.nix 中的 systemd user 服务 inkling 管理（见 hosts/desktop/home.nix）；~/.local/bin/inkling-run 是它的 ExecStart。
+      # Inkling and MiniCPM share the local llama.cpp router.
       # 在 Hermes 里用 /model inkling 切换；context_length 由 Hermes 探测本地端点得到。
       model_aliases.inkling = {
         model = "inkling";
         provider = "custom";
-        base_url = "http://127.0.0.1:8081/v1";
-        api_key = "inkling-local";
+        base_url = "http://${localLlama.host}:${toString localLlama.port}/v1";
+        api_key = localLlama.api-key;
       };
 
       # computer_use providers are selected separately, not generic plugins.

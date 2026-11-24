@@ -54,23 +54,24 @@ in
   nixpkgs.overlays = [
     inputs.emacs-overlay.overlay
     (final: prev: {
-      # MiniCPM-V 4.7 support landed after the llama.cpp revision in this
-      # nixpkgs pin. Build the pinned package at the upstream supported commit.
+      # Mainline b12662 supports both MiniCPM-V 4.7 and Inkling's mainline GGUF.
       llama-cpp-minicpm = (prev.llama-cpp.override { cudaSupport = true; }).overrideAttrs (old: {
-        version = "11551";
+        version = "12662";
         src = prev.fetchFromGitHub {
           owner = "ggml-org";
           repo = "llama.cpp";
-          rev = "69f201a2051ea9b9e9b50c3cc56afd9e2ae64414";
-          hash = "sha256-r83/Ij5kWZUVh9i7OVWiiP5pS6aD2YyKLJ0i6hMxdyY=";
+          rev = "b12662";
+          hash = "sha256-mYD05rUpGnSJTO1r4YAop0TjaPAqo0CuTXG3vejWF78=";
         };
         nativeBuildInputs = builtins.filter (input: (input.name or "") != "npm-config-hook") old.nativeBuildInputs;
+        buildInputs = old.buildInputs ++ [ prev.cudaPackages_12.cuda_nvml_dev ];
         npmDeps = null;
         preConfigure = "";
         cmakeFlags = old.cmakeFlags ++ [
           "-DLLAMA_BUILD_WEBUI=OFF"
           "-DLLAMA_BUILD_UI=OFF"
-          "-DLLAMA_BUILD_COMMIT:STRING=69f201a"
+          "-DLLAMA_BUILD_COMMIT:STRING=1f3ea67"
+          "-DCMAKE_CUDA_ARCHITECTURES=89"
         ];
       });
       flameshot = prev.flameshot.override {
@@ -89,24 +90,39 @@ in
       models-max = 1;
       models-preset = pkgs.writeText "local-models.ini" ''
         version = 1
+        [*]
+        ctx-size = 65536
+        parallel = 1
+        flash-attn = on
+        cache-type-k = q4_0
+        cache-type-v = q4_0
+        fit = on
+        fit-target = 1536
+        jinja = true
         [minicpm-v-4.7-35b-a3b]
         model = /home/minicpm-models/MiniCPM-V-4_7-35B-A3B-Q4_K_M.gguf
         mmproj = /home/minicpm-models/mmproj-model-f16.gguf
         n-gpu-layers = auto
         reasoning = off
+        [inkling]
+        model = /home/minicpm-models/Inkling-2-Mini-UD-Q3_K_XL-mainline.gguf
+        mmproj = /home/minicpm-models/mmproj-F16.gguf
+        n-gpu-layers = 99
+        n-cpu-moe = 16
+        load-mode = none
+        cache-type-k = q4_0
+        cache-type-v = q4_0
+        fit = off
+        ubatch-size = 64
+        temp = 1.0
+        top-p = 1.0
+        top-k = 0
+        min-p = 0.0
         [qwen3.6-27b]
         model = /home/minicpm-models/Qwen3.6-27B-Q4_K_M.gguf
         mmproj = /home/minicpm-models/mmproj-Qwen3.6-27B-Q8_0.gguf
       '';
       api-key = "minicpm-local";
-      ctx-size = 65536;
-      parallel = 1;
-      flash-attn = "on";
-      cache-type-k = "q4_0";
-      cache-type-v = "q4_0";
-      fit = "on";
-      fit-target = 1536;
-      jinja = true;
       no-webui = true;
     };
   };
@@ -176,7 +192,7 @@ in
 
   # Configure network proxy if necessary
   networking.proxy.default = "http://127.0.0.1:10808/";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain,130.162.136.252";
   # Prefer working DNS servers over the router's unreliable DHCP DNS.
   networking.networkmanager.insertNameservers = [
     "1.1.1.1"
