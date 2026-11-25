@@ -190,9 +190,10 @@ in
 
 
 
-  # Configure network proxy if necessary
+  # Explicit HTTP/SOCKS forwarding only; transparent proxy stays disabled
+  # in v2rayA's application settings. Keep the service itself proxy-free.
   networking.proxy.default = "http://127.0.0.1:10808/";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain,130.162.149.210";
+  networking.proxy.noProxy = "127.0.0.1,localhost,::1,internal.domain,130.162.149.210";
   # Prefer working DNS servers over the router's unreliable DHCP DNS.
   networking.networkmanager.insertNameservers = [
     "1.1.1.1"
@@ -204,8 +205,24 @@ in
     pam.services.swaylock = {};
   };
 
-  services.v2raya.enable = false;
-  services.cloudflare-warp.enable = true;
+  services.v2raya = {
+    enable = false;
+    # The existing SQLite state requires the newer server and matching core.
+    package = pkgs.callPackage ../../packages/v2raya.nix { };
+  };
+  systemd.services.v2raya = {
+    environment = {
+      V2RAYA_ADDRESS = "127.0.0.1:2017";
+      V2RAYA_CONFIG = "/etc/v2raya";
+      V2RAYA_NFTABLES_SUPPORT = "off";
+    };
+    # Do not let the root proxy service inherit a proxy pointing at itself.
+    serviceConfig.UnsetEnvironment = [
+      "http_proxy" "https_proxy" "all_proxy" "ftp_proxy"
+      "HTTP_PROXY" "HTTPS_PROXY" "ALL_PROXY" "FTP_PROXY"
+    ];
+  };
+  services.cloudflare-warp.enable = false;
 
 
   # Docker

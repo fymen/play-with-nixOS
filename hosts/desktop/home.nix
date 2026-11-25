@@ -12,6 +12,7 @@ let
   inherit (import ./variables.nix) gitUsername gitEmail;
   zlibCli = pkgs.callPackage ../../packages/zlib-cli.nix { };
   computerUseLinux = pkgs.callPackage ../../packages/computer-use-linux.nix { };
+  magpie = pkgs.callPackage ../../packages/magpie.nix { };
 
 in
 {
@@ -72,52 +73,52 @@ in
 
   # Both local models use the same llama.cpp router.
   # Keep Pi's settings/auth files writable and preserve the default cloud model.
-  home.file.".pi/agent/models.json".text = builtins.toJSON {
-    "$schema" = "https://pi.dev/schemas/models.schema.json";
-    providers.local-llama = {
-      name = "Local llama.cpp";
-      baseUrl = "http://127.0.0.1:8080/v1";
-      api = "openai-completions";
-      # Local-only service credential, shared with services.llama-cpp.
-      apiKey = "minicpm-local";
-      authHeader = true;
-      models = [
-        {
-          id = "minicpm-v-4.7-35b-a3b";
-          name = "MiniCPM-V 4.7 35B-A3B (local)";
-          reasoning = false;
-          input = [ "text" "image" ];
-          contextWindow = 65536;
-          maxTokens = 8192;
-          cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; };
-          compat = {
-            supportsStore = false;
-            supportsDeveloperRole = false;
-            supportsReasoningEffort = false;
-            maxTokensField = "max_tokens";
-          };
-        }
-        {
-          id = "inkling";
-          name = "inkling(local)";
-          reasoning = false;
-          input = [ "text" "image" ];
-          contextWindow = 65536;
-          maxTokens = 8192;
-          cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; };
-          compat = {
-            supportsStore = false;
-            supportsDeveloperRole = false;
-            supportsReasoningEffort = false;
-            maxTokensField = "max_tokens";
-          };
-        }
+  # home.file.".pi/agent/models.json".text = builtins.toJSON {
+  #   "$schema" = "https://pi.dev/schemas/models.schema.json";
+  #   providers.local-llama = {
+  #     name = "Local llama.cpp";
+  #     baseUrl = "http://127.0.0.1:8080/v1";
+  #     api = "openai-completions";
+  #     # Local-only service credential, shared with services.llama-cpp.
+  #     apiKey = "minicpm-local";
+  #     authHeader = true;
+  #     models = [
+  #       {
+  #         id = "minicpm-v-4.7-35b-a3b";
+  #         name = "MiniCPM-V 4.7 35B-A3B (local)";
+  #         reasoning = false;
+  #         input = [ "text" "image" ];
+  #         contextWindow = 65536;
+  #         maxTokens = 8192;
+  #         cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; };
+  #         compat = {
+  #           supportsStore = false;
+  #           supportsDeveloperRole = false;
+  #           supportsReasoningEffort = false;
+  #           maxTokensField = "max_tokens";
+  #         };
+  #       }
+  #       {
+  #         id = "inkling";
+  #         name = "inkling(local)";
+  #         reasoning = false;
+  #         input = [ "text" "image" ];
+  #         contextWindow = 65536;
+  #         maxTokens = 8192;
+  #         cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; };
+  #         compat = {
+  #           supportsStore = false;
+  #           supportsDeveloperRole = false;
+  #           supportsReasoningEffort = false;
+  #           maxTokensField = "max_tokens";
+  #         };
+  #       }
 
-      ];
+  #     ];
 
-    };
+  #   };
 
-  };
+  # };
 
 
   # Supply a complete icon theme for GTK trays and application launchers.
@@ -149,10 +150,14 @@ in
   # Keep a declarative CLI entry available for narrowly scoped local deployment.
   home.file.".local/bin/zlib".source = lib.getExe zlibCli;
   home.file.".local/bin/computer-use-linux".source = lib.getExe computerUseLinux;
+  home.file.".local/bin/magpie".source = lib.getExe magpie;
+  home.file.".local/share/applications/magpie.desktop".source = "${magpie}/share/applications/magpie.desktop";
+  home.file.".local/share/icons/hicolor/scalable/apps/magpie.svg".source = "${magpie}/share/icons/hicolor/scalable/apps/magpie.svg";
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    magpie
     computerUseLinux
     zlibCli
     nix-output-monitor
@@ -203,7 +208,6 @@ in
     # Image viewer
     eog
     # Editor
-    cc-switch # Manage AI coding agent configurations
 
     # Data visualization
     gnuplot
@@ -251,7 +255,7 @@ in
 
     poppler-utils
 
-    # appimage-run
+    appimage-run
 
     # tor-browser
     tsukimi
