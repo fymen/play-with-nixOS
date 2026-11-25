@@ -196,7 +196,20 @@ in
       compression = {
         enabled = true;
         threshold = 0.5;
+        threshold_tokens = 16384;
         target_ratio = 0.2;
+        proactive_prune_tokens = 4096;
+        idle_compact_after_seconds = 600;
+      };
+
+      # Compaction summaries stay on a remote fast model even when the
+      # conversation runs on the local Inkling model (aux provider "auto"
+      # would otherwise inherit it and make summarization slow).
+      auxiliary = {
+        compression = {
+          provider = "magpie";
+          model = "deepseek/deepseek-flash";
+        };
       };
 
       display = {

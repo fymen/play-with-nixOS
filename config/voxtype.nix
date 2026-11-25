@@ -4,7 +4,7 @@ let
 in
 {
   services.voxtype = {
-    enable = true;
+    enable = false;
     package = pkgs.voxtype-vulkan;
     # Restrict Vulkan to the NVIDIA driver, not Mesa's software implementation.
     environment.VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json";
@@ -53,12 +53,12 @@ in
   home.file.".local/bin/voxtype".source = lib.getExe config.services.voxtype.package;
 
   # Start with the desktop session, whose environment supplies WAYLAND_DISPLAY.
-  systemd.user.services.voxtype = {
-    Unit = {
-      After = [ "pipewire.service" ];
-      PartOf = lib.mkForce [ "graphical-session.target" ];
-      ConditionPathExists = model;
-    };
-    Install.WantedBy = lib.mkForce [ "graphical-session.target" ];
-  };
+  # systemd.user.services.voxtype = {
+  #   Unit = {
+  #     After = [ "pipewire.service" ];
+  #     PartOf = lib.mkForce [ "graphical-session.target" ];
+  #     ConditionPathExists = model;
+  #   };
+  #   Install.WantedBy = lib.mkForce [ "graphical-session.target" ];
+  # };
 }

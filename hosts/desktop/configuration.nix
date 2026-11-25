@@ -108,7 +108,7 @@ in
         model = /home/minicpm-models/Inkling-2-Mini-UD-Q3_K_XL-mainline.gguf
         mmproj = /home/minicpm-models/mmproj-F16.gguf
         n-gpu-layers = 99
-        n-cpu-moe = 16
+        n-cpu-moe = 12
         load-mode = none
         cache-type-k = q4_0
         cache-type-v = q4_0
