@@ -138,25 +138,12 @@
 
 * General
 ** Auto save
-The aim is save our hands from =C-x C-s=, the most frequently used key.
+Keep recovery snapshots independently of saves to the original file.
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package super-save
-  :ensure t
-  :config
-  ;; Keep recovery snapshots independently of saves to the original file.
-  (let ((recovery-dir (expand-file-name "auto-save/" user-emacs-directory)))
-    (make-directory recovery-dir t)
-    (setq auto-save-default t
-          auto-save-file-name-transforms `((".*" ,recovery-dir t))))
-
-  (setq super-save-auto-save-when-idle t)
-  (setq super-save-remote-files nil)
-  (setq super-save-exclude '(".gpg" ".age" ".bin"))
-  ;; Save silently
-  (setq super-save-silent t)
-  ;; Save all opened buffers
-  (setq super-save-all-buffers nil)
-  (super-save-mode +1))
+(let ((recovery-dir (expand-file-name "auto-save/" user-emacs-directory)))
+  (make-directory recovery-dir t)
+  (setq auto-save-default t
+        auto-save-file-name-transforms `((".*" ,recovery-dir t))))
 #+end_src
 
 ** Color theme
@@ -329,15 +316,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   :config
   (dashboard-setup-startup-hook))
 #+end_src
-** Anzu mode (query & replace highlight)
-#+begin_src emacs-lisp :tangle yes
-(use-package anzu
-  :config
-  (global-anzu-mode 1)
-  (setq anzu-minimum-input-length 4)
-  (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
-  (global-set-key [remap query-replace] 'anzu-query-replace))
-#+end_src
 ** Mode line
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package mini-echo
@@ -345,11 +323,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
   (mini-echo-mode))
 #+end_src
 
-#+begin_src emacs-lisp :tangle no :lexical no
-(use-package mini-modeline
-  :config
-  (mini-modeline-mode t))
-#+end_src
 ** Open newline & move text
 #+begin_src emacs-lisp :tangle yes :lexical no
 (defun scroll-up-one-line()
@@ -385,20 +358,6 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 (global-set-key (kbd "C-O") 'open-newline-below)
 (global-set-key (kbd "C-o") 'open-newline-above)
 #+end_src
-** Extra settings
-#+begin_src emacs-lisp :tangle yes
-(use-package cursor-chg
-  ;; make cursor terser
-  ;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/cursor-chg.el
-  ;; :if (file-exists-p
-  ;; (expand-file-name "cursor-chg.el" local-elisp-directory))
-  ;; :load-path local-elisp-directory
-  :defer 1
-  :config
-  (setq curchg-default-cursor-color "tomato4")
-  (change-cursor-mode 1)
-  (toggle-cursor-type-when-idle 1))
-#+end_src
 
 * Enhancement
 ** Ediff
@@ -409,14 +368,10 @@ The aim is save our hands from =C-x C-s=, the most frequently used key.
 ** Uniquify
 #+begin_src emacs-lisp :tangle yes
 ;; Every buffer should have a unique name
-(use-package uniquify
-  :defer 3
-  :config
-  (setq
-   uniquify-buffer-name-style 'post-forward
-   uniquify-separator " • "
-   uniquify-after-kill-buffer-p t
-   uniquify-ignore-buffers-re "^\\*"))
+(setq uniquify-buffer-name-style 'post-forward
+      uniquify-separator " • "
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re "^\\*")
 
 #+end_src
 ** Hippie expand
@@ -442,13 +397,6 @@ Only in elisp and c mode.
   :config
   (add-hook 'emacs-lisp-mode-hook 'smartscan-mode)
   (add-hook 'c-mode-hook 'smartscan-mode))
-#+end_src
-** Hungry delete
-#+begin_src emacs-lisp :tangle yes
-(use-package hungry-delete
-  :defer 1
-  :config
-  (global-hungry-delete-mode))
 #+end_src
 ** Smart fill paragraph
 #+begin_src emacs-lisp :tangle yes
@@ -593,28 +541,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 (global-set-key (kbd "C-c w") (quote copy-word))
 #+end_src
-** ibuffer-vc
-#+begin_src emacs-lisp :tangle yes
-(use-package ibuffer-vc
-  :defer 10
-  :config
-  (add-hook 'ibuffer-hook
-            (lambda ()
-              (ibuffer-vc-set-filter-groups-by-vc-root)
-              (unless (eq ibuffer-sorting-mode 'alphabetic)
-                (ibuffer-do-sort-by-alphabetic))))
-  (setq ibuffer-formats
-        '((mark modified read-only vc-status-mini " "
-                (name 18 18 :left :elide)
-                " "
-                (size 9 -1 :right)
-                " "
-                (mode 16 16 :left :elide)
-                " "
-                (vc-status 16 16 :left)
-                " "
-              filename-and-process))))
-#+end_src
 ** narrow-or-widen-dwim
    #+BEGIN_SRC emacs-lisp :tangle yes
      (defun narrow-or-widen-dwim (p)
@@ -646,9 +572,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 ** Dired
 #+begin_src emacs-lisp :tangle yes
-(use-package dired-filetype-face
-  :defer t)
-
 (use-package emacs
   :defer 10
   :config
@@ -660,56 +583,11 @@ point reaches the beginning or end of the buffer, stop there."
         )
   (dired-async-mode 1)
   ;; auto refresh dired when file changes
-  (add-hook 'dired-mode-hook 'auto-revert-mode)
-
-  (with-eval-after-load 'dired  (require 'dired-filetype-face)))
+  (add-hook 'dired-mode-hook 'auto-revert-mode))
 
 #+end_src
 
 * Extensions
-** Hydra
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package hydra
-  :ensure t
-  :config
-  (defhydra win (global-map "M-l")
-    "eyebrowse"
-    ("p" eyebrowse-prev-window-config :color red)
-    ("n" eyebrowse-next-window-config :color red)
-    ("<tab>" eyebrowse-last-window-config nil :color red)
-    ;; ("r" eyebrowse-rename-window-config nil :color red)
-    ;; ("c" eyebrowse-create-window-config nil :color red)
-    ("C" eyebrowse-close-window-config nil :color red)
-    ("0" eyebrowse-switch-to-window-config-0 nil :color blue)
-    ("1" eyebrowse-switch-to-window-config-1 nil :color blue)
-    ("2" eyebrowse-switch-to-window-config-2 nil :color blue)
-    ("3" eyebrowse-switch-to-window-config-3 nil :color blue)
-    ("4" eyebrowse-switch-to-window-config-4 nil :color blue)
-    ("5" eyebrowse-switch-to-window-config-5 nil :color blue)
-    ("6" eyebrowse-switch-to-window-config-6 nil :color blue)
-    ("7" eyebrowse-switch-to-window-config-7 nil :color blue)
-    ("8" eyebrowse-switch-to-window-config-8 nil :color blue)
-    ("9" eyebrowse-switch-to-window-config-9 nil :color blue)
-
-    ("q" delete-window nil :color blue)
-    ("m" delete-other-windows nil :color blue)
-    ("v" my/vsplit-last-buffer nil :color blue)
-    ("h" my/hsplit-last-buffer nil :color blue)
-    )
-  (defhydra win (global-map "M-l")
-    "window"
-    ("," popper-toggle nil :color blue)
-    ("." popper-cycle nil :color blue)
-
-    ("e" er/expand-region nil :color blue)
-
-    ;; ("g" text-scale-increase "in")
-    ;; ("l" text-scale-decrease "out")
-    ("g" magit-status nil :color blue)
-    )
-  )
-
-#+end_src
 ** ace-window
 #+begin_src emacs-lisp :tangle yes
  (use-package ace-window
@@ -722,15 +600,6 @@ point reaches the beginning or end of the buffer, stop there."
          ("M-O" . ace-swap-window)))
 #+end_src
 
-** beacon-mode
-Never to lose your cursor again.
-#+begin_src emacs-lisp :tangle yes
-(use-package beacon
-  :diminish beacon-mode
-  :init
-  (beacon-mode 1)
-  (setq beacon-push-mark 35))
-#+end_src
 ** Rainbow delimiters
 #+begin_src emacs-lisp :tangle yes
 (use-package rainbow-delimiters
@@ -741,40 +610,6 @@ Never to lose your cursor again.
 #+begin_src emacs-lisp :tangle yes
 (use-package expand-region
   :bind ("C-c e" . er/expand-region))
-#+end_src
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package wrap-region
-  :defer 1
-  :config
-  (wrap-region-add-wrappers
-   '(("$" "$")
-     ("{-" "-}" "#")
-     ("/" "/" nil org-mode)
-     ("=" "=" nil org-mode)
-     ("+" "+" nil org-mode)
-     ("_" "_" nil org-mode)
-     ("*" "*" nil org-mode)
-     ("~" "~" nil org-mode)
-     ("/* " " */" "#" (java-mode javascript-mode css-mode))
-     ("`" "`" nil (markdown-mode ruby-mode))))
-
-  (wrap-region-global-mode t))
-#+end_src
-** Key frequency
-#+begin_src emacs-lisp :tangle yes
-(use-package keyfreq
-  :hook (after-init . keyfreq-mode)
-  :init
-  :config
-  (setq keyfreq-excluded-commands
-        '(self-insert-command
-          abort-recursive-edit
-          forward-char
-          backward-char
-          previous-line
-          next-line))
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
 #+end_src
 ** Olivetti (for prose writing)
 #+begin_src emacs-lisp :tangle yes
@@ -823,31 +658,8 @@ Never to lose your cursor again.
              ("C-p" . company-select-previous)
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
-
-(use-package company-org-block
-  :ensure t
-  :custom
-  (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
-  :hook ((org-mode . (lambda ()
-                       (setq-local company-backends '(company-org-block))
-                       (company-mode +1)))))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package company-c-headers
-  :after company
-  :commands company-c-headers
-  :config
-  ;; Available for manual use without duplicating clangd completions.
-  nil)
-#+end_src
-To retrive candidates for your projects, you will have to tell Clang
-where your include paths are, create a file named =.dir-local.el= at
-your project root:
-#+BEGIN_SRC emacs-lisp :tangle no
-  ((nil . ((company-clang-arguments . ("-I/home/<user>/project_root/include1/"
-                                       "-I/home/<user>/project_root/include2/")))))
-#+END_SRC
 ** Popper
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package popper
@@ -907,15 +719,6 @@ your project root:
   (default-input-method "rime"))
 #+end_src
 * Program
-** Dumb jump
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package dumb-jump
-  :config
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  (dumb-jump-mode))
-#+end_src
-
 ** Elisp
 #+begin_src emacs-lisp :tangle yes :lexical no
 (add-hook 'emacs-lisp-mode-hook 'display-line-numbers-mode)
@@ -960,18 +763,8 @@ your project root:
 (add-hook 'c++-mode-hook 'display-line-numbers-mode)
 (add-hook 'c++-ts-mode-hook 'display-line-numbers-mode)
 
-(use-package color-identifiers-mode
-  :config
-  (add-hook 'c-mode-hook 'color-identifiers-mode)
-  (add-hook 'c++-mode-hook 'color-identifiers-mode)
-  (add-hook 'c++-ts-mode-hook 'color-identifiers-mode))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package modern-cpp-font-lock
-  :diminish t
-  :config (modern-c++-font-lock-global-mode t))
-#+end_src
 ** Cmake
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package cmake-mode
@@ -1059,18 +852,6 @@ your project root:
      )
 
    #+end_src
-** Clear trailing spaces automatically
-#+begin_src emacs-lisp :tangle no :lexical no
-(use-package ws-butler
-  :defer 1
-  :hook ((prog-mode
-          c-mode
-          c++-mode
-          nix-mode
-          c-ts-mode
-          c++-ts-mode
-          ) . ws-butler-mode))
-#+end_src
 ** Fly spell
 #+begin_src emacs-lisp :tangle yes
 (defvar my/ispell-dictionaries '("american" "espanol")
@@ -1387,22 +1168,6 @@ need to be passed verbatim to shell commands."
       compilation-always-kill t               ; Just kill old compile processes before starting the new one
       compilation-scroll-output 'first-error) ; Automatically scroll to first
 
-
-(use-package smart-compile
-  :bind ("<f5>" . smart-compile)
-  :config
-  (add-to-list 'smart-compile-alist '("\\.c\\'"          . "gcc -O2 %f -lm -o %n && ./%n"))
-  (add-to-list 'smart-compile-alist '("\\.[Cc]+[Pp]*\\'" . "g++ -O2 %f -lm -o %n && ./%n"))
-  )
-#+end_src
-
-** Smartparens
-#+begin_src emacs-lisp :tangle yes
-(use-package smartparens
-  :hook ((prog-mode text-mode) . smartparens-mode)
-  :config
-  ;; load default config
-  (require 'smartparens-config))
 #+end_src
 
 ** Tree sit auto
@@ -1585,8 +1350,6 @@ Use a prefix arg to get regular RET. "
               org-confirm-babel-evaluate nil     ; No confirmation before executing code
               org-edit-src-content-indentation 0 ; No relative indentation for code blocks
               org-fontify-whole-block-delimiter-line t) ; Fontify whole block
-(use-package gnuplot
-  :defer t)
 ;; active Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -1614,28 +1377,6 @@ Use a prefix arg to get regular RET. "
   :config
   (setq plantuml-default-exec-mode 'executable
         plantuml-executable-path "plantuml"))
-#+end_src
-** Graphviz(dot)
-#+begin_src emacs-lisp :tangle yes
-(use-package graphviz-dot-mode
-  :defer t
-  :after org
-  :mode (("\\.diag\\'"      . graphviz-dot-mode)
-         ("\\.blockdiag\\'" . graphviz-dot-mode)
-         ("\\.nwdiag\\'"    . graphviz-dot-mode)
-         ("\\.rackdiag\\'"  . graphviz-dot-mode)
-         ("\\.dot\\'"       . graphviz-dot-mode)
-         ("\\.gv\\'"        . graphviz-dot-mode))
-  :init
-  (setq graphviz-dot-indent-width tab-width)
-  (with-eval-after-load 'org
-      (defalias 'org-babel-execute:graphviz-dot #'org-babel-execute:dot)
-      (add-to-list 'org-babel-load-languages '(dot . t))
-      (require 'ob-dot)
-      (setq org-src-lang-modes
-            (append '(("dot" . graphviz-dot))
-                    (delete '("dot" . fundamental) org-src-lang-modes)))))
-
 #+end_src
 ** COMMENT Org auto tangle
 #+begin_src emacs-lisp :tangle no
@@ -1740,35 +1481,8 @@ Use a prefix arg to get regular RET. "
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 #+end_src
-*** org-roam-ui
-#+begin_src emacs-lisp :tangle yes
-(use-package org-roam-ui
-  :defer t
-  :after org-roam
-  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;;         a hookable mode anymore, you're advised to pick something yourself
-  ;;         if you don't care about startup time, use
-  ;;  :hook (after-init . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
-#+end_src
 ** Org transclusion
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package org-transclusion
-  :after org
-  :bind
-  (:map org-mode-map
-        ("<f12>" . org-transclusion-mode)))
-#+end_src
-
-** Org hugo
-#+begin_src emacs-lisp :tangle yes
-(use-package ox-hugo
-  :defer t
-  :after ox)
 #+end_src
 
 ** org-fragtog(preview latex online)
@@ -1905,80 +1619,6 @@ Use a prefix arg to get regular RET. "
 (setq eshell-prefer-lisp-functions nil)
 (global-set-key (kbd "<f8>") 'eshell)
 #+end_src
-** Exec-path-from-shell
-It will reset the =PATH= variable generated by =direnv=, disable it.
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package exec-path-from-shell
-
-  :if (memq window-system '(mac ns x))
-  :config
-  (exec-path-from-shell-initialize))
-#+end_src
-* COMMENT Exwm
-#+begin_src emacs-lisp :tangle no
-(defun exwm/run-in-background (command &optional once)
-  (let ((command-parts (split-string command " +")))
-    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
-
-(use-package exwm
-  :if (seq-contains-p command-line-args "--with-exwm")
-  :config
-  (set-frame-parameter (selected-frame) 'alpha-background 0.7)
-  (require 'exwm-randr)
-  ;; (exwm/run-in-background "feh --bg-scale \"${cat $HOME/Pictures/wall-paper.jpg}\"")
-  (start-process-shell-command
-   "xrandr" nil "xrandr --output eDP --mode 1920x1200")
-
-  ;; Emacs server is not required to run EXWM but it has some interesting uses
-  (server-start)
-
-  (require 'exwm-config)
-  ;; Set the initial workspace number.
-  (unless (get 'exwm-workspace-number 'saved-value)
-    (setq exwm-workspace-number 2))
-  ;; Make class name the buffer name
-  (add-hook 'exwm-update-class-hook
-            (lambda ()
-              (exwm-workspace-rename-buffer exwm-class-name)))
-  ;; Global keybindings.
-  (unless (get 'exwm-input-global-keys 'saved-value)
-    (setq exwm-input-global-keys
-          `(
-            ;; 's-r': Reset (to line-mode).
-            ([?\s-R] . exwm-restart)
-            ;; 's-w': Switch workspace.
-            ([?\s-w] . exwm-workspace-switch)
-            ;; 's-1': Switch workspace.
-            ([?\s-1] . (exwm-workspace-switch 0))
-            ;; 's-d': Launch application.
-            ([?\s-d] . dmenu))))
-
-            ;; ;; 's-N': Switch to certain workspace.
-            ;; ,@(mapcar (lambda (i)
-            ;;             `(,(kbd (format "s-%d" i)) .
-            ;;               (lambda ()
-            ;;                 (interactive)
-            ;;                 (exwm-workspace-switch-create ,i))))
-            ;;           (number-sequence 0 9))))
-  ;; Line-editing shortcuts
-  (unless (get 'exwm-input-simulation-keys 'saved-value)
-    (setq exwm-input-simulation-keys
-          '(([?\C-b] . [left])
-            ([?\C-f] . [right])
-            ([?\C-p] . [up])
-            ([?\C-n] . [down])
-            ([?\C-a] . [home])
-            ([?\C-e] . [end])
-            ([?\M-v] . [prior])
-            ([?\C-v] . [next])
-            ([?\C-d] . [delete])
-            ([?\C-k] . [S-end delete]))))
-  ;; Enable EXWM
-  (exwm-enable)
-  (exwm-randr-enable)
-  (exwm-config-ido)
-  (exwm-config-misc))
-#+end_src
 * Other tools
 ** Rainbow mode
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -1988,15 +1628,12 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
 ** Which key (show available keybindings)
 #+begin_src emacs-lisp :tangle yes
 ;; Display available keybindings in popup
-(use-package which-key
-  :hook (after-init . which-key-mode)
-  :config
-  (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
-  (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
-  (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⌦" . nil)))
-  (add-to-list 'which-key-replacement-alist '(("ESC" . nil) . ("⎋" . nil)))
-  (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
-  (which-key-mode 1))
+(which-key-mode 1)
+(add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+(add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⌦" . nil)))
+(add-to-list 'which-key-replacement-alist '(("ESC" . nil) . ("⎋" . nil)))
+(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
 #+end_src
 ** Pdf tools
    #+begin_src emacs-lisp :tangle yes
@@ -2006,24 +1643,6 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
      (pdf-tools-install))
    (use-package org-noter)
    #+end_src
-
-** Dictionary & popweb
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package popweb
-  :defer t
-  :custom
-  (popweb-zoom-factor 1.5))
-(use-package popweb-dict
-  :defer t
-  :bind ("C-c d" . popweb-dict-collins-input))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-;; display the definition of word at point
-(use-package sdcv
-  :defer t
-  :bind ("C-c d" . sdcv-search-input))
-#+end_src
 
 ** Elfeed
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -2056,50 +1675,14 @@ It will reset the =PATH= variable generated by =direnv=, disable it.
   (setq elfeed-show-mode-hook
         (lambda ()
           (setq elfeed-show-entry-switch #'my/show-elfeed))))
-
-(use-package elfeed-org
-  :ensure t
-  :after elfeed
-  :config
-  (elfeed-org)
-  :custom
-  (rmh-elfeed-org-files (list (expand-file-name
-                               "elfeed.org"
-  		                       user-emacs-directory))))
-
-;; Have to install mpv and yl-dlp to make it work
-(use-package elfeed-tube
-  :ensure t
-  :after elfeed
-  :config
-  (elfeed-tube-setup)
-
-  :bind (:map elfeed-show-mode-map
-              ("F" . elfeed-tube-fetch)
-              ([remap save-buffer] . elfeed-tube-save)
-              :map elfeed-search-mode-map
-              ("F" . elfeed-tube-fetch)
-              ([remap save-buffer] . elfeed-tube-save)))
-
-(use-package elfeed-tube-mpv
-  :after elfeed
-  :ensure t
-  :bind (:map elfeed-show-mode-map
-              ("v" . elfeed-tube-mpv)
-              ("C-c C-f" . elfeed-tube-mpv-follow-mode)
-              ("C-c C-w" . elfeed-tube-mpv-where)))
 #+end_src
 ** Qrencode
 Generate QR code in Emacs.
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package qrencode
-  :ensure t
-  :commands (qrencode qrencode-region qrencode-url-at-point)
-  )
 #+end_src
 * AGI
 ** Pi coding agent with Pilish
-Use =C-c a p= or =M-x pilish= from a project directory.  Compose a prompt
+Use =C-c x p= or =M-x pilish= from a project directory.  Compose a prompt
 in the input buffer and send it with =C-c C-c=.  Pi and Pilish are managed
 by Nix; authenticate once by running =pi= in a terminal and using =/login=.
 Restart Emacs after activating the new package environment so it finds =pi=.
@@ -2107,18 +1690,19 @@ Restart Emacs after activating the new package environment so it finds =pi=.
 (use-package pilish
   :ensure t
   :commands (pilish)
-  :bind (("C-c a p" . pilish)))
+  :bind (("C-c x p" . pilish))
+  )
 #+end_src
 ** Local models with llama.cpp
-Use =C-c g= to open a local chat, =C-c G= for the request menu, and
+Use =C-c x g= to open a local chat, =C-c x G= for the request menu, and
 =C-c RET= to send a message in the chat buffer.  The menu selects MiniCPM
 or Qwen; llama.cpp loads one model at a time.
 #+begin_src emacs-lisp :tangle yes
 (use-package gptel
   :ensure t
   :commands (gptel gptel-send gptel-menu)
-  :bind (("C-c g" . gptel)
-         ("C-c G" . gptel-menu))
+  :bind (("C-c x g" . gptel)
+         ("C-c x G" . gptel-menu))
   :config
   (setq gptel-backend
         (gptel-make-openai "Local llama.cpp"
@@ -2183,7 +1767,7 @@ or Qwen; llama.cpp loads one model at a time.
       :position (with-current-buffer output (point-max))
       :stream nil)))
 
-(global-set-key (kbd "C-c a r") #'my-gptel-review)
+
 #+end_src
 ** ide
 #+begin_src emacs-lisp :lexical no
@@ -2195,7 +1779,7 @@ or Qwen; llama.cpp loads one model at a time.
 
 ** agent-shell（omp）
 通过 ACP 直接启动 =omp acp=，沿用 omp 已有的登录状态与模型配置。
-系统安装本配置后，在项目目录的 buffer 中按 =C-c a o= 或执行
+系统安装本配置后，在项目目录的 buffer 中按 =C-c x o= 或执行
 =M-x agent-shell=；=C-u M-x agent-shell= 新建独立会话。
 需要 Emacs 的 =exec-path= 中可找到支持 ACP 的 =omp=。
 desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运行
@@ -2204,20 +1788,11 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package agent-shell
   :commands (agent-shell agent-shell-omp-start)
-  :bind ("C-c a o" . agent-shell)
+  :bind ("C-c x o" . agent-shell)
   :custom
   (agent-shell-preferred-agent-config 'omp))
 #+end_src
 
-** leetcode
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package leetcode
-  :defer t
-  :config
-  (setq leetcode-prefer-language "cpp")
-  (setq leetcode-save-solutions t)
-  (setq leetcode-directory "~/gitest/org-samples/C++/leetcode/"))
-#+end_src
 ** COMMENT epub
 #+begin_src emacs-lisp :tangle no :lexical no
 (defun my-nov-font-setup ()
@@ -2237,9 +1812,6 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package scratch
-  :defer t
-  :bind ("C-c s" . scratch))
 #+end_src
 ** Password store
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -2274,11 +1846,8 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
 
 ** Save status
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package recentf
-  :hook (after-init . recentf-mode)
-  :init
-  (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
-  )
+(setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
+(recentf-mode)
 
 (use-package emacs
   :defer 10
@@ -2309,10 +1878,6 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
   (savehist-mode))
 #+end_src
 
-** COMMENT Start server or Restart Emacs
-#+begin_src emacs-lisp :tangle yes :lexical no
-(server-start)
-#+end_src
 ** Restore GC
 #+begin_src emacs-lisp :tangle yes :lexical no
 ;; Balance collection frequency and pause duration during interactive work.
@@ -2320,28 +1885,3 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
       read-process-output-max (* 1024 1024))
 #+end_src
 
-* test
-#+begin_src emacs-lisp :tangle yes :lexical no
-(use-package ement
-  :defer t
-  )
-#+end_src
-
-#+begin_src emacs-lisp :lexical no
-(use-package vterm
-  :defer t
-  :ensure t)
-#+end_src
-
-#+begin_src emacs-lisp :lexical no
-(setq bookmark-save-flag 1) ;; save bookmarks on every change
-(setq bookmark-default-file (concat user-emacs-directory "/var/bookmark-default.el"))
-#+end_src
-
-#+begin_src emacs-lisp :lexical no
-(use-package opencc
-  :defer t
-  )
-#+end_src
-* References
-https://github.com/novoid/dot-emacs/blob/master/config.org

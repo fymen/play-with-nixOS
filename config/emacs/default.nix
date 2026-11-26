@@ -29,25 +29,6 @@ with lib; let
       hash = "sha256-oWQmT7uOSB+0fRrv2TLcqUgpb29PAQ2tnLIGmmGj9hw=";
     };
   };
-  popweb = pkgs.emacs.pkgs.trivialBuild rec {
-    pname = "popweb";
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner = "fymen";
-      repo = "popweb";
-      rev = "2e2662f987e4638c5c5fc5cdfb4347565f74300b";
-      sha256 = "132gcymzsaaryyk4nglv9pwmdrnspdn4r1ayjbh0mqg6xf9w7mvk";
-    };
-
-    preBuild = ''
-    cp extension/dict/* ./
-    '';
-    postInstall = ''
-    LISPDIR=$out/share/emacs/site-lisp
-    install *.py $LISPDIR
-    install *.js $LISPDIR
-    '';
-  };
 
 in {
 
@@ -171,7 +152,6 @@ in {
       # popweb-py-pkgs
 
       #      chgcursor-el
-      popweb
 
       (pkgs.writeShellScriptBin "espad" ''
         emacsclient --alternate-editor='false' --no-wait --create-frame --frame-parameters='(quote (name . "scratchpad"))'
