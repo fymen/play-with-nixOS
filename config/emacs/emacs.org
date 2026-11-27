@@ -572,8 +572,8 @@ point reaches the beginning or end of the buffer, stop there."
 
 ** Dired
 #+begin_src emacs-lisp :tangle yes
-(use-package emacs
-  :defer 10
+(use-package dired
+  :ensure nil
   :config
   (setq dired-dwim-target t            ; if another Dired buffer is visible in another window, use that directory as target for Rename/Copy
         dired-recursive-copies 'always         ; "always" means no asking
@@ -581,9 +581,14 @@ point reaches the beginning or end of the buffer, stop there."
         dired-listing-switches "-lha"          ; human-readable listing
         ls-lisp-dirs-first t
         )
-  (dired-async-mode 1)
   ;; auto refresh dired when file changes
   (add-hook 'dired-mode-hook 'auto-revert-mode))
+
+(use-package dired-async
+  :ensure async
+  :after dired
+  :config
+  (dired-async-mode 1))
 
 #+end_src
 
@@ -639,20 +644,20 @@ point reaches the beginning or end of the buffer, stop there."
    #+end_src
 ** company-mode
 #+begin_src emacs-lisp :tangle yes
+(use-package company-flx
+  :after company)
+
 (use-package company
   :ensure t
   :diminish company-mode
-  :init
-  (use-package company-flx)
+  :config
+  (require 'company-flx)
   (global-company-mode 1)
   (setq company-backends (delete 'company-semantic company-backends))
   ;; LSP supplies project-aware C/C++ candidates through company-capf.
   (setq company-backends (delete 'company-clang company-backends))
   (add-to-list 'company-backends 'company-files)
-  (with-eval-after-load 'company
-    (company-flx-mode +1))
-
-  :config
+  (company-flx-mode +1)
   (bind-keys :map company-active-map
              ("C-n" . company-select-next)
              ("C-p" . company-select-previous)
@@ -900,9 +905,9 @@ point reaches the beginning or end of the buffer, stop there."
 ** Vertico
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package vertico
-  :init
-  (vertico-mode)
+  :demand t
   :config
+  (vertico-mode 1)
   (keymap-set vertico-map "C-j" #'vertico-insert)
   (keymap-set vertico-map "C-l" #'vertico-directory-delete-word))
 
@@ -1181,15 +1186,17 @@ need to be passed verbatim to shell commands."
 ** lsp-mode
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package lsp-mode
-  :commands (lsp)
+  :commands (lsp lsp-deferred)
   :hook (((ruby-mode
            php-mode
            typescript-mode
+           typescript-ts-mode
+           tsx-ts-mode
            c++-mode
            c-mode
            c-ts-mode
            c++-ts-mode
-           ) . lsp))
+           ) . lsp-deferred))
   :init
   (setq lsp-auto-configure t
         lsp-auto-guess-root t
@@ -1481,10 +1488,6 @@ Use a prefix arg to get regular RET. "
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 #+end_src
-** Org transclusion
-#+begin_src emacs-lisp :tangle yes :lexical no
-#+end_src
-
 ** org-fragtog(preview latex online)
 #+begin_src emacs-lisp :tangle yes :lexical no
 (use-package org-fragtog
@@ -1501,10 +1504,10 @@ Use a prefix arg to get regular RET. "
 #+end_src
 ** Latex
 #+begin_src emacs-lisp :tangle yes
-(use-package emacs
-  :defer 10
+(use-package ox-latex
+  :ensure nil
+  :after org
   :config
-  (require 'ox-latex)
   (require 'ox-beamer)
   (setq org-latex-images-centered 't)
 
@@ -1676,10 +1679,6 @@ Use a prefix arg to get regular RET. "
         (lambda ()
           (setq elfeed-show-entry-switch #'my/show-elfeed))))
 #+end_src
-** Qrencode
-Generate QR code in Emacs.
-#+begin_src emacs-lisp :tangle yes :lexical no
-#+end_src
 * AGI
 ** Pi coding agent with Pilish
 Use =C-c x p= or =M-x pilish= from a project directory.  Compose a prompt
@@ -1687,11 +1686,114 @@ in the input buffer and send it with =C-c C-c=.  Pi and Pilish are managed
 by Nix; authenticate once by running =pi= in a terminal and using =/login=.
 Restart Emacs after activating the new package environment so it finds =pi=.
 #+begin_src emacs-lisp :tangle yes
+;; Create/resume/toggle the Pi coding agent session.
+;; Defined before the use-package so `:bind' can reference it at load time.
+
+(defun my/pilish-most-recent-session-file ()
+  "Return the newest readable, regular JSONL session across all projects.
+Inspect each candidate once and skip files removed during the scan."
+  (require 'pilish)
+  (let ((root (pilish-jsonl-sessions-root))
+        latest latest-time)
+    (when (file-directory-p root)
+      (condition-case err
+          (dolist (file (directory-files-recursively root "\\.jsonl\\'"))
+            (condition-case nil
+                (let ((attrs (file-attributes file)))
+                  (when (and attrs
+                             (null (file-attribute-type attrs))
+                             (file-readable-p file)
+                             (> (file-attribute-size attrs) 0))
+                    (let ((mtime (file-attribute-modification-time attrs)))
+                      (when (or (null latest-time)
+                                (time-less-p latest-time mtime))
+                        (setq latest file latest-time mtime)))))
+              (file-error nil)))
+        (file-error
+         (message "Pilish session scan failed: %s" (error-message-string err)))))
+    latest))
+
+(defun my/pilish-side-buffer ()
+  "Return a non-pilish buffer for the right-hand window, or *scratch*."
+  (catch 'found
+    (dolist (buf (buffer-list))
+      (when (and (buffer-live-p buf)
+                 (not (string-prefix-p " " (buffer-name buf)))
+                 (with-current-buffer buf
+                   (not (derived-mode-p 'pilish-chat-mode
+                                        'pilish-input-mode))))
+        (throw 'found buf)))
+    (get-buffer-create "*scratch*")))
+
+(defun my/pilish-layout-half-left ()
+  "Restore a left chat/input column and a full-height right buffer."
+  (when-let* ((chat-buf (pilish--get-chat-buffer))
+              (chat-win (get-buffer-window chat-buf (selected-frame)))
+              (input-buf (pilish-session-input-buffer chat-buf)))
+    (let* ((input-win (get-buffer-window input-buf (selected-frame)))
+           (right-win
+            (seq-find
+             (lambda (win)
+               (with-current-buffer (window-buffer win)
+                 (not (derived-mode-p 'pilish-chat-mode 'pilish-input-mode))))
+             (window-list)))
+           (right-buf (if right-win (window-buffer right-win)
+                        (my/pilish-side-buffer)))
+           (right-point (and right-win (window-point right-win)))
+           (right-start (and right-win (window-start right-win)))
+           (chat-point (window-point chat-win))
+           (chat-start (window-start chat-win))
+           (input-point (if input-win (window-point input-win)
+                          (with-current-buffer input-buf (point-max)))))
+      ;; Build columns before splitting the left column vertically.  Never
+      ;; infer column ownership from an existing window's immediate parent.
+      (select-window chat-win)
+      (let ((ignore-window-parameters t))
+        (delete-other-windows chat-win))
+      (set-window-dedicated-p chat-win nil)
+      (let* ((right (split-window chat-win nil 'right))
+             (input (split-window chat-win
+                                  (- (max window-min-height
+                                          (min 10 (/ (window-total-height chat-win) 4))))
+                                  'below)))
+        (set-window-buffer right right-buf)
+        (set-window-buffer input input-buf)
+        (set-window-point chat-win chat-point)
+        (set-window-start chat-win chat-start)
+        (when right-point (set-window-point right right-point))
+        (when right-start (set-window-start right right-start))
+        (set-window-point input input-point)
+        (select-window input)))))
+
+(defun my/pilish-or-toggle ()
+  "Create or toggle the Pi coding agent session.
+Resume the most recent session on first use; otherwise start a new one.
+Arrange the pilish session on the left half and focus its input window.
+When toggling the session off, leave the remaining window selected."
+  (interactive)
+  ;; First invocation: pilish is not loaded yet; `pilish' is autoloaded and
+  ;; will load the package and create the session.
+  (if (and (fboundp 'pilish-project-buffers)
+           (pilish-project-buffers))
+      (pilish-toggle)
+    (let ((recent (my/pilish-most-recent-session-file)))
+      (if recent
+          (condition-case err
+              (pilish-open-session-file recent)
+            (error
+             (message "Pilish could not restore %s: %s; opening a session instead"
+                      (file-name-nondirectory recent) (error-message-string err))
+             (pilish)))
+        (pilish))))
+  ;; After creating or toggling, restore the left-half layout.  When the
+  ;; toggle hid the session, no chat window exists and this is a no-op.
+  (my/pilish-layout-half-left))
+
 (use-package pilish
   :ensure t
-  :commands (pilish)
-  :bind (("C-c x p" . pilish))
-  )
+  :commands (pilish pilish-toggle)
+  :bind (("C-c x p" . pilish)
+         ("C-c g" . my/pilish-or-toggle)))
 #+end_src
 ** Local models with llama.cpp
 Use =C-c x g= to open a local chat, =C-c x G= for the request menu, and
@@ -1714,16 +1816,15 @@ or Qwen; llama.cpp loads one model at a time.
           :stream t
           :models '((minicpm-v-4.7-35b-a3b
                      :capabilities (media) :mime-types ("image/jpeg" "image/png" "image/webp"))
-                    (qwen3.6-27b
+                    (inkling
                      :capabilities (media) :mime-types ("image/jpeg" "image/png" "image/webp"))))
-        gptel-model 'minicpm-v-4.7-35b-a3b
+        gptel-model 'inkling
         gptel-max-tokens 4096))
-
-(require 'gptel)
 
 (defun my-gptel-review (beg end)
   "对选区提出修改建议，并在独立 buffer 中输出改稿。"
   (interactive "r")
+  (require 'gptel)
   (unless (use-region-p)
     (user-error "请先选中需要修改的文字"))
   (let* ((text (buffer-substring-no-properties beg end))
@@ -1793,16 +1894,6 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
   (agent-shell-preferred-agent-config 'omp))
 #+end_src
 
-** COMMENT epub
-#+begin_src emacs-lisp :tangle no :lexical no
-(defun my-nov-font-setup ()
-  (face-remap-add-relative 'variable-pitch :family "Liberation Serif" :height 1.0))
-
-(use-package nov
-  :hook
-  (nov-mode-hook . my-nov-font-setup))
-#+end_src
-
 * Secrets
 ** Agenix
 #+begin_src emacs-lisp :tangle yes :lexical no
@@ -1825,13 +1916,13 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
 #+end_src
 ** Privates
 #+begin_src emacs-lisp :tangle yes :lexical no
-(use-package emacs
-  :defer 10
-  :config
+(run-with-idle-timer
+ 10 nil
+ (lambda ()
   (if (file-exists-p
        (setq private-file
              (expand-file-name ".private.org" "~/")))
-      (org-babel-load-file private-file)))
+      (org-babel-load-file private-file))))
 #+end_src
 
 * Need start lately
@@ -1849,9 +1940,11 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
 (setq recentf-auto-cleanup 'never) ;; disable before we start recentf!
 (recentf-mode)
 
-(use-package emacs
-  :defer 10
+(use-package savehist
+  :ensure nil
+  :demand t
   :config
+  (setq savehist-autosave-interval 60)
   (setq savehist-additional-variables
         '(tablist-named-filter
           projectile-project-command-history
@@ -1875,7 +1968,7 @@ desktop 通过 Home Manager 的 =programs.omp= 安装 omp；修改配置后运�
   (put 'face-name-history          'history-length 25)
   (put 'bookmark-history           'history-length 25)
   (setq history-delete-duplicates t)
-  (savehist-mode))
+  (savehist-mode 1))
 #+end_src
 
 ** Restore GC

@@ -43,7 +43,7 @@ in
       efiInstallAsRemovable = true; # Otherwise /boot/EFI/BOOT/BOOTX64.EFI isn't generated
       devices = ["nodev"];
       useOSProber = true;
-      default = 2;
+      default = "saved";
     };
   };
   boot.initrd.kernelModules = [];

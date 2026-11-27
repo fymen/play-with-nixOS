@@ -7,28 +7,7 @@
   ...
 }:
 with lib; let
-  inherit (pkgs) fetchurl;
-  inherit (pkgs) fetchFromGitHub;
-
-  # popweb-py-pkgs = pkgs.python311.withPackages (ps: [
-  #   ps.pyqt6
-  #   ps.pyqt6-sip
-  #   ps.pyqt6-webengine
-  #   ps.epc
-  #   ps.sexpdata
-  #   ps.browser-cookie3
-  # ]);
-
   cfg = config.modules.editors.emacs;
-
-  chgcursor-el = pkgs.emacs-pgtk.pkgs.trivialBuild rec {
-    pname = "cursor-chg";
-    version = "1.0";
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/emacsmirror/cursor-chg/71a22ee8f81dd309e1c0d357679b755cf1ad47f7/cursor-chg.el";
-      hash = "sha256-oWQmT7uOSB+0fRrv2TLcqUgpb29PAQ2tnLIGmmGj9hw=";
-    };
-  };
 
 in {
 
@@ -94,9 +73,8 @@ in {
           ]))
         ];
 
-        # The cursor extension is maintained outside the package archive.
+        # Pin Pilish independently of the package archive.
         override = final: prev: {
-          cursor-chg = chgcursor-el;
           pilish = final.callPackage ../../packages/pilish.nix {};
         };
 
@@ -129,6 +107,10 @@ in {
     };
 
     home.packages = with pkgs; [
+      # Language servers used by the configured C/C++ and TypeScript hooks.
+      clang-tools
+      typescript-language-server
+      typescript
       # agent-shell speaks ACP through this adapter, rather than the Codex CLI.
       codex-acp
       (pkgs.callPackage ../../packages/pi-coding-agent.nix {})
@@ -148,10 +130,6 @@ in {
       grim
       slurp
       swappy
-
-      # popweb-py-pkgs
-
-      #      chgcursor-el
 
       (pkgs.writeShellScriptBin "espad" ''
         emacsclient --alternate-editor='false' --no-wait --create-frame --frame-parameters='(quote (name . "scratchpad"))'

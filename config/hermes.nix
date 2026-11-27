@@ -196,10 +196,10 @@ in
       compression = {
         enabled = true;
         threshold = 0.5;
-        threshold_tokens = 16384;
+        # threshold_tokens = 16384;
         target_ratio = 0.2;
-        proactive_prune_tokens = 4096;
-        idle_compact_after_seconds = 600;
+        # proactive_prune_tokens = 4096;
+        # idle_compact_after_seconds = 600;
       };
 
       # Compaction summaries stay on a remote fast model even when the
