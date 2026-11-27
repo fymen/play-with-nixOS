@@ -60,6 +60,15 @@ in
 
   programs.omp.enable = true;
 
+  # Keep Codex's mutable settings (models, login and other MCP servers) intact.
+  # Register the pinned Hyprland server again when its Nix store path changes.
+  home.activation.codexComputerUse = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/codex mcp add hypruse \
+      --env HYPRUSE_SCREENSHOT_MODE=image \
+      -- ${lib.getExe config.programs.hypruse.package}
+    run ${lib.getExe config.programs.hypruse.package} skill install --agent codex
+  '';
+
   stylix.targets.rofi.enable = false;
   stylix.targets.swaync.enable = false;
   stylix.targets.emacs.enable = false;
