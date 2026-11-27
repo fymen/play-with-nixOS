@@ -14,6 +14,19 @@ let
     keyboardLayout
     wallpaper
   ;
+  sessionService = description: command: {
+    Unit = {
+      Description = description;
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session-pre.target" ];
+    };
+    Service = {
+      ExecStart = command;
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 in
 {
   # The desktop launcher uses Kitty; let Stylix apply its fonts and colors too.
@@ -29,7 +42,8 @@ in
     systemd.variables = [
       "DISPLAY" "WAYLAND_DISPLAY" "HYPRLAND_INSTANCE_SIGNATURE"
       "XDG_CURRENT_DESKTOP" "XDG_SESSION_TYPE" "XDG_SESSION_DESKTOP"
-      "QT_QPA_PLATFORMTHEME"
+      "QT_QPA_PLATFORMTHEME" "QT_QPA_PLATFORM" "GDK_BACKEND"
+      "MOZ_ENABLE_WAYLAND" "NIXOS_OZONE_WL"
     ];
     configType = "lua";
     extraConfig = ''
@@ -38,20 +52,12 @@ in
       hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
       hl.env("XDG_SESSION_TYPE", "wayland")
       hl.env("XDG_SESSION_DESKTOP", "Hyprland")
-      hl.env("GDK_BACKEND", "wayland, x11")
+      hl.env("GDK_BACKEND", "wayland,x11")
       hl.env("CLUTTER_BACKEND", "wayland")
       hl.env("QT_QPA_PLATFORM", "wayland;xcb")
       hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
-      hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
       hl.env("MOZ_ENABLE_WAYLAND", "1")
 
-      hl.on("hyprland.start", function()
-        hl.exec_cmd("killall -q waybar;sleep .5 && waybar")
-        hl.exec_cmd("${pkgs.networkmanagerapplet}/bin/nm-applet --indicator")
-        hl.exec_cmd("${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent")
-        hl.exec_cmd("wl-paste --type text --watch cliphist store")
-        hl.exec_cmd("wl-paste --type image --watch cliphist store")
-      end)
 
       hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
       ${extraMonitorSettings}
@@ -66,8 +72,8 @@ in
 
       hl.config({
         general = {
-          gaps_in = 6,
-          gaps_out = 8,
+          gaps_in = 1,
+          gaps_out = 2,
           border_size = 2,
           layout = "dwindle",
           resize_on_border = true,
@@ -132,20 +138,12 @@ in
       hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd("/run/current-system/sw/bin/zsh -c rofi-launcher"))
       hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("rofi-pass"))
       hl.bind("SUPER + Y", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
-      hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("web-search"))
-      hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("wallsetter"))
       hl.bind("SUPER + SHIFT + N", hl.dsp.exec_cmd("swaync-client -rs"))
       hl.bind("SUPER + W", hl.dsp.exec_cmd("${browser}"))
-      hl.bind("SUPER + E", hl.dsp.exec_cmd("emopicker9000"))
       hl.bind("SUPER + S", hl.dsp.exec_cmd("screenshootin"))
       hl.bind("Print", hl.dsp.exec_cmd("screenshootin"))
-      hl.bind("SUPER + D", hl.dsp.exec_cmd("discord"))
-      hl.bind("SUPER + O", hl.dsp.exec_cmd("obs"))
-      hl.bind("SUPER + C", hl.dsp.exec_cmd("hyprpicker -a"))
       hl.bind("SUPER + G", hl.dsp.exec_cmd("gimp"))
-      hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd("godot4"))
-      hl.bind("SUPER + T", hl.dsp.exec_cmd("thunar"))
-      hl.bind("SUPER + M", hl.dsp.exec_cmd("spotify"))
+      hl.bind("SUPER + T", hl.dsp.exec_cmd("${pkgs.nautilus}/bin/nautilus"))
       hl.bind("SUPER + Q", hl.dsp.window.close())
       hl.bind("SUPER + P", hl.dsp.window.pseudo())
       hl.bind("SUPER + F", hl.dsp.window.fullscreen())
@@ -210,6 +208,18 @@ in
 
   };
 
+  # Session-owned services replace unmanaged compositor child processes.
+  systemd.user.services = {
+    desktop-network-applet = sessionService "NetworkManager tray indicator"
+      "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
+    desktop-polkit-agent = sessionService "Desktop PolicyKit authentication agent"
+      "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";
+    clipboard-text = sessionService "Clipboard text history"
+      "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store";
+    clipboard-image = sessionService "Clipboard image history"
+      "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store";
+  };
+
   # Scripts
   home.packages = [
     pkgs.flameshot
@@ -252,7 +262,7 @@ in
     settings = {
       general = {
         disable_loading_bar = true;
-        grace = 10;
+        grace = 0;
         hide_cursor = true;
         no_fade_in = false;
       };
@@ -299,13 +309,14 @@ in
       general = {
         after_sleep_cmd = "hyprctl dispatch dpms on";
         ignore_dbus_inhibit = false;
-        lock_cmd = "hyprlock";
+        before_sleep_cmd = "${pkgs.systemd}/bin/loginctl lock-session";
+        lock_cmd = "${pkgs.procps}/bin/pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
       };
 
       listener = [
         {
           timeout = 300;
-          on-timeout = "hyprlock";
+          on-timeout = "${pkgs.systemd}/bin/loginctl lock-session";
         }
         {
           timeout = 900;

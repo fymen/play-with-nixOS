@@ -180,7 +180,7 @@ in
       };
       sizes = {
         applications = 12;
-        terminal = 15;
+        terminal = 12;
         desktop = 11;
         popups = 12;
       };

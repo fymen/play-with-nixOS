@@ -15,10 +15,15 @@ with lib;
   # Configure & Theme Waybar
   programs.waybar = {
     enable = true;
+    systemd = {
+      enable = true;
+      target = "graphical-session.target";
+    };
     package = pkgs.waybar;
     settings = [
       {
         layer = "top";
+        height = if host == "desktop" then 28 else 0;
         position = "top";
         modules-center = [ "hyprland/window" ];
         modules-left = [
@@ -97,7 +102,8 @@ with lib;
           tooltip = false;
         };
         "tray" = {
-          spacing = 12;
+          spacing = if host == "desktop" then 8 else 12;
+          icon-size = if host == "desktop" then 16 else 20;
         };
         "pulseaudio" = {
           format = "{icon} {volume}% {format_source}";
@@ -291,18 +297,22 @@ with lib;
           }
       ''
       (optionalString (host == "desktop") ''
-        /* Logical pixels: keep the bar balanced on a 150% scaled 4K display. */
-        * { font-size: 14px; }
+        /* Compact logical-pixel sizing for the desktop's 150% scale. */
+        * { font-size: 13px; }
+        #workspaces { margin: 1px 4px; padding: 1px 4px; }
         #tray {
           background: #${config.lib.stylix.colors.base01};
           color: #${config.lib.stylix.colors.base05};
         }
-        #custom-startmenu { font-size: 22px; padding: 0px 20px 0px 12px; }
+        #custom-startmenu { font-size: 18px; padding: 0px 14px 0px 10px; }
         #cpu, #memory, #window,
         #custom-notification, #tray, #custom-exit, #idle_inhibitor, #pulseaudio {
-          padding: 0px 12px;
+          padding: 0px 10px;
+          margin-top: 1px;
+          margin-bottom: 1px;
         }
-        #clock { padding: 0px 12px 0px 20px; }
+        #battery { margin-top: 1px; margin-bottom: 1px; }
+        #clock { padding: 0px 10px 0px 14px; }
       '')
     ];
   };
