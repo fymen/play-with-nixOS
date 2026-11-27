@@ -14,6 +14,8 @@
     hermes-agent.url = "github:NousResearch/hermes-agent";
     
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
+    # Pin the source archive directly to avoid GitHub API rate limits.
+    codex-desktop-linux.url = "https://codeload.github.com/ilysenko/codex-desktop-linux/tar.gz/ebb97799faa1a3437608e8f1812801a1c7b14b74";
     omp = {
       # Fetch pinned source without the rate-limited GitHub API.
       url = "github:can1357/oh-my-pi";

@@ -22,6 +22,7 @@ in
       ../../system/system-packages.nix
       ../../system/desktop-packages.nix
       ../../system/desktop-base.nix
+      inputs.codex-desktop-linux.nixosModules.default
       # ../../system/window-systems
       ../../system/fonts.nix
       ../../system/tailscale.nix
@@ -304,6 +305,7 @@ in
 
   # Install firefox.
   programs.firefox.enable = true;
+  programs.codexDesktopLinux.enable = true;
 
   # Allow unfree packages
   nixpkgs = {

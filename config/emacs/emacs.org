@@ -1763,12 +1763,14 @@ Inspect each candidate once and skip files removed during the scan."
         (throw 'found buf)))
     (get-buffer-create "*scratch*")))
 
-(defun my/pilish-layout-half-left ()
-  "Restore a left chat/input column and a full-height right buffer."
-  (when-let* ((chat-buf (pilish--get-chat-buffer))
-              (chat-win (get-buffer-window chat-buf (selected-frame)))
-              (input-buf (pilish-session-input-buffer chat-buf)))
-    (let* ((input-win (get-buffer-window input-buf (selected-frame)))
+(defun my/pilish-layout-half-left (&optional session)
+  "Restore SESSION's left chat/input column and full-height right buffer."
+  (when-let* ((chat-buf (or session (pilish--get-chat-buffer)))
+              (input-buf (pilish-session-input-buffer chat-buf))
+              (anchor (or (get-buffer-window chat-buf (selected-frame))
+                          (get-buffer-window input-buf (selected-frame)))))
+    (let* ((chat-win (get-buffer-window chat-buf (selected-frame)))
+           (input-win (get-buffer-window input-buf (selected-frame)))
            (right-win
             (seq-find
              (lambda (win)
@@ -1779,16 +1781,19 @@ Inspect each candidate once and skip files removed during the scan."
                         (my/pilish-side-buffer)))
            (right-point (and right-win (window-point right-win)))
            (right-start (and right-win (window-start right-win)))
-           (chat-point (window-point chat-win))
-           (chat-start (window-start chat-win))
+           (chat-point (if chat-win (window-point chat-win)
+                         (with-current-buffer chat-buf (point))))
+           (chat-start (and chat-win (window-start chat-win)))
            (input-point (if input-win (window-point input-win)
                           (with-current-buffer input-buf (point-max)))))
       ;; Build columns before splitting the left column vertically.  Never
       ;; infer column ownership from an existing window's immediate parent.
-      (select-window chat-win)
+      (select-window anchor)
       (let ((ignore-window-parameters t))
-        (delete-other-windows chat-win))
+        (delete-other-windows anchor))
+      (setq chat-win anchor)
       (set-window-dedicated-p chat-win nil)
+      (set-window-buffer chat-win chat-buf)
       (let* ((right (split-window chat-win nil 'right))
              (input (split-window chat-win
                                   (- (max window-min-height
@@ -1797,7 +1802,7 @@ Inspect each candidate once and skip files removed during the scan."
         (set-window-buffer right right-buf)
         (set-window-buffer input input-buf)
         (set-window-point chat-win chat-point)
-        (set-window-start chat-win chat-start)
+        (when chat-start (set-window-start chat-win chat-start))
         (when right-point (set-window-point right right-point))
         (when right-start (set-window-start right right-start))
         (set-window-point input input-point)
@@ -1809,23 +1814,34 @@ Resume the most recent session on first use; otherwise start a new one.
 Arrange the pilish session on the left half and focus its input window.
 When toggling the session off, leave the remaining window selected."
   (interactive)
-  ;; First invocation: pilish is not loaded yet; `pilish' is autoloaded and
-  ;; will load the package and create the session.
-  (if (and (fboundp 'pilish-project-buffers)
-           (pilish-project-buffers))
-      (pilish-toggle)
-    (let ((recent (my/pilish-most-recent-session-file)))
-      (if recent
-          (condition-case err
-              (pilish-open-session-file recent)
-            (error
-             (message "Pilish could not restore %s: %s; opening a session instead"
-                      (file-name-nondirectory recent) (error-message-string err))
-             (pilish)))
-        (pilish))))
-  ;; After creating or toggling, restore the left-half layout.  When the
-  ;; toggle hid the session, no chat window exists and this is a no-op.
-  (my/pilish-layout-half-left))
+  (require 'pilish)
+  (let* ((chat (or (pilish-session-chat-buffer)
+                   (car (pilish-project-buffers))))
+         (input (and chat (pilish-session-input-buffer chat)))
+         (chat-win (and chat (get-buffer-window chat (selected-frame))))
+         (input-win (and input (get-buffer-window input (selected-frame)))))
+    (cond
+     ;; A lone input or chat window cannot be hidden reliably by Pilish.
+     ;; Restore the layout directly, without creating or resuming a session.
+     ((and chat (or chat-win input-win)
+           (not (and chat-win input-win (> (length (window-list)) 2))))
+      (my/pilish-layout-half-left chat))
+     ((and chat chat-win input-win)
+      (with-current-buffer chat (pilish-toggle)))
+     (chat
+      (pilish-show-session chat)
+      (my/pilish-layout-half-left chat))
+     (t
+      (let ((recent (my/pilish-most-recent-session-file)))
+        (if recent
+            (condition-case err
+                (pilish-open-session-file recent)
+              (error
+               (message "Pilish could not restore %s: %s; opening a session instead"
+                        (file-name-nondirectory recent) (error-message-string err))
+               (pilish)))
+          (pilish)))
+      (my/pilish-layout-half-left)))))
 
 (use-package pilish
   :ensure t

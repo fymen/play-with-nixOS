@@ -64,6 +64,15 @@ Other useful tools:
 | [[https://github.com/Syllo/nvtop][nvtop]]        | Monitor GPU process                                  |
 | [[https://github.com/rakshasa/rtorrent][rtorrent]]     | Torrent tool in command line, useful on server       |
 
+* Codex Desktop
+The =desktop= host enables =programs.codexDesktopLinux= through the
+[[https://github.com/ilysenko/codex-desktop-linux][community Nix packaging]] of the official Linux application.
+Run =codex-desktop= after =make install HOST=desktop=; the application menu
+may display it as ChatGPT Community. The existing Codex CLI remains separate.
+The source revision is pinned in =flake.nix= to a direct archive URL to avoid
+GitHub API rate limits. To upgrade, change that revision, run
+=nix flake update codex-desktop-linux=, then build and install the desktop host.
+
 * Emacs on Hyprland
 #+attr_html: :width 800
 [[file:samples/emacs-hyprland.png]]
