@@ -138,36 +138,9 @@ in
         inactivity_timeout = 600;
       };
 
-      mcp_servers."computer-use-linux" = {
-        enabled = true;
-
-        # 使用已安装包的固定 Nix 路径，不依赖 PATH。
-        command = toString
-          config.home.file.".local/bin/computer-use-linux".source;
-        args = [ "mcp" ];
-
-        env = {
-          COMPUTER_USE_LINUX_ENABLE_SHELL = "0";
-          WAYLAND_DISPLAY = "\${WAYLAND_DISPLAY}";
-          HYPRLAND_INSTANCE_SIGNATURE = "\${HYPRLAND_INSTANCE_SIGNATURE}";
-          DBUS_SESSION_BUS_ADDRESS = "\${DBUS_SESSION_BUS_ADDRESS}";
-        };
-
-
-        tools.include = [
-          "doctor"
-          "list_windows"
-          "focused_window"
-          "list_apps"
-          "get_app_state"
-          "get_tree_page"
-          "screenshot"
-          "activate_window"
-          "type_text"
-          "press_key"
-          "click"
-        ];
-      };
+      # Disable entries retained by Hermes' settings merge, including its legacy key.
+      mcp_servers."computer-use-linux".enabled = false;
+      mcpServers."computer-use-linux".enabled = false;
 
       # INT8 GPU weights and a short idle timeout leave headroom for MiniCPM.
       stt = {

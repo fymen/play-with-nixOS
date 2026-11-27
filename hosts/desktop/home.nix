@@ -11,7 +11,6 @@
 let
   inherit (import ./variables.nix) gitUsername gitEmail;
   zlibCli = pkgs.callPackage ../../packages/zlib-cli.nix { };
-  computerUseLinux = pkgs.callPackage ../../packages/computer-use-linux.nix { };
   magpie = pkgs.callPackage ../../packages/magpie.nix { };
 
 in
@@ -158,7 +157,6 @@ in
 
   # Keep a declarative CLI entry available for narrowly scoped local deployment.
   home.file.".local/bin/zlib".source = lib.getExe zlibCli;
-  home.file.".local/bin/computer-use-linux".source = lib.getExe computerUseLinux;
   home.file.".local/bin/magpie".source = lib.getExe magpie;
   home.file.".local/share/applications/magpie.desktop".source = "${magpie}/share/applications/magpie.desktop";
   home.file.".local/share/icons/hicolor/scalable/apps/magpie.svg".source = "${magpie}/share/icons/hicolor/scalable/apps/magpie.svg";
@@ -167,7 +165,6 @@ in
   # environment.
   home.packages = with pkgs; [
     magpie
-    computerUseLinux
     zlibCli
     nix-output-monitor
     nix-tree
