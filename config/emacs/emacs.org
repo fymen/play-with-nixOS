@@ -54,6 +54,21 @@
         (yank))
     (clipboard-yank)))
 (global-set-key (kbd "C-S-v") #'my/wayland-clipboard-paste)
+
+(defun my/keyboard-quit ()
+  "Cancel the region first, then any active minibuffer, or quit normally."
+  (interactive)
+  (cond
+   ((region-active-p)
+    (keyboard-quit))
+   ((active-minibuffer-window)
+    (with-selected-window (active-minibuffer-window)
+      (abort-recursive-edit)))
+   (t
+    (keyboard-quit))))
+
+(global-set-key (kbd "C-g") #'my/keyboard-quit)
+
 (setq auto-revert-interval 1            ; Refresh buffers fast
       default-input-method "TeX"        ; Use TeX when toggling input method
       echo-keystrokes 0.1               ; Show keystrokes asap
