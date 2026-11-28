@@ -125,9 +125,6 @@ in
         top-p = 1.0
         top-k = 0
         min-p = 0.0
-        [qwen3.6-27b]
-        model = /home/minicpm-models/Qwen3.6-27B-Q4_K_M.gguf
-        mmproj = /home/minicpm-models/mmproj-Qwen3.6-27B-Q8_0.gguf
       '';
       api-key = "minicpm-local";
       no-webui = true;
