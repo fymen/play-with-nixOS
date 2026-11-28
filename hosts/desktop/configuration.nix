@@ -50,8 +50,7 @@ in
   boot.initrd.kernelModules = [];
 
   networking.hostName = "desktop"; # Define your hostname.
-  # Flameshot 13 treats grim's physical-pixel image as logical pixels on Wayland.
-  # Supply logical pixels to its private grim adapter at fractional scaling.
+  # Keep native screenshot pixels and teach Flameshot's grim adapter their DPR.
   nixpkgs.overlays = [
     inputs.emacs-overlay.overlay
     (final: prev: {
@@ -75,11 +74,18 @@ in
           "-DCMAKE_CUDA_ARCHITECTURES=89"
         ];
       });
-      flameshot = prev.flameshot.override {
-        grim = prev.writeShellScriptBin "grim" ''
-          exec ${prev.grim}/bin/grim -s 1 "$@"
+      flameshot = prev.flameshot.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          # Backport the grim DPR correction without resampling the capture.
+          # QScreen's DPR may be rounded on fractionally scaled Wayland outputs.
+          substituteInPlace src/utils/screengrabber.cpp \
+            --replace-fail 'res.load(imgPath, "ppm");' 'res.load(imgPath, "ppm");
+        const QRect logicalGeo = logicalDesktopGeometry();
+        if (!res.isNull() && logicalGeo.height() > 0) {
+            res.setDevicePixelRatio(qreal(res.height()) / logicalGeo.height());
+        }'
         '';
-      };
+      });
     })
   ];
   services.llama-cpp = {
