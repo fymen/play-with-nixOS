@@ -107,14 +107,13 @@ in
         reasoning = off
         [inkling]
         load-on-startup = true
-        model = /home/minicpm-models/Inkling-2-Mini-UD-Q3_K_XL-mainline.gguf
+        model = /home/minicpm-models/Inkling-2-Mini-GSQ-RCO-IQ3_S.gguf
         mmproj = /home/minicpm-models/mmproj-F16.gguf
-        n-gpu-layers = 99
-        n-cpu-moe = 12
-        load-mode = none
+        n-gpu-layers = auto
+        load-mode = mmap
         cache-type-k = q4_0
         cache-type-v = q4_0
-        fit = off
+        fit = on
         ubatch-size = 64
         temp = 1.0
         top-p = 1.0

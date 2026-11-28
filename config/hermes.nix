@@ -78,22 +78,16 @@ in
 
     # Deep-merge stable preferences; leave onboarding, OAuth and session state alone.
     settings = {
+      # Keep local-content conversations and their summaries on the local server.
       model = {
-        default = "deepseek-v4-flash"; # 或 "deepseek-v4-pro"
-        provider = "deepseek";
-        base_url = "https://api.deepseek.com/v1";
-
-
-        # default = "minicpm-v-4.7-35b-a3b";
-        # # "llamacpp" selects Hermes' own managed server, not our NixOS service.
-        # provider = "custom";
-        # base_url = "http://${localLlama.host}:${toString localLlama.port}/v1";
-        # api_mode = "chat_completions";
-        # # Existing non-secret loopback credential shared with the local llama.cpp service.
-        # # Explicitly replace the previous provider's inline key during the deep merge.
-        # api_key = localLlama.api-key;
-        # context_length = localLlama.ctx-size;
-        # streaming = true;
+        default = "inkling";
+        provider = "custom";
+        base_url = "http://${localLlama.host}:${toString localLlama.port}/v1";
+        api_mode = "chat_completions";
+        api_key = localLlama.api-key;
+        # The server retains 64K capacity; normal agent sessions compact earlier.
+        context_length = 32768;
+        streaming = true;
       };
 
       # Inkling and MiniCPM share the local llama.cpp router.
@@ -169,20 +163,18 @@ in
       compression = {
         enabled = true;
         threshold = 0.5;
-        # threshold_tokens = 16384;
+        threshold_tokens = 12000;
         target_ratio = 0.2;
-        # proactive_prune_tokens = 4096;
+        proactive_prune_tokens = 4096;
         # idle_compact_after_seconds = 600;
       };
 
-      # Compaction summaries stay on a remote fast model even when the
-      # conversation runs on the local Inkling model (aux provider "auto"
-      # would otherwise inherit it and make summarization slow).
-      auxiliary = {
-        compression = {
-          provider = "magpie";
-          model = "deepseek/deepseek-flash";
-        };
+      auxiliary.compression = {
+        provider = "custom";
+        model = "inkling";
+        base_url = "http://${localLlama.host}:${toString localLlama.port}/v1";
+        api_key = localLlama.api-key;
+        timeout = 300;
       };
 
       display = {
