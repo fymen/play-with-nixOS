@@ -106,6 +106,7 @@ in
         n-gpu-layers = auto
         reasoning = off
         [inkling]
+        load-on-startup = true
         model = /home/minicpm-models/Inkling-2-Mini-UD-Q3_K_XL-mainline.gguf
         mmproj = /home/minicpm-models/mmproj-F16.gguf
         n-gpu-layers = 99
@@ -201,7 +202,7 @@ in
     "223.5.5.5"
   ];
   security = {
-    sudo.wheelNeedsPassword = false;
+    sudo.wheelNeedsPassword = true;
 
     pam.services.swaylock = {};
   };
@@ -296,7 +297,7 @@ in
     linger = true;
     isNormalUser = true;
     description = "${username}";
-    extraGroups = [ "networkmanager" "wheel" "docker" "input" "uinput" ];
+    extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       #  thunderbird
     ];

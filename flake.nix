@@ -123,6 +123,37 @@
     in
     {
       nixosConfigurations = builtins.mapAttrs mkHost hosts;
+
+      checks.x86_64-linux.script-tests =
+        let
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
+          python = pkgs.python3.withPackages (ps: [ ps.defusedxml ps.requests ]);
+        in
+        pkgs.runCommand "offline-script-tests" { nativeBuildInputs = [ python ]; } ''
+          export PYTHONDONTWRITEBYTECODE=1
+          export HOME="$TMPDIR"
+          python -m unittest discover -s ${./scripts} -p 'test_*.py'
+          touch "$out"
+        '';
+
+      checks.x86_64-linux.bootstrap-lint =
+        let pkgs = import nixpkgs { system = "x86_64-linux"; };
+        in pkgs.runCommand "bootstrap-config-lint" { nativeBuildInputs = [ pkgs.statix ]; } ''
+          statix check ${./config/misc.nix}
+          statix check ${./config/daily-report.nix}
+          touch "$out"
+        '';
+
+      devShells.x86_64-linux.default =
+        let pkgs = import nixpkgs { system = "x86_64-linux"; };
+        in pkgs.mkShell {
+          packages = [
+            (pkgs.python3.withPackages (ps: [ ps.defusedxml ps.requests ]))
+            pkgs.statix
+            pkgs.alejandra
+            pkgs.gnumake
+          ];
+        };
     };
 
 }

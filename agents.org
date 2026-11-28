@@ -56,6 +56,7 @@ This is a NixOS flake-based configuration managing multiple hosts with home-mana
 
 #+begin_src sh
 make                      # Show help only
+make check                # Offline script tests, focused lint, all-host evaluation
 make eval HOST=desktop    # Evaluate without lock updates
 make build HOST=desktop   # Build without activation or lock updates
 make test HOST=desktop    # Temporary activation (explicit authorization required)
@@ -157,3 +158,21 @@ These are informational, not errors:
 5. For GPU-related packages, this system has NVIDIA (desktop) and AMD (laptop)
 6. Stylix handles theming - avoid hardcoding colors/themes that conflict
 7. Home-manager configs can access =inputs= via =extraSpecialArgs=
+
+* Personal Repository Bootstrap
+
+=modules.misc.enable= is enabled on desktop and laptop. Activation clones missing
+personal repositories only; existing paths (including symlinks) are preserved.
+SSH uses batch mode and existing known_hosts. Missing SSH keys, an unknown host,
+or network failures produce a warning and are retried on a later activation.
+Private clones use umask 077. Override =modules.misc.forgeUrl= or individual
+=config*RepoUrl= options to use another forge or repository.
+
+* Reproducible Checks
+
+=make check= builds flake checks (offline Python tests with requests/defusedxml,
+focused Statix checks) and evaluates every host without activation or lock updates.
+=nix develop --no-update-lock-file= supplies Python dependencies, Statix and
+Alejandra for local work. Full host builds remain a separate validation step.
+Desktop and laptop require a sudo password; Docker on desktop can be used through
+sudo. Tailnet traffic follows host firewall rules instead of trusting all ports.

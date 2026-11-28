@@ -161,6 +161,20 @@ in
   home.file.".local/share/applications/magpie.desktop".source = "${magpie}/share/applications/magpie.desktop";
   home.file.".local/share/icons/hicolor/scalable/apps/magpie.svg".source = "${magpie}/share/icons/hicolor/scalable/apps/magpie.svg";
 
+  systemd.user.services.magpie = {
+    Unit = {
+      Description = "Magpie desktop application";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = lib.getExe magpie;
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [

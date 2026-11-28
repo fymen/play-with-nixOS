@@ -50,7 +50,8 @@ in
   # The loopback key is explicitly non-secret, as in config/hermes.nix.
   # Recipient ID and real credentials remain outside the Nix store.
   xdg.configFile."daily-report/model.json".text = builtins.toJSON {
-    model = config.services.hermes-agent.settings.model.default;
+    # Follow the server's startup model instead of maintaining another model name.
+    models_preset = toString localLlama.models-preset;
     url = "http://${localLlama.host}:${toString localLlama.port}/v1/chat/completions";
     key = localLlama.api-key;
   };

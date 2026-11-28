@@ -14,6 +14,7 @@ help:
 	  '  help / all       Show this help (default; no system changes)' \
 	  '  eval             Evaluate HOST without building or changing the lock' \
 	  '  build            Build HOST without activation or lock updates' \
+	  '  check            Run offline script checks and evaluate all hosts' \
 	  '  debug            Build with tracing and nix-output-monitor' \
 	  '  test             Temporarily activate HOST (sudo)' \
 	  '  install          Switch to HOST permanently (sudo)' \
@@ -34,13 +35,17 @@ help:
 	  'BUILD_HOST empty or localhost builds locally; set user@builder for remote builds.' \
 	  'Override deployment variables: DEPLOY_HOST=user@address BUILD_HOST=user@builder'
 
+check:
+	nix flake check --no-update-lock-file
+	@for host in desktop laptop vps oracle-vps vm; do $(MAKE) eval HOST=$$host; done
+
 all: help
 
 eval:
 	nix eval --no-update-lock-file '.#nixosConfigurations.$(HOST).config.system.build.toplevel.drvPath'
 
 build:
-	nix build  --no-link '.#nixosConfigurations.$(HOST).config.system.build.toplevel'
+	nix build --no-update-lock-file --no-link '.#nixosConfigurations.$(HOST).config.system.build.toplevel'
 
 debug:
 	nix build --no-update-lock-file --no-link --show-trace --option eval-cache false '.#nixosConfigurations.$(HOST).config.system.build.toplevel' |& nom
@@ -86,4 +91,4 @@ test_deploy:
 deploy:
 	nixos-rebuild switch --flake '.#$(HOST)' --no-update-lock-file --target-host '$(DEPLOY_HOST)' $(BUILD_HOST_FLAGS) --verbose
 
-.PHONY: help all eval build debug test install update update-secrets archive cleanup clean build-vm list-generations list-packages test_deploy deploy
+.PHONY: help all check eval build debug test install update update-secrets archive cleanup clean build-vm list-generations list-packages test_deploy deploy

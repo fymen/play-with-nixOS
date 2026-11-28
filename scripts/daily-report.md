@@ -66,7 +66,9 @@ nix eval --no-update-lock-file path:.#nixosConfigurations.desktop.config.system.
 微信会话过期时沿用 `hermes-weixin-login` 恢复；必要时给 Hermes 微信联系人发送一条消息
 刷新上下文，不应擅自替换成其他人的会话。
 
-`~/.config/daily-report/model.json` 由 Home Manager 生成，复用本机 llama.cpp；其中的
+`~/.config/daily-report/model.json` 由 Home Manager 生成，读取本机 llama.cpp
+预设中唯一标记 `load-on-startup = true` 的模型（当前为 Inkling），不跟随 Hermes 的远程默认模型。
+以后只需在 llama.cpp 预设中移动该标记；未指定或指定多个启动模型时，日报会明确降级为标题速览；其中的
 loopback key 与 `config/hermes.nix` 一样是非秘密的本地占位凭据。换外部模型时，真实密钥
 必须改用运行时秘密，不能写进 `xdg.configFile.*.text`。
 

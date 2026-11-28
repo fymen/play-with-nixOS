@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   home.file.".config/wlogout/icons" = {
@@ -35,7 +35,7 @@
       }
       {
         "label" = "lock";
-        "action" = "sleep 1; hyprlock";
+        "action" = "sleep 1; ${pkgs.systemd}/bin/loginctl lock-session";
         "text" = "Lock";
         "keybind" = "l";
       }

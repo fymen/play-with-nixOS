@@ -54,6 +54,19 @@ class DailyReportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             report.request("file:///etc/passwd")
 
+    def test_digest_follows_server_startup_model(self):
+        preset = self.state / "models.ini"
+        for model in ["inkling", "another-model"]:
+            preset.write_text(f"[*]\nctx-size = 65536\n[unused]\n[{model}]\nload-on-startup = true\n")
+            self.assertEqual(report.digest_model({"models_preset": str(preset)}), model)
+
+    def test_ambiguous_or_missing_startup_model_rejected(self):
+        preset = self.state / "models.ini"
+        for content in ["[unused]\n", "[one]\nload-on-startup = true\n[two]\nload-on-startup = true\n"]:
+            preset.write_text(content)
+            with self.assertRaises(ValueError):
+                report.digest_model({"models_preset": str(preset)})
+
     def test_unknown_model_ids_rejected(self):
         response = {"choices": [{"message": {"content": json.dumps([
             {"id": "invented", "summary": "fake", "impact": "fake"}])}}]}
