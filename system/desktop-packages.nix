@@ -3,7 +3,6 @@
     tuigreet
     yad
     swappy
-    awww
     grim
     slurp
   ];

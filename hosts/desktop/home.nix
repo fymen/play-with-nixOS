@@ -46,7 +46,6 @@ in
     ../../config/password-store.nix
     ../../config/fcitx.nix
     ../../config/misc.nix
-    ../../config/openclaw.nix
   ];
 
   dconf.enable = true;
@@ -193,7 +192,6 @@ in
     bat # Alternative to "cat"
     btop # Alternative to "top"
     nvtopPackages.nvidia # Monitor GPU process
-    starship
     fd # Alternative to "find"
     lazygit # Magit alternative
     glow # Markdown viewer in command line
@@ -203,7 +201,6 @@ in
     grc # Colorize command output
 
     ydotool # Desktop automation tool, move mouse or something
-    autojump # Jump around directories fastly
 
     hyfetch
 
@@ -281,8 +278,6 @@ in
     tsukimi
     v2rayn
 
-    cloudflare-warp             # https://developers.cloudflare.com/warp-client/get-started/linux/
-    owl
     # easyeffects
 
     net-tools
